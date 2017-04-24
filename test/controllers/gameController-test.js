@@ -7,7 +7,6 @@ function GameViewDouble() {
 }
 GameViewDouble.prototype = {
   getCanvas: function(){
-
   }
 };
 
@@ -15,24 +14,24 @@ function GameDouble() {
 
 }
 describe("GameController", function(){
-var gameController;
-var gameViewDouble = new GameViewDouble()
-var gameDouble = new GameDouble()
-beforeEach(function(){
-  gameController = new GameController(gameDouble, gameViewDouble);
-});
+  var gameController;
+  var gameViewDouble;
+  var gameDouble;
 
- it("exists", function(){
-   expect(gameController).to.exist;
+  beforeEach(function(){
+    gameViewDouble = new GameViewDouble();
+    gameDouble =  new GameDouble();
+    gameController = new GameController(gameDouble, gameViewDouble);
   });
 
-it("render calls git canvas on game view", function() {
+  it("exists", function(){
+    expect(gameController).to.exist;
+  });
 
-var spyOn = sinon.spy(gameViewDouble, "getCanvas")
-
-gameController.render()
-expect(spyOn).to.HaveBeenCalled 
-
-});
+  it("render calls git canvas on game view", function(){
+    var spyGetCanvas = sinon.spy(gameViewDouble, "getCanvas");
+    gameController.render();
+    expect(spyGetCanvas).to.have.been.calledTwice;
+  });
 
 });
