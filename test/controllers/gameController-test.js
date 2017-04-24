@@ -31,7 +31,7 @@ describe("GameController", function(){
   it("render calls git canvas on game view", function(){
     var spyGetCanvas = sinon.spy(gameViewDouble, "getCanvas");
     gameController.render();
-    expect(spyGetCanvas).to.have.been.calledTwice;
+    expect(spyGetCanvas).to.have.been.calledOnce;
   });
 
 });

@@ -7,9 +7,9 @@ function GameController(game = new Game(),gameView = new GameView()) {
 
 GameController.prototype = {
   render: function(){
-    this.gameView.getCanvas();
+    var canvas = this.gameView.getCanvas();
+    document.getElementById('gameDiv').innerHtml = canvas;
   }
-
 }
 
 module.exports = GameController;
