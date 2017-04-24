@@ -1,1 +1,1 @@
-# Bloc
+# Bloc [![Build Status](https://travis-ci.org/joemaidman/bloc.svg?branch=master)](https://travis-ci.org/joemaidman/bloc) [![Code Climate GPA](https://codeclimate.com/github/joemaidman/bloc/badges/gpa.svg)](https://codeclimate.com/github/joemaidman/bloc) [![Code Climate Coverage](https://codeclimate.com/github/joemaidman/bloc/badges/coverage.svg)](https://codeclimate.com/github/joemaidman/bloc)
