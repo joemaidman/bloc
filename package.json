@@ -4,7 +4,7 @@
   "description": "Multiplayer isometric building game",
   "main": "index.js",
   "scripts": {
-    "test": "istanbul cover --report lcov --report json --report text --report html _mocha -- -r ./test/testConfig.js test/models/*-test.js"
+    "test": "istanbul cover --report lcov --report json --report text --report html _mocha -- -r ./test/testConfig.js test/**/*-test.js"
   },
   "author": "Sophie McLean, Joe Maidman, Ryan Chu, Christos Paraskeva",
   "license": "ISC",
@@ -13,5 +13,8 @@
     "istanbul": "^0.4.5",
     "mocha": "^3.3.0",
     "sinon": "^2.1.0"
+  },
+  "dependencies": {
+    "canvas": "^1.6.5"
   }
 }
