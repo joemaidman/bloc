@@ -3,4 +3,4 @@ node_js:
   - "stable"
 addons:
   code_climate:
-      repo_token: 
+      repo_token: 93f0f931c8e698e45fb7d824e1cb476592e7bc9cd6a27c58a1f9f9d963e2675a
