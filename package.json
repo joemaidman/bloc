@@ -1,21 +1,28 @@
 {
-  "name": "bloc",
+  "name": "Bloc",
   "version": "1.0.0",
   "description": "Multiplayer isometric building game",
-  "main": "index.js",
+  "main": "app.js",
   "scripts": {
-    "test": "istanbul cover --report lcov --report json --report text --report html _mocha -- -r ./test/testConfig.js test/**/*-test.js"
+    "test": "mocha -- -r ./test/testConfig.js test/**/*-test.js",
+    "cover": "istanbul cover --report lcov --report json --report text --report html _mocha -- -r ./test/testConfig.js test/**/*-test.js",
+    "build": "webpack",
+    "start": "node app.js"
   },
   "author": "Sophie McLean, Joe Maidman, Ryan Chu, Christos Paraskeva",
   "license": "ISC",
   "devDependencies": {
     "chai": "^3.5.0",
+    "chai-virtual-dom": "^1.0.0",
     "istanbul": "^0.4.5",
+    "jsdom": "^10.0.0",
     "mocha": "^3.3.0",
     "sinon": "^2.1.0",
-    "sinon-chai": "^2.9.0"
+    "sinon-chai": "^2.9.0",
+    "virtual-dom": "^2.1.1",
+    "webpack": "^2.4.1"
   },
   "dependencies": {
-    "canvas": "^1.6.5"
+    "express": "^4.15.2"
   }
 }

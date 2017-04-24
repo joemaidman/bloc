@@ -1,7 +1,6 @@
 "strict mode";
 
 var GameController = require('../../src/controllers/gameController.js');
-
 function GameViewDouble() {
 
 }

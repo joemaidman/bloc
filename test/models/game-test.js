@@ -3,11 +3,11 @@
 var Game = require('../../src/models/game.js');
 
 describe("Game", function(){
-var game;
+  var game;
 
- it("has a name", function(){
-   game = new Game();
-   expect(game.name).to.equal("Bloc");
+  it("has a name", function(){
+    game = new Game();
+    expect(game.name).to.equal("Bloc");
   });
 
 });

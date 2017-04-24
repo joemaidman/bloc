@@ -1,9 +1,9 @@
 "strict mode";
 
-var Canvas = require('canvas');
-
 function GameView(){
-  this.canvas = new Canvas(200,200);
+  this.canvas = document.createElement('canvas');
+  this.canvas.width = 200;
+  this.canvas.height  = 200;
 }
 
 GameView.prototype = {
