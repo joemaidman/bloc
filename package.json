@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "istanbul cover --report lcov --report json --report text --report html _mocha -- -r ./test/testConfig.js test/**/*-test.js",
-    "build": "webpack"
+    "build": "webpack",
+    "karma": "karma start my.conf.js"
   },
   "author": "Sophie McLean, Joe Maidman, Ryan Chu, Christos Paraskeva",
   "license": "ISC",
@@ -13,9 +14,12 @@
     "chai": "^3.5.0",
     "istanbul": "^0.4.5",
     "karma": "^1.6.0",
+    "karma-chai-sinon": "^0.1.5",
     "karma-chrome-launcher": "^2.0.0",
+    "karma-cli": "^1.0.1",
     "karma-mocha": "^1.3.0",
     "karma-phantomjs-launcher": "^1.0.4",
+    "karma-webpack": "^2.0.3",
     "mocha": "^3.3.0",
     "sinon": "^2.1.0",
     "sinon-chai": "^2.9.0",

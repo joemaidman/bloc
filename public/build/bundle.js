@@ -71,27 +71,6 @@
 /***/ (function(module, exports) {
 
 "strict mode";
-
-function GameController(game = new Game(),gameView = new GameView()) {
-  this.game = game;
-  this.gameView = gameView;
-}
-
-GameController.prototype = {
-  render: function(){
-    var canvas = this.gameView.getCanvas();
-    document.getElementById('gameDiv').appendChild(canvas);
-  }
-}
-
-module.exports = GameController;
-
-
-/***/ }),
-/* 1 */
-/***/ (function(module, exports) {
-
-"strict mode";
 function Game(){
   this.name = "Bloc";
 }
@@ -100,12 +79,10 @@ module.exports = Game;
 
 
 /***/ }),
-/* 2 */
+/* 1 */
 /***/ (function(module, exports) {
 
 "strict mode";
-
-// var Canvas = require('canvas');
 
 function GameView(){
   this.canvas = document.createElement('canvas');
@@ -121,12 +98,35 @@ module.exports = GameView;
 
 
 /***/ }),
+/* 2 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"strict mode";
+var GameView = __webpack_require__(1);
+var Game = __webpack_require__(0);
+
+function GameController(game,gameView) {
+  this.game = game;
+  this.gameView = gameView;
+}
+
+GameController.prototype = {
+  render: function(){
+    var canvas = this.gameView.getCanvas();
+    document.getElementById('gameDiv').appendChild(canvas);
+  }
+}
+
+module.exports = GameController;
+
+
+/***/ }),
 /* 3 */
 /***/ (function(module, exports, __webpack_require__) {
 
-window.GameView = __webpack_require__(2);
-window.Game = __webpack_require__(1);
-window.GameController = __webpack_require__(0);
+window.GameView = __webpack_require__(1);
+window.Game = __webpack_require__(0);
+window.GameController = __webpack_require__(2);
 
 
 /***/ })

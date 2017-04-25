@@ -8,7 +8,7 @@ describe("GameView", function(){
   beforeEach(function(){
     gameView = new GameView();
   });
-  
+
   it("exists", function(){
     expect(gameView).not.to.be.undefined;
   });

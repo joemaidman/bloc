@@ -1,6 +1,6 @@
 // Karma configuration
 // Generated on Tue Apr 25 2017 11:25:10 GMT+0100 (BST)
-
+var webpackConfig = require('./webpack.config.js');
 module.exports = function(config) {
   config.set({
 
@@ -10,13 +10,12 @@ module.exports = function(config) {
 
     // frameworks to use
     // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
-    frameworks: ['mocha'],
+    frameworks: ['mocha', 'chai-sinon'],
 
 
     // list of files / patterns to load in the browser
     files: [
-      'node_modules/chai/chai.js',
-      'src/**/*.js',
+      './public/build/bundle.js',
       'test/**/*-test.js'
     ],
 
@@ -29,11 +28,15 @@ module.exports = function(config) {
       'test/testConfig.js'
     ],
 
+    webpack: webpackConfig,
 
     // preprocess matching files before serving them to the browser
     // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
     preprocessors: {
+              'src/**/*.js': ['webpack'],
+            'test/**/*-test.js': ['webpack']
     },
+
 
 
     // test results reporter to use
@@ -61,7 +64,7 @@ module.exports = function(config) {
 
     // start these browsers
     // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
-    browsers: ['PhantomJS'],
+    browsers: ['PhantomJS', 'Chrome'],
 
 
     // Continuous Integration mode

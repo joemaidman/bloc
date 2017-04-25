@@ -1,6 +1,8 @@
 "strict mode";
+var GameView = require('../views/gameView.js');
+var Game = require('../models/game.js');
 
-function GameController(game = new Game(),gameView = new GameView()) {
+function GameController(game, gameView) {
   this.game = game;
   this.gameView = gameView;
 }
