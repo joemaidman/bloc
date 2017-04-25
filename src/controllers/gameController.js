@@ -11,9 +11,8 @@ GameController.prototype = {
   loadInterface: function(){
     return this.gameView.getCanvas();
   },
-  getShape: function(){
-    // console.log(this.game.createBlock())
-    return this.game.createShape();
+  getShape: function(xPos, yPos, zPos){
+    return this.game.createShape(xPos, yPos, zPos);
   }
 };
 

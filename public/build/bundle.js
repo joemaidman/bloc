@@ -210,8 +210,11 @@ function Game(){
   this.name = "Bloc";
 }
 Game.prototype = {
-  createBlock:function(){
-    return Shape.Prism(Point(2,0,1));
+  createShape:function(x = 0, y = 0, z = 0){
+    return this._shape(new Point(x, y, z));
+  },
+  _shape: function(point){
+    return Shape.Prism(point,0.5,0.5,0.5)
   }
 }
 
@@ -439,9 +442,8 @@ GameController.prototype = {
   loadInterface: function(){
     return this.gameView.getCanvas();
   },
-  getBlock: function(){
-    // console.log(this.game.createBlock())
-    return this.game.createBlock();
+  getShape: function(xPos, yPos, zPos){
+    return this.game.createShape(xPos, yPos, zPos);
   }
 };
 
