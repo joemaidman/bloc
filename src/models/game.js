@@ -10,7 +10,7 @@ Game.prototype = {
     return this._shape(new Point(x, y, z));
   },
   _shape: function(point){
-    return Shape.Prism(point,0.5,0.5,0.5)
+    return Shape.Prism(point,0.3,0.3,0.3)
   }
 }
 
