@@ -4,6 +4,15 @@
 </head>
 <body>
   <div id="gameDiv"></div>
+  <script>
+  document.addEventListener("DOMContentLoaded", function(){
+    var gameView = new window.GameView();
+    var game = new window.Game();
+    var gameController = new window.GameController(game, gameView);
+    var div = document.getElementById('gameDiv');
+    div.innerHTML = gameController.loadInterface();
+  });
+  </script>
 </body>
 
 </html>

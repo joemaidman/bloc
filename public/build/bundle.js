@@ -85,7 +85,7 @@ module.exports = Game;
 "strict mode";
 
 function GameView(){
-  this.canvas = document.createElement('canvas');
+  this.canvas = "<canvas id='canv'></canvas>";
 }
 
 GameView.prototype = {
@@ -105,15 +105,14 @@ module.exports = GameView;
 var GameView = __webpack_require__(1);
 var Game = __webpack_require__(0);
 
-function GameController(game,gameView) {
+function GameController(game, gameView) {
   this.game = game;
   this.gameView = gameView;
 }
 
 GameController.prototype = {
-  render: function(){
-    var canvas = this.gameView.getCanvas();
-    document.getElementById('gameDiv').appendChild(canvas);
+  loadInterface: function(){
+    return this.gameView.getCanvas();
   }
 }
 

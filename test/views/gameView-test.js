@@ -14,7 +14,7 @@ describe("GameView", function(){
   });
 
   it("can return a canvas", function(){
-    expect(gameView.getCanvas()).to.be.a('Canvas');
+    expect(gameView.getCanvas()).to.equal("<canvas id='canv'></canvas>");
   });
 
 });

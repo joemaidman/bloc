@@ -3,6 +3,12 @@
 var webpackConfig = require('./webpack.config.js');
 module.exports = function(config) {
   config.set({
+    preprocessors: {
+      'test/**/*-test.js': ['inject-html']
+    },
+    injectHtml: {
+        file: '<div id="test-content"><div>'
+    },
 
     // base path that will be used to resolve all patterns (eg. files, exclude)
     basePath: '',
@@ -35,6 +41,7 @@ module.exports = function(config) {
     preprocessors: {
               'src/**/*.js': ['webpack'],
             'test/**/*-test.js': ['webpack']
+
     },
 
 

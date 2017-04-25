@@ -1,7 +1,7 @@
 "strict mode";
 
 function GameView(){
-  this.canvas = document.createElement('canvas');
+  this.canvas = "<canvas id='canv'></canvas>";
 }
 
 GameView.prototype = {
