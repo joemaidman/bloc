@@ -6,7 +6,7 @@ function Game(){
   this.name = "Bloc";
 }
 Game.prototype = {
-  createBlock:function(){
+  createShape:function(){
     return Shape.Prism(Point(2,0,1));
   }
 }

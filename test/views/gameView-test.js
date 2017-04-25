@@ -14,7 +14,7 @@ describe("GameView", function(){
   });
 
   it("can return a canvas", function(){
-    expect(gameView.getCanvas()).to.equal("<canvas id='canv'></canvas>");
+    expect(gameView.getCanvas()).to.equal("<canvas width='600px' height='498px' id='canvas'></canvas>");
   });
 
 });

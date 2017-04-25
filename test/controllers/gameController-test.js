@@ -14,7 +14,7 @@ function GameDouble() {
 }
 
 GameDouble.prototype = {
-  createBlock: function(){
+  createShape: function(){
 
   }
 };
@@ -41,9 +41,9 @@ describe("GameController", function(){
   });
 
   it("getBlock calls createBlock on game", function(){
-    var spyCreateBlock = sinon.spy(gameDouble, "createBlock");
-    gameController.getBlock();
-    expect(spyCreateBlock).to.have.been.calledOnce;
+    var spyCreateShape = sinon.spy(gameDouble, "createShape");
+    gameController.getShape();
+    expect(spyCreateShape).to.have.been.calledOnce;
   });
 
 });
