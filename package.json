@@ -25,5 +25,7 @@
     "sinon-chai": "^2.9.0",
     "webpack": "^2.4.1"
   },
-  "dependencies": {}
+  "dependencies": {
+    "isomer": "^0.2.6"
+  }
 }

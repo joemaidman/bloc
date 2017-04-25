@@ -10,7 +10,12 @@ function GameController(game, gameView) {
 GameController.prototype = {
   loadInterface: function(){
     return this.gameView.getCanvas();
+  },
+  getBlock: function(){
+    return this.game.createBlock();
   }
-}
+};
+
+
 
 module.exports = GameController;

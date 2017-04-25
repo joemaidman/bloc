@@ -12,6 +12,13 @@ GameViewDouble.prototype = {
 function GameDouble() {
 
 }
+
+GameDouble.prototype = {
+  createBlock: function(){
+
+  }
+};
+
 describe("GameController", function(){
   var gameController;
   var gameViewDouble;
@@ -31,6 +38,12 @@ describe("GameController", function(){
     var spyGetCanvas = sinon.spy(gameViewDouble, "getCanvas");
     gameController.loadInterface();
     expect(spyGetCanvas).to.have.been.calledOnce;
+  });
+
+  it("getBlock calls createBlock on game", function(){
+    var spyCreateBlock = sinon.spy(gameDouble, "createBlock");
+    gameController.getBlock();
+    expect(spyCreateBlock).to.have.been.calledOnce;
   });
 
 });
