@@ -4,6 +4,10 @@ document.addEventListener("DOMContentLoaded", function(){
 
   var socket = io.connect();
   var iso = new Isomer(document.getElementById("canvas"), { scale: 30 });
+  var Shape = Isomer.Shape;
+  var Point = Isomer.Point;
+  var Color = Isomer.Color;
+  var Path = Isomer.Path;
 
   drawGridLines(11,11,0);
   drawOrigin();
@@ -26,30 +30,30 @@ document.addEventListener("DOMContentLoaded", function(){
 
   function drawGridLines (xsize, ysize, zheight) {
     for (x = 0; x < xsize+1; x++) {
-      iso.add(new Isomer.Path([
-        new Isomer.Point(x, 0, zheight),
-        new Isomer.Point(x, xsize, zheight),
-        new Isomer.Point(x, 0, zheight),
+      iso.add(new Path([
+        new Point(x, 0, zheight),
+        new Point(x, xsize, zheight),
+        new Point(x, 0, zheight),
       ]),
-      new Isomer.Color(255, 0, 0));
+      new Color(255, 0, 0));
     }
     for (y = 0; y < ysize+1; y++) {
-      iso.add(new Isomer.Path([
-        new Isomer.Point(0, y, zheight),
-        new Isomer.Point(ysize, y, zheight),
-        new Isomer.Point(0, y, zheight),
+      iso.add(new Path([
+        new Point(0, y, zheight),
+        new Point(ysize, y, zheight),
+        new Point(0, y, zheight),
       ]),
-      new Isomer.Color(255,0,0));
+      new Color(255,0,0));
     }
   }
 
   function  drawOrigin(){
-    iso.add(new Isomer.Path([
-      Isomer.Point(4, 4, 2),
-      Isomer.Point(4, 3, 2),
-      Isomer.Point(4, 4, 1),
-      Isomer.Point(4, 5, 1)
-    ]), new Isomer.Color(50, 160, 60));
+    iso.add(new Path([
+      Point(4, 4, 2),
+      Point(4, 3, 2),
+      Point(4, 4, 1),
+      Point(4, 5, 1)
+    ]), new Color(50, 160, 60));
   }
 
   socket.on('updateWorld', function (data) {
@@ -60,7 +64,7 @@ document.addEventListener("DOMContentLoaded", function(){
     console.log("Adding blocks");
     for (var i = 0; i<blocks.length; i++ ){
       console.log("Block added");
-      iso.add(Isomer.Shape.Prism(new Isomer.Point(blocks[i].xPos, blocks[i].yPos, blocks[i].zPos)),new Isomer.Color(blocks[i].r,blocks[i].g,blocks[i].b));
+      iso.add(Shape.Prism(new Point(blocks[i].xPos, blocks[i].yPos, blocks[i].zPos)),new Color(blocks[i].r,blocks[i].g,blocks[i].b));
     }
   });
 });
