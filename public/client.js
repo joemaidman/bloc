@@ -5,11 +5,9 @@ document.addEventListener("DOMContentLoaded", function(){
 
   GridLines(11,11,0);
 
-  socket.emit('add_block', {block: [0,0,0,255,0,0]});
+  socket.emit('add_block', {block: [4,1,0,255,0,0]});
   socket.emit('add_block', {block: [3,0,0,255,0,0]});
-  socket.emit('add_block', {block: [0,0,0,255,0,0]});
-  socket.emit('add_block', {block: [0,3,0,255,0,0]});
-  socket.emit('add_block', {block: [3,3,0,255,0,0]});
+
 
   function GridLines (xsize, ysize, zheight) {
     for (x = 0; x < xsize+1; x++) {
@@ -38,4 +36,17 @@ document.addEventListener("DOMContentLoaded", function(){
       iso.add(Isomer.Shape.Prism(new Isomer.Point(blocks[i].xPos, blocks[i].yPos, blocks[i].zPos)));
     }
   });
+});
+
+document.addEventListener("DOMContentLoaded", function(){
+  var canvas = document.getElementById("canvas");
+
+  canvas.addEventListener("mousedown", getPosition, false);
+
+  function getPosition(event){
+    var rect = canvas.getBoundingClientRect();
+    var x = event.clientX - rect.left;
+    var y = event.clientY - rect.top;
+    console.log("x: " + x + "y: " + y);
+  }
 });
