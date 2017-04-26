@@ -6,6 +6,7 @@ function GameViewDouble() {
 }
 GameViewDouble.prototype = {
   getCanvas: function(){
+    return true;
   }
 };
 
@@ -21,6 +22,9 @@ GameDouble.prototype = {
     return true;
   },
   rotateShapes: function(){
+    return true;
+  },
+  getScale: function(){
     return true;
   }
 };

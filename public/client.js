@@ -1,28 +1,30 @@
+"strict mode";
+
 document.addEventListener("DOMContentLoaded", function(){
 
   var socket = io.connect();
-  var iso = new Isomer(document.getElementById("canvas"));
+  var iso = new Isomer(document.getElementById("canvas"), { scale: 30 });
 
-  GridLines(11,11,0);
+  drawGridLines(11,11,0);
   drawOrigin();
 
   $( "#rotate" ).click(function() {
     socket.emit('rotate');
   });
 
-  socket.emit('add_block', {block: [0,0,0,255,0,0]});
-  socket.emit('add_block', {block: [3,0,0,255,0,0]});
+  socket.emit('add_block', {block: [0,0,0,0,0,255]});
+  socket.emit('add_block', {block: [3,0,0,0,255,0]});
   socket.emit('add_block', {block: [0,3,0,255,0,0]});
-  socket.emit('add_block', {block: [3,3,0,255,0,0]});
+  socket.emit('add_block', {block: [3,3,0,100,100,100]});
 
-  function GridLines (xsize, ysize, zheight) {
+  function drawGridLines (xsize, ysize, zheight) {
     for (x = 0; x < xsize+1; x++) {
       iso.add(new Isomer.Path([
         new Isomer.Point(x, 0, zheight),
         new Isomer.Point(x, xsize, zheight),
         new Isomer.Point(x, 0, zheight),
       ]),
-    new Isomer.Color(255, 0, 0));
+      new Isomer.Color(255, 0, 0));
     }
     for (y = 0; y < ysize+1; y++) {
       iso.add(new Isomer.Path([
@@ -30,7 +32,7 @@ document.addEventListener("DOMContentLoaded", function(){
         new Isomer.Point(ysize, y, zheight),
         new Isomer.Point(0, y, zheight),
       ]),
-    new Isomer.Color(255,0,0));
+      new Isomer.Color(255,0,0));
     }
   }
 
@@ -44,13 +46,16 @@ document.addEventListener("DOMContentLoaded", function(){
   }
 
   socket.on('updateWorld', function (data) {
-
-   var blocks = data.blocks;
-   console.log("Adding blocks");
+    iso.canvas.clear();
+    drawGridLines(11,11,0);
+    drawOrigin();
+    var blocks = data.blocks;
+    console.log("Adding blocks");
     for (var i = 0; i<blocks.length; i++ ){
       console.log("Block added");
       iso.add(Isomer.Shape.Prism(new Isomer.Point(blocks[i].xPos, blocks[i].yPos, blocks[i].zPos)),new Isomer.Color(blocks[i].r,blocks[i].g,blocks[i].b));
     }
+
 
   });
 });

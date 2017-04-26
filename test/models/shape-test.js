@@ -38,5 +38,3 @@ describe("Shape", function(){
 
 
 });
-
-//X, Y, Z, R, G, B
