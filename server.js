@@ -5,7 +5,7 @@ var express = require('express'),
 
 var server = http.createServer(app);
 var io = socketIo.listen(server);
-var blocks =[]
+var blocks =[];
 server.listen(8080);
 
 app.use(express.static(__dirname + '/public'));

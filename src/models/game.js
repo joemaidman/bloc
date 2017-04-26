@@ -1,16 +1,15 @@
 "strict mode";
-var Isomer = require("isomer");
-var Shape = Isomer.Shape;
-var Point = Isomer.Point;
+
 function Game(){
-  this.name = "Bloc";
+  this.shapes = [];
 }
+
 Game.prototype = {
-  createShape:function(x = 0, y = 0, z = 0){
-    return this._shape(new Point(x, y, z));
+  getShapes: function(){
+    return this.shapes;
   },
-  _shape: function(point){
-    return Shape.Prism(point,0.5,0.5,0.5)
+  addShape: function(shape){
+    this.shapes.push(shape);
   }
 }
 

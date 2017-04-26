@@ -1,6 +1,6 @@
 "strict mode";
 var GameController = require('../../src/controllers/gameController.js');
-
+var Shape = require('../../src/models/shape.js');
 function GameViewDouble() {
 
 }
@@ -10,12 +10,15 @@ GameViewDouble.prototype = {
 };
 
 function GameDouble() {
-
+  this.shapes = [];
 }
 
 GameDouble.prototype = {
-  createShape: function(){
-
+  getShapes: function(){
+    return true;
+  },
+  addShape: function(){
+    return true;
   }
 };
 
@@ -34,16 +37,16 @@ describe("GameController", function(){
     expect(gameController).to.exist;
   });
 
-  it("render calls git canvas on game view", function(){
-    var spyGetCanvas = sinon.spy(gameViewDouble, "getCanvas");
-    gameController.loadInterface();
-    expect(spyGetCanvas).to.have.been.calledOnce;
+  it("getAllShapes calls getShapes on game", function(){
+    var spyGetShapes = sinon.spy(gameDouble, "getShapes");
+    gameController.getAllShapes();
+    expect(spyGetShapes).to.have.been.calledOnce;
   });
 
-  it("getBlock calls createBlock on game", function(){
-    var spyCreateShape = sinon.spy(gameDouble, "createShape");
-    gameController.getShape();
-    expect(spyCreateShape).to.have.been.calledOnce;
-  });
+  it(".createShape returns a shape", function(){
+    var spyAddShape = sinon.spy(gameDouble, "addShape");
+    gameController.createShape();
+    expect(spyAddShape).to.have.been.calledOnce;
+  })
 
 });
