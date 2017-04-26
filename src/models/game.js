@@ -10,6 +10,7 @@ Game.prototype = {
   },
   addShape: function(shape){
     this.shapes.push(shape);
+    console.log(this.shapes)
   }
 }
 

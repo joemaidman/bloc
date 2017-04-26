@@ -3,11 +3,13 @@ document.addEventListener("DOMContentLoaded", function(){
   var socket = io.connect();
   var iso = new Isomer(document.getElementById("canvas"));
 
-  socket.emit('add_block', {block: [0,0,0]});
-  socket.emit('add_block', {block: [3,0,0]});
-  socket.emit('add_block', {block: [0,3,0]});
-  socket.emit('add_block', {block: [0,3,0]});
-  socket.emit('add_block', {block: [3,3,0]});
+  GridLines(11,11,0);
+
+  socket.emit('add_block', {block: [0,0,0,255,0,0]});
+  socket.emit('add_block', {block: [3,0,0,255,0,0]});
+  socket.emit('add_block', {block: [0,0,0,255,0,0]});
+  socket.emit('add_block', {block: [0,3,0,255,0,0]});
+  socket.emit('add_block', {block: [3,3,0,255,0,0]});
 
   function GridLines (xsize, ysize, zheight) {
     for (x = 0; x < xsize+1; x++) {
@@ -30,11 +32,10 @@ document.addEventListener("DOMContentLoaded", function(){
 
   socket.on('updateWorld', function (data) {
 
-  GridLines(11,11,0);
 
    var blocks = data.blocks;
     for (var i = 0; i<blocks.length; i++ ){
-      iso.add(Isomer.Shape.Prism(new Isomer.Point(blocks[i][0], blocks[i][1], blocks[i][2])));
+      iso.add(Isomer.Shape.Prism(new Isomer.Point(blocks[i].xPos, blocks[i].yPos, blocks[i].zPos)));
     }
   });
 });
