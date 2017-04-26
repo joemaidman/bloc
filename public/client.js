@@ -8,8 +8,15 @@ document.addEventListener("DOMContentLoaded", function(){
   drawGridLines(11,11,0);
   drawOrigin();
 
-  $( "#rotate" ).click(function() {
+  $("#rotate").click(function() {
     socket.emit('rotate');
+  });
+
+  $("#add").click(function() {
+    var x = parseInt($("#x").val());
+    var y = parseInt($("#y").val());
+    var z = parseInt($("#z").val());
+    socket.emit('add_block', {block: [x,y,z,255,0,0]});
   });
 
   socket.emit('add_block', {block: [0,0,0,0,0,255]});
@@ -38,10 +45,10 @@ document.addEventListener("DOMContentLoaded", function(){
 
   function  drawOrigin(){
     iso.add(new Isomer.Path([
-      Isomer.Point(5, 5, 0),
-      Isomer.Point(6, 5, 0),
-      Isomer.Point(5, 6, 0),
-      Isomer.Point(6, 6, 0)
+      Isomer.Point(4, 4, 2),
+      Isomer.Point(4, 3, 2),
+      Isomer.Point(4, 4, 1),
+      Isomer.Point(4, 5, 1)
     ]), new Isomer.Color(50, 160, 60));
   }
 
@@ -55,7 +62,5 @@ document.addEventListener("DOMContentLoaded", function(){
       console.log("Block added");
       iso.add(Isomer.Shape.Prism(new Isomer.Point(blocks[i].xPos, blocks[i].yPos, blocks[i].zPos)),new Isomer.Color(blocks[i].r,blocks[i].g,blocks[i].b));
     }
-
-
   });
 });

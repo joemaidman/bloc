@@ -27,12 +27,12 @@ Shape.prototype = {
     this.setPosition(newCoordinates[0], newCoordinates[1], this.zPos);
   },
   _calculateRotation: function(cx, cy, x, y, angle) {
-      var radians = (Math.PI / 180) * angle,
-          cos = Math.cos(radians),
-          sin = Math.sin(radians),
-          nx = (cos * (x - cx)) + (sin * (y - cy)) + cx,
-          ny = (cos * (y - cy)) - (sin * (x - cx)) + cy;
-      return [nx, ny];
+    var radians = (Math.PI / 180) * angle,
+    cos = Math.cos(radians),
+    sin = Math.sin(radians),
+    nx = (cos * (x - cx)) + (sin * (y - cy)) + cx,
+    ny = (cos * (y - cy)) - (sin * (x - cx)) + cy;
+    return [nx, ny];
   }
 };
 

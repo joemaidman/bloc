@@ -1,12 +1,12 @@
 "strict mode";
 
 var express = require('express'),
-    app = express(),
-    http = require('http'),
-    socketIo = require('socket.io'),
-    GameView = require('./src/views/gameView.js'),
-    Game = require('./src/models/game.js'),
-    GameController = require('./src/controllers/gameController.js');
+app = express(),
+http = require('http'),
+socketIo = require('socket.io'),
+GameView = require('./src/views/gameView.js'),
+Game = require('./src/models/game.js'),
+GameController = require('./src/controllers/gameController.js');
 
 var server = http.createServer(app);
 var io = socketIo.listen(server);
