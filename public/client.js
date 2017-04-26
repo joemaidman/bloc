@@ -64,3 +64,16 @@ document.addEventListener("DOMContentLoaded", function(){
     }
   });
 });
+
+document.addEventListener("DOMContentLoaded", function(){
+  var canvas = document.getElementById("canvas");
+
+  canvas.addEventListener("mousedown", getPosition, false);
+
+  function getPosition(event){
+    var rect = canvas.getBoundingClientRect();
+    var x = event.clientX - rect.left;
+    var y = event.clientY - rect.top;
+    console.log("x: " + x + "y: " + y);
+  }
+});
