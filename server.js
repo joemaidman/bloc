@@ -22,4 +22,9 @@ io.on('connection', function(socket) {
     gameController.createShape(data.block[0], data.block[1], data.block[2], data.block[3], data.block[4], data.block[5]);
     io.emit("updateWorld", {blocks: gameController.getAllShapes()});
   });
+
+  socket.on('rotate', function (data) {
+    gameController.rotateWorld();
+    io.emit("updateWorld", {blocks: gameController.getAllShapes()});
+  });
 });
