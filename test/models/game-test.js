@@ -1,30 +1,21 @@
 "strict mode";
 
 var Game = require('../../src/models/game.js');
-var Isomer = require("isomer");
-var Shape = Isomer.Shape;
-var Point = Isomer.Point;
 
 describe("Game", function(){
-var game;
+  var game;
 
-beforeEach(function(){
-  game = new Game();
-});
-
- it("has a name", function(){
-
-   expect(game.name).to.equal("Bloc");
+  beforeEach(function(){
+    game = new Game();
   });
 
-  it("createShape returns a block", function(){
-    expect(game.createShape()).to.be.an.instanceof(Shape);
+  it(".getBlocks returns an array of shapes", function(){
+    expect(game.getShapes()).to.eql([]);
+  });
+
+  it (".addShape adds a shape to the shapes array", function(){
+    game.addShape(1);
+    expect(game.getShapes()).to.eql([1]);
   })
 
-  it("createShape returns block to predefined position", function(){
-    var spyShape = sinon.spy(game, '_shape')
-    game.createShape(1,1,1);
-    var point = new Point(1,1,1);
-    expect(spyShape).to.have.been.calledWith(point);
-  })
 });

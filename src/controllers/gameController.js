@@ -1,6 +1,7 @@
 "strict mode";
 var GameView = require('../views/gameView.js');
 var Game = require('../models/game.js');
+var Shape = require('../models/shape.js');
 
 function GameController(game, gameView) {
   this.game = game;
@@ -8,11 +9,11 @@ function GameController(game, gameView) {
 }
 
 GameController.prototype = {
-  loadInterface: function(){
-    return this.gameView.getCanvas();
+  getAllShapes: function(){
+    return this.game.getShapes();
   },
-  getShape: function(xPos, yPos, zPos){
-    return this.game.createShape(xPos, yPos, zPos);
+  createShape: function(xPos = 0, yPos = 0, zPos = 0, r = 0, g = 0, b = 0){
+    this.game.addShape(new Shape(xPos, yPos, zPos, r, g, b));
   }
 };
 
