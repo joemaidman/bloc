@@ -23,6 +23,10 @@ describe("Game", function(){
     game = new Game();
   });
 
+  it("exists", function(){
+    expect(game).to.exist;
+  });
+
   it(".getShapes returns an array of shapes", function(){
     expect(game.getShapes()).to.eql([]);
   });
@@ -52,7 +56,7 @@ describe("Game", function(){
     var shapeDoubleOne = new ShapeDouble(1, 2, 0);
     var shapeDoubleTwo = new ShapeDouble(2, 3, 1);
     var shapeDoubleThree = new ShapeDouble(0, 0, 0);
-    var shapeDoubleFour = new ShapeDouble(0, 0, 1);
+    var shapeDoubleFour = new ShapeDouble(2, 0, 1);
     game.addShape(shapeDoubleOne);
     game.addShape(shapeDoubleTwo);
     game.addShape(shapeDoubleThree);
@@ -60,12 +64,21 @@ describe("Game", function(){
     expect(game.getShapes()).to.eql([shapeDoubleOne, shapeDoubleThree, shapeDoubleTwo, shapeDoubleFour]);
   });
 
-  it (".will check for existing block at same coordinates when block is added", function(){
+  it (".addShape will check for existing block at same coordinates when block is added", function(){
     var shapeDoubleOne = new ShapeDouble(1, 2, 0);
     var shapeDoubleTwo = new ShapeDouble(1, 2, 0);
     game.addShape(shapeDoubleOne);
     game.addShape(shapeDoubleTwo);
     expect(game.getShapes()).to.eql([shapeDoubleOne]);
+  });
+
+  it (".clearShapes will remove all shapes from the game", function(){
+    var shapeDoubleOne = new ShapeDouble(1, 2, 0);
+    var shapeDoubleTwo = new ShapeDouble(1, 2, 0);
+    game.addShape(shapeDoubleOne);
+    game.addShape(shapeDoubleTwo);
+    game.clearShapes();
+    expect(game.getShapes()).to.eql([]);
   });
 
 });

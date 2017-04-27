@@ -17,6 +17,10 @@ document.addEventListener("DOMContentLoaded", function(){
     socket.emit('rotate');
   });
 
+  $("#clear").click(function() {
+    socket.emit('clearBlocks');
+  });
+
   function calculateGridPosition(mouseX, mouseY){
     var x = Math.floor(((mouseX - 300) / 26) + (((mouseX - 300) / 26) + ((mouseY - 540)/ 15)) / -2);
     var y = Math.floor((((mouseX - 300) / 26) + ((mouseY - 540) / 15)) / -2);
@@ -107,8 +111,7 @@ document.addEventListener("DOMContentLoaded", function(){
     drawGridLines(11,11,0);
     drawOrigin();
     var blocks = data.blocks;
-    // console.log("Adding blocks");
-    // console.log(blocks);
+    console.log("Receiving world update and drawing blocks");
     for (var i = 0; i<blocks.length; i++ ){
       console.log("Block added");
       iso.add(Shape.Prism(new Point(blocks[i].xPos, blocks[i].yPos, blocks[i].zPos)),new Color(blocks[i].r,blocks[i].g,blocks[i].b));
@@ -126,6 +129,5 @@ document.addEventListener("DOMContentLoaded", function(){
     var rect = canvas.getBoundingClientRect();
     var x = event.clientX - rect.left;
     var y = event.clientY - rect.top;
-    // console.log("x: " + x + "y: " + y);
   }
 });

@@ -15,6 +15,9 @@ Game.prototype = {
   deleteShape: function(coordinates){
     this.shapes.splice(this._findShapeIndex(coordinates),1);
   },
+  clearShapes: function(){
+    this.shapes = [];
+  },
   rotateShapes: function(){
     for(var i = 0; i < this.shapes.length; i++){
       this.shapes[i].rotate();

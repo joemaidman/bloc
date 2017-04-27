@@ -20,6 +20,9 @@ GameController.prototype = {
   },
   rotateWorld: function(){
     this.game.rotateShapes();
+  },
+  resetWorld: function(){
+    this.game.clearShapes();
   }
 };
 
