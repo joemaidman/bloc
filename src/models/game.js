@@ -6,6 +6,7 @@ function Game(){
 
 Game.prototype = {
   getShapes: function(){
+    this._sortShapes();
     return this.shapes;
   },
   addShape: function(shape){
@@ -25,6 +26,11 @@ Game.prototype = {
         return i;
       }
     }
+  },
+  _sortShapes: function(){
+    this.shapes.sort(function(a, b){
+        return (a.getPosition().x + a.getPosition().y + (a.getPosition().z * 100)) < (b.getPosition().x + b.getPosition().y + (b.getPosition().z * 100));
+    });
   }
 };
 
