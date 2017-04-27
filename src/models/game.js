@@ -13,7 +13,8 @@ Game.prototype = {
     if (this._positionEmpty(shape) && this._positionValid(shape)) { this.shapes.push(shape); }
   },
   deleteShape: function(coordinates){
-    this.shapes.splice(this._findShapeIndex(coordinates),1);
+    var shapeIndex = this._findShapeIndex(coordinates);
+    if(shapeIndex > 0){this.shapes.splice(shapeIndex,1)};
   },
   clearShapes: function(){
     this.shapes = [];
