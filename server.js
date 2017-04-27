@@ -14,14 +14,22 @@ var gameView = new GameView();
 var game = new Game();
 var gameController = new GameController(game, gameView);
 server.listen(8080);
+var clientCount = 0;
 
 app.use(express.static(__dirname + '/public'));
 console.log("Server running on port 8080");
 
 io.on('connection', function(socket) {
-  console.log("new client connected");
+  clientCount++;
+  console.log("A new client connected: " + socket.id + " (" + clientCount + " clients)");
+
   socket.on('add_block', function (data) {
     gameController.createShape(data.block[0], data.block[1], data.block[2], data.block[3], data.block[4], data.block[5]);
+    io.emit("updateWorld", {blocks: gameController.getAllShapes()});
+  });
+
+  socket.on('delete_block', function (data) {
+    gameController.removeShape(data.block[0], data.block[1], data.block[2]);
     io.emit("updateWorld", {blocks: gameController.getAllShapes()});
   });
 
@@ -29,4 +37,10 @@ io.on('connection', function(socket) {
     gameController.rotateWorld();
     io.emit("updateWorld", {blocks: gameController.getAllShapes()});
   });
+
+  socket.on('disconnect', function (data) {
+    clientCount--;
+    console.log("A client disconnected: " + socket.id + " (" + clientCount + " clients)");
+  });
+
 });

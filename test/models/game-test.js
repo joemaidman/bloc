@@ -41,14 +41,11 @@ describe("Game", function(){
 
   it (".deleteShape deletes a shape from the shape array", function(){
     var shapeDoubleOne = new ShapeDouble(1, 2, 0);
-    var shapeDoubleTwo = new ShapeDouble(4, 1, 0);
+    var shapeDoubleTwo = new ShapeDouble(2, 3, 1);
     game.addShape(shapeDoubleOne);
     game.addShape(shapeDoubleTwo);
-    expect(game.getShapes()).to.eql([shapeDoubleOne, shapeDoubleTwo]);
-    console.log(game.getShapes())
-    game.deleteShape({x: 1, y: 2, z: 0});
-    console.log(game.getShapes())
-    // expect(game.getShapes()).to.eql([shapeDoubleTwo]);
+    game.deleteShape({x: 2, y: 3, z: 1});
+    expect(game.getShapes()).to.eql([shapeDoubleOne]);
   })
 
 });

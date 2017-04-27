@@ -12,22 +12,19 @@ Game.prototype = {
     this.shapes.push(shape);
   },
   deleteShape: function(coordinates){
-    // console.log(this.shapes)
-    this.shapes = this._findShape(coordinates)
-    // console.log(this.shapes)
+    this.shapes.splice(this._findShapeIndex(coordinates),1);
   },
   rotateShapes: function(){
     for(var i = 0; i < this.shapes.length; i++){
       this.shapes[i].rotate();
     }
   },
-  _findShape: function(coordinates){
-    return this.shapes.find(function(shape){
-      console.log(shape.getPosition().toString())
-      console.log(coordinates.toString())
-
-      // console.log(shape.getPosition().toString() !== coordinates.toString());
-    });
+  _findShapeIndex: function(coordinates){
+    for(var i = 0; i < this.shapes.length; i++){
+      if((this.shapes[i].getPosition().x == coordinates.x) &&(this.shapes[i].getPosition().y == coordinates.y) && (this.shapes[i].getPosition().z == coordinates.z)){
+        return i;
+      }
+    }
   }
 };
 

@@ -23,6 +23,14 @@ document.addEventListener("DOMContentLoaded", function(){
     socket.emit('add_block', {block: [x,y,z,255,0,0]});
   });
 
+  $("#delete").click(function() {
+    var x = parseInt($("#x").val());
+    var y = parseInt($("#y").val());
+    var z = parseInt($("#z").val());
+    console.log("Deleting Block")
+    socket.emit('delete_block', {block: [x,y,z]});
+  });
+
   socket.emit('add_block', {block: [0,0,0,0,0,255]});
   socket.emit('add_block', {block: [3,0,0,0,255,0]});
   socket.emit('add_block', {block: [0,3,0,255,0,0]});
