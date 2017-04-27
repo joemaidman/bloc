@@ -81,4 +81,28 @@ describe("Game", function(){
     expect(game.getShapes()).to.eql([]);
   });
 
+  it (".addShape doesn't add a shape with an invalid positive position on any axis", function(){
+    var shapeDoubleOne = new ShapeDouble(0, 0, 0);
+    var shapeDoubleTwo = new ShapeDouble(11, 0, 0);
+    var shapeDoubleThree = new ShapeDouble(0, 11, 0);
+    var shapeDoubleFour = new ShapeDouble(0, 0, 11);
+    game.addShape(shapeDoubleOne);
+    game.addShape(shapeDoubleTwo);
+    game.addShape(shapeDoubleThree);
+    game.addShape(shapeDoubleFour);
+    expect(game.getShapes()).to.eql([shapeDoubleOne]);
+  });
+
+  it (".addShape doesn't add a shape with a negative position on any axis", function(){
+    var shapeDoubleOne = new ShapeDouble(0, 0, 0);
+    var shapeDoubleTwo = new ShapeDouble(-1, 0, 0);
+    var shapeDoubleThree = new ShapeDouble(0, -1, 0);
+    var shapeDoubleFour = new ShapeDouble(0, 0, -1);
+    game.addShape(shapeDoubleOne);
+    game.addShape(shapeDoubleTwo);
+    game.addShape(shapeDoubleThree);
+    game.addShape(shapeDoubleFour);
+    expect(game.getShapes()).to.eql([shapeDoubleOne]);
+  });
+
 });
