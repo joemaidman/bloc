@@ -24,6 +24,7 @@ document.addEventListener("DOMContentLoaded", function(){
   });
 
   socket.emit('add_block', {block: [0,0,0,0,0,255]});
+
   socket.emit('add_block', {block: [3,0,0,0,255,0]});
   socket.emit('add_block', {block: [0,3,0,255,0,0]});
   socket.emit('add_block', {block: [3,3,0,100,100,100]});
@@ -71,13 +72,18 @@ document.addEventListener("DOMContentLoaded", function(){
 
 document.addEventListener("DOMContentLoaded", function(){
   var canvas = document.getElementById("canvas");
+  var stage = new createjs.Stage(document.getElementById("canvas"));
 
-  canvas.addEventListener("mousedown", getPosition, false);
 
-  function getPosition(event){
-    var rect = canvas.getBoundingClientRect();
-    var x = event.clientX - rect.left;
-    var y = event.clientY - rect.top;
-    console.log("x: " + x + "y: " + y);
-  }
+  stage.on("stagemousedown", function(evt) {
+    alert("the canvas was clicked at "+evt.stageX+","+evt.stageY);
+});
+  // canvas.addEventListener("mousedown", getPosition, false);
+  //
+  // function getPosition(event){
+  //   var rect = canvas.getBoundingClientRect();
+  //   var x = event.clientX - rect.left;
+  //   var y = event.clientY - rect.top;
+  //   console.log("x: " + x + "y: " + y);
+  // }
 });
