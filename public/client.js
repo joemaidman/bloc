@@ -23,12 +23,12 @@ document.addEventListener("DOMContentLoaded", function(){
     return {x: x, y: y};
   }
 
-  function writeMessage(canvas, message) {
+  function writeMessage(canvas, message, x, y) {
     var context = canvas.getContext('2d');
-    context.clearRect(0, 0, 500, 100);
+    context.clearRect(0, 0, 400, 100);
     context.font = '12pt Calibri';
     context.fillStyle = 'black';
-    context.fillText(message, 10, 25);
+    context.fillText(message, x, y);
   }
   function getMousePos(canvas, evt) {
     var rect = canvas.getBoundingClientRect();
@@ -45,7 +45,13 @@ document.addEventListener("DOMContentLoaded", function(){
     var message = "Mouse: x:" + Math.floor(mousePos.x) + ", y:" + Math.floor(mousePos.y) + "\n";
     var gridPos = calculateGridPosition(getMousePos(canvas, evt).x, getMousePos(canvas, evt).y);
     message += "Grid: x : " + gridPos.x + ", y: " + gridPos.y;
-    writeMessage(canvas, message);
+    writeMessage(canvas, message, 10, 25);
+  }, false);
+
+  canvas.addEventListener('mouseup', function(evt) {
+    var mousePos = getMousePos(canvas, evt);
+    var gridPos = calculateGridPosition(getMousePos(canvas, evt).x, getMousePos(canvas, evt).y);
+    socket.emit('add_block', {block: [gridPos.x,gridPos.y,0,255,0,0]});
   }, false);
 
   $("#add").click(function() {
@@ -101,11 +107,13 @@ document.addEventListener("DOMContentLoaded", function(){
     drawGridLines(11,11,0);
     drawOrigin();
     var blocks = data.blocks;
-    console.log("Adding blocks");
+    // console.log("Adding blocks");
+    // console.log(blocks);
     for (var i = 0; i<blocks.length; i++ ){
       console.log("Block added");
       iso.add(Shape.Prism(new Point(blocks[i].xPos, blocks[i].yPos, blocks[i].zPos)),new Color(blocks[i].r,blocks[i].g,blocks[i].b));
     }
+    writeMessage(canvas, "Block Count: " + blocks.length, 450, 20);
   });
 });
 
@@ -118,6 +126,6 @@ document.addEventListener("DOMContentLoaded", function(){
     var rect = canvas.getBoundingClientRect();
     var x = event.clientX - rect.left;
     var y = event.clientY - rect.top;
-    console.log("x: " + x + "y: " + y);
+    // console.log("x: " + x + "y: " + y);
   }
 });

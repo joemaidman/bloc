@@ -25,22 +25,26 @@ io.on('connection', function(socket) {
 
   socket.on('add_block', function (data) {
     gameController.createShape(data.block[0], data.block[1], data.block[2], data.block[3], data.block[4], data.block[5]);
-    io.emit("updateWorld", {blocks: gameController.getAllShapes()});
+    updateWorld();
   });
 
   socket.on('delete_block', function (data) {
     gameController.removeShape(data.block[0], data.block[1], data.block[2]);
-    io.emit("updateWorld", {blocks: gameController.getAllShapes()});
+    updateWorld();
   });
 
   socket.on('rotate', function (data) {
     gameController.rotateWorld();
-    io.emit("updateWorld", {blocks: gameController.getAllShapes()});
+    updateWorld();
   });
 
   socket.on('disconnect', function (data) {
     clientCount--;
     console.log("A client disconnected: " + socket.id + " (" + clientCount + " clients)");
   });
+
+  function updateWorld(){
+    io.emit("updateWorld", {blocks: gameController.getAllShapes()});
+  }
 
 });
