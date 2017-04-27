@@ -1,10 +1,12 @@
+"strict mode";
+
 var express = require('express'),
-    app = express(),
-    http = require('http'),
-    socketIo = require('socket.io'),
-    GameView = require('./src/views/gameView.js'),
-    Game = require('./src/models/game.js'),
-    GameController = require('./src/controllers/gameController.js');
+app = express(),
+http = require('http'),
+socketIo = require('socket.io'),
+GameView = require('./src/views/gameView.js'),
+Game = require('./src/models/game.js'),
+GameController = require('./src/controllers/gameController.js');
 
 var server = http.createServer(app);
 var io = socketIo.listen(server);
@@ -20,6 +22,11 @@ io.on('connection', function(socket) {
   console.log("new client connected");
   socket.on('add_block', function (data) {
     gameController.createShape(data.block[0], data.block[1], data.block[2], data.block[3], data.block[4], data.block[5]);
+    io.emit("updateWorld", {blocks: gameController.getAllShapes()});
+  });
+
+  socket.on('rotate', function (data) {
+    gameController.rotateWorld();
     io.emit("updateWorld", {blocks: gameController.getAllShapes()});
   });
 });

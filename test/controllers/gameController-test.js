@@ -6,6 +6,7 @@ function GameViewDouble() {
 }
 GameViewDouble.prototype = {
   getCanvas: function(){
+    return true;
   }
 };
 
@@ -18,6 +19,12 @@ GameDouble.prototype = {
     return true;
   },
   addShape: function(){
+    return true;
+  },
+  rotateShapes: function(){
+    return true;
+  },
+  getScale: function(){
     return true;
   }
 };
@@ -47,6 +54,14 @@ describe("GameController", function(){
     var spyAddShape = sinon.spy(gameDouble, "addShape");
     gameController.createShape();
     expect(spyAddShape).to.have.been.calledOnce;
-  })
+  });
+
+  it("can call rotate on all shapes", function(){
+    var rotateSpy = sinon.spy(gameDouble, "rotateShapes");
+    gameController.rotateWorld();
+    expect(rotateSpy).to.have.been.calledOnce;
+  });
+
+
 
 });

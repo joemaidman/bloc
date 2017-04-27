@@ -14,6 +14,9 @@ GameController.prototype = {
   },
   createShape: function(xPos = 0, yPos = 0, zPos = 0, r = 0, g = 0, b = 0){
     this.game.addShape(new Shape(xPos, yPos, zPos, r, g, b));
+  },
+  rotateWorld: function(){
+    this.game.rotateShapes();
   }
 };
 

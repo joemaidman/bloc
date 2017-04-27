@@ -10,7 +10,11 @@ Game.prototype = {
   },
   addShape: function(shape){
     this.shapes.push(shape);
-    console.log(this.shapes)
+  },
+  rotateShapes: function(){
+    for(var i = 0; i < this.shapes.length; i++){
+      this.shapes[i].rotate();
+    }
   }
 }
 
