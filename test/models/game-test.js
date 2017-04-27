@@ -28,8 +28,8 @@ describe("Game", function(){
   });
 
   it (".addShape adds a shape to the shapes array", function(){
-    var shapeDoubleOne = new ShapeDouble();
-    var shapeDoubleTwo = new ShapeDouble();
+    var shapeDoubleOne = new ShapeDouble(1, 2, 0);
+    var shapeDoubleTwo = new ShapeDouble(3, 2, 0);
     var rotateShapeSpyOne = sinon.spy(shapeDoubleOne, "rotate");
     var rotateShapeSpyTwo = sinon.spy(shapeDoubleTwo, "rotate");
     game.addShape(shapeDoubleOne);
@@ -58,6 +58,14 @@ describe("Game", function(){
     game.addShape(shapeDoubleThree);
     game.addShape(shapeDoubleFour);
     expect(game.getShapes()).to.eql([shapeDoubleTwo, shapeDoubleFour, shapeDoubleOne, shapeDoubleThree]);
+  });
+
+  it (".will check for existing block at same coordinates when block is added", function(){
+    var shapeDoubleOne = new ShapeDouble(1, 2, 0);
+    var shapeDoubleTwo = new ShapeDouble(1, 2, 0);
+    game.addShape(shapeDoubleOne);
+    game.addShape(shapeDoubleTwo);
+    expect(game.getShapes()).to.eql([shapeDoubleOne]);
   });
 
 });

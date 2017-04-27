@@ -10,7 +10,7 @@ Game.prototype = {
     return this.shapes;
   },
   addShape: function(shape){
-    this.shapes.push(shape);
+    if (this._findShapeIndex(shape.getPosition()) === false) { this.shapes.push(shape); }
   },
   deleteShape: function(coordinates){
     this.shapes.splice(this._findShapeIndex(coordinates),1);
@@ -26,6 +26,7 @@ Game.prototype = {
         return i;
       }
     }
+    return false;
   },
   _sortShapes: function(){
     this.shapes.sort(function(a, b){

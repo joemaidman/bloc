@@ -87,7 +87,7 @@ document.addEventListener("DOMContentLoaded", function(){
     }
   }
 
-  function  drawOrigin(){
+  function drawOrigin(){
     iso.add(new Path([
       Point(4, 4, 2),
       Point(4, 3, 2),
