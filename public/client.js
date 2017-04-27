@@ -1,7 +1,9 @@
+var createjs = require("createjs-easeljs")
 document.addEventListener("DOMContentLoaded", function(){
 
   var socket = io.connect();
   var iso = new Isomer(document.getElementById("canvas"));
+  var stage = new createjs.Stage(document.getElementById("canvas"));
 
   GridLines(11,11,0);
 
@@ -48,5 +50,7 @@ document.addEventListener("DOMContentLoaded", function(){
     var x = event.clientX - rect.left;
     var y = event.clientY - rect.top;
     console.log("x: " + x + "y: " + y);
+
   }
+
 });

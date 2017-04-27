@@ -20,6 +20,7 @@
     "webpack": "^2.4.1"
   },
   "dependencies": {
+    "createjs-easeljs": "^0.8.2",
     "express": "^4.15.2",
     "http": "0.0.0"
   }
