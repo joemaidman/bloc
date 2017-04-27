@@ -7,6 +7,7 @@ function Game(){
 Game.prototype = {
   getShapes: function(){
     this._sortShapes();
+    console.log(this.shapes);
     return this.shapes;
   },
   addShape: function(shape){
@@ -30,7 +31,7 @@ Game.prototype = {
   },
   _sortShapes: function(){
     this.shapes.sort(function(a, b){
-        return (a.getPosition().x + a.getPosition().y + (a.getPosition().z * 100)) < (b.getPosition().x + b.getPosition().y + (b.getPosition().z * 100));
+      return (a.getPosition().z - b.getPosition().z || b.getPosition().x - a.getPosition().x || b.getPosition().y - a.getPosition().y);
     });
   }
 };

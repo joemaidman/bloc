@@ -57,7 +57,7 @@ describe("Game", function(){
     game.addShape(shapeDoubleTwo);
     game.addShape(shapeDoubleThree);
     game.addShape(shapeDoubleFour);
-    expect(game.getShapes()).to.eql([shapeDoubleTwo, shapeDoubleFour, shapeDoubleOne, shapeDoubleThree]);
+    expect(game.getShapes()).to.eql([shapeDoubleOne, shapeDoubleThree, shapeDoubleTwo, shapeDoubleFour]);
   });
 
   it (".will check for existing block at same coordinates when block is added", function(){
