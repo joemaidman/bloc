@@ -17,40 +17,36 @@ document.addEventListener("DOMContentLoaded", function(){
     socket.emit('rotate');
   });
 
-  function calculate(mouseX, mouseY){
-  var part1 = (mouseX - 300) / 26;
-  var part2 = (((mouseX - 300) / 26) + ((mouseY - 540)/ 15)) / -2;
-  var x = Math.floor(part1 + part2);
-
-  var y = Math.floor((((mouseX - 300) / 26) + ((mouseY - 540) / 15)) / -2);
-
-  console.log("X: " + x + " || Y: " + y);
+  function calculateGridPosition(mouseX, mouseY){
+    var x = Math.floor(((mouseX - 300) / 26) + (((mouseX - 300) / 26) + ((mouseY - 540)/ 15)) / -2);
+    var y = Math.floor((((mouseX - 300) / 26) + ((mouseY - 540) / 15)) / -2);
+    return {x: x, y: y};
   }
 
-
   function writeMessage(canvas, message) {
-          var context = canvas.getContext('2d');
-          context.clearRect(0, 0, 500, 100);
-          context.font = '12pt Calibri';
-          context.fillStyle = 'black';
-          context.fillText(message, 10, 25);
-        }
-        function getMousePos(canvas, evt) {
-          var rect = canvas.getBoundingClientRect();
-          return {
-            x: evt.clientX - rect.left,
-            y: evt.clientY - rect.top
-          };
-        }
-        var canvas = document.getElementById('canvas');
-        var context = canvas.getContext('2d');
+    var context = canvas.getContext('2d');
+    context.clearRect(0, 0, 500, 100);
+    context.font = '12pt Calibri';
+    context.fillStyle = 'black';
+    context.fillText(message, 10, 25);
+  }
+  function getMousePos(canvas, evt) {
+    var rect = canvas.getBoundingClientRect();
+    return {
+      x: evt.clientX - rect.left,
+      y: evt.clientY - rect.top
+    };
+  }
+  var canvas = document.getElementById('canvas');
+  var context = canvas.getContext('2d');
 
-        canvas.addEventListener('mousemove', function(evt) {
-          var mousePos = getMousePos(canvas, evt);
-          var message = 'Mouse position: ' + Math.floor(mousePos.x) + ', ' + Math.floor(mousePos.y);
-          writeMessage(canvas, message);
-          calculate(getMousePos(canvas, evt).x, getMousePos(canvas, evt).y);
-        }, false);
+  canvas.addEventListener('mousemove', function(evt) {
+    var mousePos = getMousePos(canvas, evt);
+    var message = "Mouse: x:" + Math.floor(mousePos.x) + ", y:" + Math.floor(mousePos.y) + "\n";
+    var gridPos = calculateGridPosition(getMousePos(canvas, evt).x, getMousePos(canvas, evt).y);
+    message += "Grid: x : " + gridPos.x + ", y: " + gridPos.y;
+    writeMessage(canvas, message);
+  }, false);
 
   $("#add").click(function() {
     var x = parseInt($("#x").val());
