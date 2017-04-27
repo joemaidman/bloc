@@ -7,7 +7,6 @@ function Game(){
 Game.prototype = {
   getShapes: function(){
     this._sortShapes();
-    console.log(this.shapes);
     return this.shapes;
   },
   addShape: function(shape){
