@@ -67,7 +67,7 @@ scrollDistance+= evt.deltaY
     drawWorld();
   }
   console.log(evt.deltaY);
-  
+
   evt.preventDefault();
 }, false);
 
@@ -79,14 +79,54 @@ scrollDistance+= evt.deltaY
     writeMessage(message, "positionDiv");
   }, false);
 
-  canvas.addEventListener('mouseup', function(evt) {
-    var mousePos = getMousePos(canvas, evt);
-    var gridPos = calculateGridPosition(getMousePos(canvas, evt).x, getMousePos(canvas, evt).y);
-    var r = document.getElementById("red").value,
-        g = document.getElementById("green").value,
-        b = document.getElementById("blue").value;
-    socket.emit('add_block', {block: [(gridPos.x -=z),(gridPos.y -=z),z,r,g,b]});
-  }, false);
+  // canvas.addEventListener('mouseup', function(evt) {
+  //   var mousePos = getMousePos(canvas, evt);
+  //   var gridPos = calculateGridPosition(getMousePos(canvas, evt).x, getMousePos(canvas, evt).y);
+  //   var r = document.getElementById("red").value,
+  //       g = document.getElementById("green").value,
+  //       b = document.getElementById("blue").value;
+  //   socket.emit('add_block', {block: [(gridPos.x -=z),(gridPos.y -=z),z,r,g,b]});
+  // }, false);
+
+  canvas.addEventListener('mousedown', function(evt) {
+   var mousePos = getMousePos(canvas, evt);
+   var gridPos = calculateGridPosition(getMousePos(canvas, evt).x, getMousePos(canvas, evt).y)
+   if (evt.which === 3) {
+     socket.emit('delete_block', {block: [gridPos.x,gridPos.y, 0]});
+   }
+     else if (evt.which === 1) {
+       var r = document.getElementById("red").value,
+           g = document.getElementById("green").value,
+           b = document.getElementById("blue").value;
+socket.emit('add_block', {block: [(gridPos.x -=z),(gridPos.y -=z),z,r,g,b]});
+   }
+ }, false);
+
+ canvas.addEventListener('contextmenu', function(evt) {
+   evt.preventDefault();
+ }, false);
+
+  // canvas.addEventListener("mousedown", function(evt) {
+  //   var highlightGrid;
+  //   var gridPos = calculateGridPosition(getMousePos(canvas, evt).x, getMousePos(canvas, evt).y);
+  //
+  //   if (highlightGrid !== gridPos) {
+  //     highlightGrid = gridPos
+  //
+  //     console.log('gridPos' + gridPos)
+  //     console.log('highlight grid' + highlightGrid)
+  //
+  //     // console.log('original variable')
+  //     // console.log('changed variable')
+  //
+  //     iso.add(new Path([
+  //       Point(highlightGrid.x, highlightGrid.y, 0),
+  //       Point(highlightGrid.x, highlightGrid.y + 1, 0),
+  //       Point(highlightGrid.x + 1, highlightGrid.y, 0),
+  //       Point(highlightGrid.x + 1, highlightGrid.y + 1, 0)
+  //     ]), new Color(50, 160, 60));
+  //   }
+  // }, false);
 
   $("#add").click(function() {
     var x = parseInt($("#x").val());
@@ -105,6 +145,8 @@ scrollDistance+= evt.deltaY
     console.log("Deleting Block")
     socket.emit('delete_block', {block: [x,y,z]});
   });
+
+
 
   socket.emit('add_block', {block: [0,0,0,0,0,255]});
   socket.emit('add_block', {block: [3,0,0,0,255,0]});
