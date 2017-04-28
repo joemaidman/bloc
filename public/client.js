@@ -8,11 +8,7 @@ document.addEventListener("DOMContentLoaded", function(){
   var Point = Isomer.Point;
   var Color = Isomer.Color;
   var Path = Isomer.Path;
-
   var input = document.querySelectorAll("input");
-
-
-
 
 
   drawGridLines(11,11,0);
@@ -60,13 +56,37 @@ document.addEventListener("DOMContentLoaded", function(){
   var canvas = document.getElementById('canvas');
   var context = canvas.getContext('2d');
 
+
+
+
+// mouse/grid position counter
   canvas.addEventListener('mousemove', function(evt) {
     var mousePos = getMousePos(canvas, evt);
     var message = "Mouse: x:" + Math.floor(mousePos.x) + ", y:" + Math.floor(mousePos.y) + "\n";
     var gridPos = calculateGridPosition(getMousePos(canvas, evt).x, getMousePos(canvas, evt).y);
     message += "Grid: x : " + gridPos.x + ", y: " + gridPos.y;
     writeMessage(canvas, message, 10, 25);
+
+    var highlightGrid = var gridPos
   }, false);
+
+// mouse/grid array
+  canvas.addEventListener('mousemove', function(evt) {
+    var origMousePos = getMousePos(canvas, evt);
+    var origGridPos = calculateGridPosition(origMousePos.x, origMousePos.y);
+    var newGridPos = calculateGridPosition(getMousePos(canvas, evt).x)
+
+
+    iso.add(new Path([
+      Point(gridPos.x, gridPos.y, 0),
+      Point(gridPos.x, gridPos.y + 1, 0),
+      Point(gridPos.x + 1, gridPos.y, 0),
+      Point(gridPos.x + 1, gridPos.y + 1, 0)
+    ]), new Color(50, 160, 60));
+
+    // socket.emit('hoverUpdate');
+  }
+
 
   canvas.addEventListener('mousedown', function(evt) {
     var mousePos = getMousePos(canvas, evt);

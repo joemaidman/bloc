@@ -44,6 +44,10 @@ io.on('connection', function(socket) {
     updateWorld();
   });
 
+  socket.on('hoverUpdate', function() {
+    updateWorld();
+  });
+
   socket.on('disconnect', function (data) {
     clientCount--;
     console.log("A client disconnected: " + socket.id + " (" + clientCount + " clients)");
