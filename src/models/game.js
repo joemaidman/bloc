@@ -14,7 +14,7 @@ Game.prototype = {
   },
   deleteShape: function(coordinates){
     var shapeIndex = this._findShapeIndex(coordinates);
-    if(shapeIndex > 0){this.shapes.splice(shapeIndex,1)};
+    if(shapeIndex >= 0){this.shapes.splice(shapeIndex,1)};
   },
   clearShapes: function(){
     this.shapes = [];
@@ -25,7 +25,7 @@ Game.prototype = {
     }
   },
   _positionEmpty: function(shape){
-    return this._findShapeIndex(shape.getPosition()) === false;
+    return this._findShapeIndex(shape.getPosition()) === -1;
   },
   _positionValid: function(shape){
     var position = shape.getPosition();
@@ -37,7 +37,7 @@ Game.prototype = {
         return i;
       }
     }
-    return false;
+    return -1;
   },
   _sortShapes: function(){
     this.shapes.sort(function(a, b){
