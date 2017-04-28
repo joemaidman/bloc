@@ -13,7 +13,7 @@ document.addEventListener("DOMContentLoaded", function(){
 
 
 
-  
+
 
   drawGridLines(11,11,0);
   drawOrigin();
@@ -71,9 +71,12 @@ document.addEventListener("DOMContentLoaded", function(){
   canvas.addEventListener('mouseup', function(evt) {
     var mousePos = getMousePos(canvas, evt);
     var gridPos = calculateGridPosition(getMousePos(canvas, evt).x, getMousePos(canvas, evt).y);
-    socket.emit('add_block', {block: [gridPos.x,gridPos.y,0,255,0,0]});
+    var r = document.getElementById("red").value,
+        g = document.getElementById("green").value,
+        b = document.getElementById("blue").value;
+    socket.emit('add_block', {block: [gridPos.x,gridPos.y,0,r,g,b]});
   }, false);
-  
+
   $("#add").click(function() {
     var x = parseInt($("#x").val());
     var y = parseInt($("#y").val());
