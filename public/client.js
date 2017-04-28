@@ -59,13 +59,15 @@ scrollDistance+= evt.deltaY
   if( scrollDistance> 10){
     z = Math.min(10,z+=1)
     scrollDistance = 0
+    drawWorld();
   }
   else if (scrollDistance < -10) {
     z= Math.max(0,z-=1)
     scrollDistance = 0
+    drawWorld();
   }
   console.log(evt.deltaY);
-  drawWorld();
+  
   evt.preventDefault();
 }, false);
 
