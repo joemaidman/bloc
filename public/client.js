@@ -8,9 +8,10 @@ document.addEventListener("DOMContentLoaded", function(){
   var Point = Isomer.Point;
   var Color = Isomer.Color;
   var Path = Isomer.Path;
-
+  var blocks = [];
   var input = document.querySelectorAll("input");
-
+  var z = 0;
+  var scrollDistance = 0;
 
 
 
@@ -60,6 +61,20 @@ document.addEventListener("DOMContentLoaded", function(){
   var canvas = document.getElementById('canvas');
   var context = canvas.getContext('2d');
 
+canvas.addEventListener('mousewheel',function(evt){
+scrollDistance+= evt.deltaY
+  if( scrollDistance> 10){
+    z = Math.min(10,z+=1)
+    scrollDistance = 0
+  }
+  else if (scrollDistance < -10) {
+    z= Math.max(0,z-=1)
+    scrollDistance = 0
+  }
+  console.log(evt.deltaY)
+  drawWorld()
+})
+
   canvas.addEventListener('mousemove', function(evt) {
     var mousePos = getMousePos(canvas, evt);
     var message = "Mouse: x:" + Math.floor(mousePos.x) + ", y:" + Math.floor(mousePos.y) + "\n";
@@ -100,14 +115,14 @@ document.addEventListener("DOMContentLoaded", function(){
   socket.emit('add_block', {block: [0,3,0,255,0,0]});
   socket.emit('add_block', {block: [3,3,0,100,100,100]});
 
-  function drawGridLines (xsize, ysize, zheight) {
+  function drawGridLines (xsize, ysize, zheight, r, g, b, a) {
     for (x = 0; x < xsize+1; x++) {
       iso.add(new Path([
         new Point(x, 0, zheight),
         new Point(x, xsize, zheight),
         new Point(x, 0, zheight),
       ]),
-      new Color(255, 0, 0));
+      new Color(r, g, b,a));
     }
     for (y = 0; y < ysize+1; y++) {
       iso.add(new Path([
@@ -115,35 +130,42 @@ document.addEventListener("DOMContentLoaded", function(){
         new Point(ysize, y, zheight),
         new Point(0, y, zheight),
       ]),
-      new Color(255,0,0));
+      new Color(r, g, b,a));
     }
   }
 
-  function drawOrigin(){
+  function drawOrigin(r,g,b,a){
     iso.add(new Path([
       Point(4, 4, 2),
       Point(4, 3, 2),
       Point(4, 4, 1),
       Point(4, 5, 1)
-    ]), new Color(50, 160, 60));
+    ]), new Color(r, g, b,a));
   }
 
   socket.on('updateWorld', function (data) {
-    iso.canvas.clear();
-    drawGridLines(11,11,0);
-    drawOrigin();
-    var blocks = data.blocks;
-    console.log("Receiving world update and drawing blocks");
-    for (var i = 0; i<blocks.length; i++ ){
-      console.log("Block added");
-      iso.add(Shape.Prism(new Point(blocks[i].xPos, blocks[i].yPos, blocks[i].zPos)),new Color(blocks[i].r,blocks[i].g,blocks[i].b));
-    }
-    writeMessage(canvas, "Block Count: " + blocks.length, 450, 20);
-  });
-});
 
-document.addEventListener("DOMContentLoaded", function(){
-  var canvas = document.getElementById("canvas");
+    blocks = data.blocks;
+    console.log("Receiving world update and drawing blocks");
+   drawWorld();
+  });
+
+
+function drawWorld(){
+  iso.canvas.clear();
+  drawGridLines(11,11,0,255,0,0,0.5);
+  drawOrigin(0,255,0);
+
+
+  for (var i = 0; i<blocks.length; i++ ){
+    console.log("Block added");
+    iso.add(Shape.Prism(new Point(blocks[i].xPos, blocks[i].yPos, blocks[i].zPos)),new Color(blocks[i].r,blocks[i].g,blocks[i].b));
+  } drawGridLines(11,11,z,255, 154, 0,1);
+  writeMessage(canvas, "Block Count: " + blocks.length, 450, 20);
+}
+
+// document.addEventListener("DOMContentLoaded", function(){
+
 
   canvas.addEventListener("mousedown", getPosition, false);
 
