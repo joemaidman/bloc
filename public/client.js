@@ -67,9 +67,23 @@ scrollDistance+= evt.deltaY
     drawWorld();
   }
   console.log(evt.deltaY);
-  
+
   evt.preventDefault();
 }, false);
+
+
+window.addEventListener('keydown', function(evt){
+  if(evt.keyCode === 38){
+      z = Math.min(10,z+=1)
+      drawWorld();
+  }
+  else if (evt.keyCode === 40) {
+      z = Math.max(0,z-=1)
+      drawWorld();
+  }
+  evt.preventDefault();
+}, false);
+
 
   canvas.addEventListener('mousemove', function(evt) {
     var mousePos = getMousePos(canvas, evt);
