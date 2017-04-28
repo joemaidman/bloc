@@ -9,6 +9,7 @@ document.addEventListener("DOMContentLoaded", function(){
   var Color = Isomer.Color;
   var Path = Isomer.Path;
   var blocks = [];
+  var highlightGrid;
   var input = document.querySelectorAll("input");
   var z = 0;
   var scrollDistance = 0;
@@ -67,7 +68,7 @@ scrollDistance+= evt.deltaY
     drawWorld();
   }
   console.log(evt.deltaY);
-  
+
   evt.preventDefault();
 }, false);
 
@@ -79,14 +80,46 @@ scrollDistance+= evt.deltaY
     writeMessage(message, "positionDiv");
   }, false);
 
-  canvas.addEventListener('mouseup', function(evt) {
-    var mousePos = getMousePos(canvas, evt);
-    var gridPos = calculateGridPosition(getMousePos(canvas, evt).x, getMousePos(canvas, evt).y);
-    var r = document.getElementById("red").value,
-        g = document.getElementById("green").value,
-        b = document.getElementById("blue").value;
-    socket.emit('add_block', {block: [(gridPos.x -=z),(gridPos.y -=z),z,r,g,b]});
+  canvas.addEventListener('mousedown', function(evt) {
+   var mousePos = getMousePos(canvas, evt);
+   var gridPos = calculateGridPosition(getMousePos(canvas, evt).x, getMousePos(canvas, evt).y)
+   if (evt.which === 3) {
+     socket.emit('delete_block', {block: [(gridPos.x -=z),(gridPos.y -=z), z]});
+   }
+     else if (evt.which === 1) {
+       var r = document.getElementById("red").value,
+           g = document.getElementById("green").value,
+           b = document.getElementById("blue").value;
+socket.emit('add_block', {block: [(gridPos.x -=z),(gridPos.y -=z),z,r,g,b]});
+   }
+ }, false);
+
+ canvas.addEventListener('contextmenu', function(evt) {
+   evt.preventDefault();
+ }, false);
+
+  canvas.addEventListener("mousemove", function(evt) {
+
+      var gridPos = calculateGridPosition(getMousePos(canvas, evt).x, getMousePos(canvas, evt).y);
+      console.log(highlightGrid)
+      if (highlightGrid !== gridPos) {
+        highlightGrid = [gridPos]
+        drawWorld();
+        console.log(highlightGrid[0].x)
+      }
   }, false);
+
+
+  function drawHighlight(){
+      iso.add(new Path([
+        Point((highlightGrid[0].x -= z), (highlightGrid[0].y -= z), z),
+        Point((highlightGrid[0].x -= z), (highlightGrid[0].y -= z), z),
+        Point((highlightGrid[0].x -= z), (highlightGrid[0].y -= z), z),
+        Point((highlightGrid[0].x -= z), (highlightGrid[0].y -= z - 1), z)
+      ]), new Color(255, 0 , 0));
+    }
+    console.log('escaped')
+
 
   $("#add").click(function() {
     var x = parseInt($("#x").val());
@@ -105,6 +138,8 @@ scrollDistance+= evt.deltaY
     console.log("Deleting Block")
     socket.emit('delete_block', {block: [x,y,z]});
   });
+
+
 
   socket.emit('add_block', {block: [0,0,0,0,0,255]});
   socket.emit('add_block', {block: [3,0,0,0,255,0]});
@@ -155,6 +190,7 @@ function drawWorld(){
   if(z === 0){
     drawGridLines(11,11,z,255, 154, 0,1);
     drawOrigin(255, 154, 0,1, z);
+    drawHighlight()
     didIDraw = true;
   }
 
@@ -163,6 +199,7 @@ function drawWorld(){
       if(blocks[i - 1].zPos != blocks[i].zPos && blocks[i].zPos === z && z > 0){
         drawGridLines(11,11,z,255, 154, 0,1);
         drawOrigin(255, 154, 0,1, z);
+        drawHighlight()
         didIDraw = true;
       }
     }
@@ -173,6 +210,7 @@ function drawWorld(){
   if(didIDraw === false){
     drawGridLines(11,11,z,255, 154, 0,1);
     drawOrigin(255, 154, 0, 1, z);
+    drawHighlight()
   }
   writeMessage("Block Count: " + blocks.length, "blockDiv");
 }
