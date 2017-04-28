@@ -9,6 +9,7 @@ document.addEventListener("DOMContentLoaded", function(){
   var Color = Isomer.Color;
   var Path = Isomer.Path;
   var blocks = [];
+  var highlightGrid = [];
   var input = document.querySelectorAll("input");
   var z = 0;
   var scrollDistance = 0;
@@ -92,7 +93,7 @@ scrollDistance+= evt.deltaY
    var mousePos = getMousePos(canvas, evt);
    var gridPos = calculateGridPosition(getMousePos(canvas, evt).x, getMousePos(canvas, evt).y)
    if (evt.which === 3) {
-     socket.emit('delete_block', {block: [gridPos.x,gridPos.y, 0]});
+     socket.emit('delete_block', {block: [(gridPos.x -=z),(gridPos.y -=z), z]});
    }
      else if (evt.which === 1) {
        var r = document.getElementById("red").value,
@@ -106,27 +107,36 @@ socket.emit('add_block', {block: [(gridPos.x -=z),(gridPos.y -=z),z,r,g,b]});
    evt.preventDefault();
  }, false);
 
-  // canvas.addEventListener("mousedown", function(evt) {
-  //   var highlightGrid;
-  //   var gridPos = calculateGridPosition(getMousePos(canvas, evt).x, getMousePos(canvas, evt).y);
-  //
-  //   if (highlightGrid !== gridPos) {
-  //     highlightGrid = gridPos
-  //
-  //     console.log('gridPos' + gridPos)
-  //     console.log('highlight grid' + highlightGrid)
-  //
-  //     // console.log('original variable')
-  //     // console.log('changed variable')
-  //
-  //     iso.add(new Path([
-  //       Point(highlightGrid.x, highlightGrid.y, 0),
-  //       Point(highlightGrid.x, highlightGrid.y + 1, 0),
-  //       Point(highlightGrid.x + 1, highlightGrid.y, 0),
-  //       Point(highlightGrid.x + 1, highlightGrid.y + 1, 0)
-  //     ]), new Color(50, 160, 60));
-  //   }
-  // }, false);
+
+
+
+
+
+
+  canvas.addEventListener("mousemove", function(evt) {
+
+      var gridPos = calculateGridPosition(getMousePos(canvas, evt).x, getMousePos(canvas, evt).y);
+      console.log(highlightGrid)
+      if (!highlightGrid.includes(gridPos)) {
+        // highlightGrid = [gridPos]
+        drawWorld();
+      }
+      console.log(gridPos)
+      console.log(highlightGrid)
+  }, false);
+
+
+  function drawHighlight(x, y, z){
+    iso.add(new Path([
+      Point((highlightGrid[0] -= z), (highlightGrid[1] -= z), z),
+      Point((highlightGrid[0] -= z), (highlightGrid[1] -= z + 1), z),
+      Point((highlightGrid[0] -= z + 1), (highlightGrid[1] -= z), z),
+      Point((highlightGrid[0] -= z + 1), (highlightGrid[1] -= z + 1), z)
+    ]), new Color(255, 0 , 0));
+  }
+
+
+
 
   $("#add").click(function() {
     var x = parseInt($("#x").val());
@@ -197,6 +207,7 @@ function drawWorld(){
   if(z === 0){
     drawGridLines(11,11,z,255, 154, 0,1);
     drawOrigin(255, 154, 0,1, z);
+    drawHighlight()
     didIDraw = true;
   }
 
@@ -205,6 +216,7 @@ function drawWorld(){
       if(blocks[i - 1].zPos != blocks[i].zPos && blocks[i].zPos === z && z > 0){
         drawGridLines(11,11,z,255, 154, 0,1);
         drawOrigin(255, 154, 0,1, z);
+        drawHighlight()
         didIDraw = true;
       }
     }
@@ -215,6 +227,7 @@ function drawWorld(){
   if(didIDraw === false){
     drawGridLines(11,11,z,255, 154, 0,1);
     drawOrigin(255, 154, 0, 1, z);
+    drawHighlight()
   }
   writeMessage("Block Count: " + blocks.length, "blockDiv");
 }
