@@ -4,6 +4,14 @@
   <script src="client.js"></script>
   <script src="isomer.js"></script>
   <script src="jquery-3.2.1.min.js"></script>
+  <style type="text/css">
+  body{
+  }
+  #display{
+    width: 10%;
+    background: #87CEFA;
+  }
+  </style>
 </head>
 <body>
   <center>
@@ -11,14 +19,25 @@
     <div id="gameDiv">
       <canvas style="border: 2px black solid;border-radius:5px;" id="canvas" width="600px" height="600px"></canvas>
     </div>
-    <div id="controls" style="width:580px;padding:10px;margin-top:10px;border: 2px black solid;border-radius:5px;">
+    <div id="controls" style="width:580px;padding:30px;margin-top:10px;border: 2px black solid;border-radius:5px;">
+
     X: <input type="number" id="x" min="0" max="10" step="1" value="5">
     Y: <input type="number" id="y" min="0" max="10" step="1" value="5">
     Z: <input type="number" id="z" min="0" max="10" step="1" value="0">
     <button id="add">Add block</button>
     <button id="delete">Delete block</button>
     <button id="rotate">Rotate</button>
+
+    <div class = "colourSelector">
+      Red<input type="range" min="0" max="255" step="1" id="red" value="135">
+      Green<input type="range" min="0" max="255" step="1" id="green" value= "206">
+      Blue<input type="range" min="0" max="255" step="1" id="blue" value="250">
+      <input id="display" type="block"  width="10%">
+  </div>
+      </div>
+
     <button id="clear">Clear blocks</button>
+
   </center>
 </body>
 </html>

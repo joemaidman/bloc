@@ -8,7 +8,12 @@ document.addEventListener("DOMContentLoaded", function(){
   var Point = Isomer.Point;
   var Color = Isomer.Color;
   var Path = Isomer.Path;
-  // var canvas = document.getElementById("canvas");
+
+  var input = document.querySelectorAll("input");
+
+
+
+  
 
   drawGridLines(11,11,0);
   drawOrigin();
@@ -16,6 +21,17 @@ document.addEventListener("DOMContentLoaded", function(){
   $("#rotate").click(function() {
     socket.emit('rotate');
   });
+
+  for(var i = 0; i < input.length; i++){
+    input[i].addEventListener("input",function(){
+      var r = document.getElementById("red").value,
+        g = document.getElementById("green").value,
+          b = document.getElementById("blue").value;
+      var display = document.getElementById("display");
+      display.style.background = "rgb(" + r + "," + g + "," + b + ")"
+    });
+  }
+
 
   $("#clear").click(function() {
     socket.emit('clearBlocks');
@@ -57,12 +73,15 @@ document.addEventListener("DOMContentLoaded", function(){
     var gridPos = calculateGridPosition(getMousePos(canvas, evt).x, getMousePos(canvas, evt).y);
     socket.emit('add_block', {block: [gridPos.x,gridPos.y,0,255,0,0]});
   }, false);
-
+  
   $("#add").click(function() {
     var x = parseInt($("#x").val());
     var y = parseInt($("#y").val());
     var z = parseInt($("#z").val());
-    socket.emit('add_block', {block: [x,y,z,255,0,0]});
+    var r = document.getElementById("red").value,
+      g = document.getElementById("green").value,
+        b = document.getElementById("blue").value;
+    socket.emit('add_block', {block: [x,y,z,r,g,b]});
   });
 
   $("#delete").click(function() {
