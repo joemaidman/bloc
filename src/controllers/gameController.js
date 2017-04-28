@@ -15,11 +15,15 @@ GameController.prototype = {
   createShape: function(xPos = 0, yPos = 0, zPos = 0, r = 0, g = 0, b = 0){
     this.game.addShape(new Shape(xPos, yPos, zPos, r, g, b));
   },
+  removeShape: function(xPos, yPos, zPos){
+    this.game.deleteShape({x: xPos, y: yPos, z: zPos});
+  },
   rotateWorld: function(){
     this.game.rotateShapes();
+  },
+  resetWorld: function(){
+    this.game.clearShapes();
   }
 };
-
-
 
 module.exports = GameController;

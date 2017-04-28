@@ -21,10 +21,16 @@ GameDouble.prototype = {
   addShape: function(){
     return true;
   },
+  deleteShape: function(coordinates){
+    return true;
+  },
   rotateShapes: function(){
     return true;
   },
   getScale: function(){
+    return true;
+  },
+  clearShapes: function(){
     return true;
   }
 };
@@ -62,6 +68,17 @@ describe("GameController", function(){
     expect(rotateSpy).to.have.been.calledOnce;
   });
 
+  it(".removeShape calls deleteShape on game", function(){
+    var deleteSpy = sinon.spy(gameDouble, "deleteShape");
+    gameController.removeShape(0,0,0);
+    expect(deleteSpy).to.have.been.calledWith({x: 0, y: 0, z: 0});
+    expect(deleteSpy).to.have.been.calledOnce;
+  });
 
+  it(".resetWorld calls clearShapes on game", function(){
+    var resetSpy = sinon.spy(gameDouble, "clearShapes");
+    gameController.resetWorld();
+    expect(resetSpy).to.have.been.calledOnce;
+  });
 
 });
