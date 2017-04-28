@@ -64,9 +64,10 @@ scrollDistance+= evt.deltaY
     z= Math.max(0,z-=1)
     scrollDistance = 0
   }
-  console.log(evt.deltaY)
-  drawWorld()
-})
+  console.log(evt.deltaY);
+  drawWorld();
+  evt.preventDefault();
+}, false);
 
   canvas.addEventListener('mousemove', function(evt) {
     var mousePos = getMousePos(canvas, evt);
