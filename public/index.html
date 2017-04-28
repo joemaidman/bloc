@@ -30,20 +30,9 @@
       Red<input type="range" min="0" max="255" step="1" id="red" value="135">
       Green<input type="range" min="0" max="255" step="1" id="green" value= "206">
       Blue<input type="range" min="0" max="255" step="1" id="blue" value="250">
-      <input id="display" type="block" color="blue" width="10%"></input>
+      <input id="display" type="block"  width="10%">
   </div>
-    </div>
-    <script type="text/javascript">
-    var input = document.querySelectorAll("input");
-
-    for(var i = 0; i < input.length; i++){
-      input[i].addEventListener("input",function(){
-        var red = document.getElementById("red").val(),
-         green = document.getElementById("green").val(),
-         blue = document.getElementById("blue").val();
-      });
-    }
-</script>
+      </div>
   </center>
 </body>
 </html>
