@@ -29,6 +29,7 @@ io.on('connection', function(socket) {
   });
 
   socket.on('delete_block', function (data) {
+    console.log('delete block server')
     gameController.removeShape(data.block[0], data.block[1], data.block[2]);
     updateWorld();
   });

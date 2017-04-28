@@ -68,13 +68,23 @@ document.addEventListener("DOMContentLoaded", function(){
     writeMessage(canvas, message, 10, 25);
   }, false);
 
-  canvas.addEventListener('mouseup', function(evt) {
+  canvas.addEventListener('mousedown', function(evt) {
     var mousePos = getMousePos(canvas, evt);
-    var gridPos = calculateGridPosition(getMousePos(canvas, evt).x, getMousePos(canvas, evt).y);
-    var r = document.getElementById("red").value,
-        g = document.getElementById("green").value,
-        b = document.getElementById("blue").value;
-    socket.emit('add_block', {block: [gridPos.x,gridPos.y,0,r,g,b]});
+    var gridPos = calculateGridPosition(getMousePos(canvas, evt).x, getMousePos(canvas, evt).y)
+    if (evt.which === 3) {
+      socket.emit('delete_block', {block: [gridPos.x,gridPos.y, 0]});
+    }
+      else if (evt.which === 1) {
+        var r = document.getElementById("red").value,
+            g = document.getElementById("green").value,
+            b = document.getElementById("blue").value;
+        socket.emit('add_block', {block: [gridPos.x,gridPos.y,0,r,g,b]});
+
+    }
+  }, false);
+
+  canvas.addEventListener('contextmenu', function(evt) {
+    evt.preventDefault();
   }, false);
 
   $("#add").click(function() {
@@ -91,7 +101,7 @@ document.addEventListener("DOMContentLoaded", function(){
     var x = parseInt($("#x").val());
     var y = parseInt($("#y").val());
     var z = parseInt($("#z").val());
-    console.log("Deleting Block")
+    console.log("Deleting Block");
     socket.emit('delete_block', {block: [x,y,z]});
   });
 
