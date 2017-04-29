@@ -65,7 +65,7 @@ describe("Room", function(){
 
   beforeEach(function(){
     gameDouble = new GameDouble();
-    room = new Room(gameDouble, 2, 1);
+    room = new Room("Timmy's Game",gameDouble, 2, 1);
   });
 
   it("exists", function(){
@@ -100,6 +100,16 @@ describe("Room", function(){
     var player = new PlayerDouble();
     room.addPlayer(player);
     expect(room.getPlayers()).to.eql([player]);
+  });
+
+  it("can get the room name", function(){
+    expect(room.getName()).to.eql("Timmy's Game");
+  });
+
+  it("can get a player count", function(){
+    var player = new PlayerDouble(1, "Timmy");
+    room.addPlayer(player);
+    expect(room.getPlayerCount()).to.eql(1);
   });
 
 });

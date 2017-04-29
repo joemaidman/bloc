@@ -1,6 +1,7 @@
 "strict mode";
 
-function Room(gameController, limit, id = this._generateId()){
+function Room(name, gameController, limit, id = this._generateId()){
+  this.name = name;
   this.gameController = gameController;
   this.players = [];
   this.id = id;
@@ -26,6 +27,12 @@ Room.prototype = {
   },
   getMessages: function(){
     return this.messages;
+  },
+  getName: function(){
+    return this.name;
+  },
+  getPlayerCount: function(){
+    return this.players.length;
   },
   addMessage: function(message){
     this.messages.push(message);

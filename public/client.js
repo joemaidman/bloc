@@ -307,6 +307,11 @@ document.addEventListener("DOMContentLoaded", function(){
     drawWorld();
   });
 
+  socket.on('list_of_games', function(data) {
+    console.log(data)
+    $("#listOfGames").html(data);
+  });
+
   socket.on('new_game_id', function (data){
     roomId = data;
   });

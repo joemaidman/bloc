@@ -25,7 +25,7 @@ console.log("Server running on port 8080");
 io.on('connection', function(socket) {
   clientCount++;
   console.log("A new client connected: " + socket.id + " (" + clientCount + " clients)");
-
+  socket.emit("list_of_games", listOfRooms());
   socket.on('add_block', function (data) {
     console.log(data);
     var room = findRoom(data.roomId);
@@ -43,8 +43,17 @@ io.on('connection', function(socket) {
     return false;
   };
 
+  function listOfRooms(){
+    var listString = ""
+    for(var i = 0; i < rooms.length; i++){
+      listString += "<li>" + rooms[i].getName() + "(" + rooms[i].getPlayerCount() + "/" + rooms[i].getLimit() + ")" + "</li>";
+    }
+    console.log(listString)
+    return listString;
+  };
+
   socket.on('new_game', function(){
-    var room = new Room(new GameController(new Game()),2);
+    var room = new Room("Test Room",new GameController(new Game()),2);
     rooms.push(room);
     room.addPlayer(new Player(socket.id, 'Timmy'));
     socket.join(room.getId());
