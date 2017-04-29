@@ -223,35 +223,48 @@ document.addEventListener("DOMContentLoaded", function(){
     ]), new Color(r, g, b,a));
   }
 
-  function drawWorld(){
+  function drawSomeBlocks(someBlocks){
+    for (var i = 0; i<someBlocks.length; i++ ){
+      iso.add(Shape.Prism(new Point(someBlocks[i].xPos, someBlocks[i].yPos, someBlocks[i].zPos)),new Color(someBlocks[i].r,someBlocks[i].g,someBlocks[i].b));
+    }
+  }
+
+  function isBelow(block){
+    return block.zPos < z;
+  }
+
+  function isAbove(block){
+    return block.zPos >= z;
+  }
+
+  function clearCanvas(){
     iso.canvas.clear();
+  }
+
+  function drawWorld(){
+    clearCanvas();
+
     if(showGridlines){
       drawWalls(11,11,11,222,0,0,1);
       drawGridLines(11,11,0,255,0,0,1);
       drawOrigin(255, 0, 0, 0, 0);
     }
 
-    var didIDraw = false;
-    if(z === 0){
+    if(blocks.length === 0){
       drawGridLines(11,11,z,255, 154, 0,1);
       drawOrigin(255, 154, 0,1, z);
-      didIDraw = true;
+    }
+    else{
+
+      var underBlocks = blocks.filter(isBelow);
+      var overBlocks = blocks.filter(isAbove);
+
+      drawSomeBlocks(underBlocks);
+      drawGridLines(11,11,z,255, 154, 0,1);
+      drawOrigin(255, 154, 0,1, z);
+      drawSomeBlocks(overBlocks);
     }
 
-    for (var i = 0; i<blocks.length; i++ ){
-      if(i > 0){
-        if(blocks[i - 1].zPos != blocks[i].zPos && blocks[i].zPos === z && z > 0){
-          drawGridLines(11,11,z,255, 154, 0,1);
-          drawOrigin(255, 154, 0,1, z);
-          didIDraw = true;
-        }
-      }
-      iso.add(Shape.Prism(new Point(blocks[i].xPos, blocks[i].yPos, blocks[i].zPos)),new Color(blocks[i].r,blocks[i].g,blocks[i].b));
-    }
-    if(didIDraw === false){
-      drawGridLines(11,11,z,255, 154, 0,1);
-      drawOrigin(255, 154, 0, 1, z);
-    }
     drawHighlight();
     writeMessage("Block Count: " + blocks.length, "blockDiv");
   }
