@@ -13,7 +13,7 @@ var io = socketIo.listen(server);
 var gameView = new GameView();
 var game = new Game();
 var gameController = new GameController(game, gameView);
-server.listen(8080);
+server.listen(process.env.PORT || 8080);
 var clientCount = 0;
 
 app.use(express.static(__dirname + '/public'));
