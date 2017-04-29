@@ -65,7 +65,7 @@ describe("Room", function(){
 
   beforeEach(function(){
     gameDouble = new GameDouble();
-    room = new Room(gameDouble, 1, 2);
+    room = new Room(gameDouble, 2, 1);
   });
 
   it("exists", function(){
