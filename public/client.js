@@ -12,7 +12,7 @@ document.addEventListener("DOMContentLoaded", function(){
   var Color = Isomer.Color;
   var Path = Isomer.Path;
   var blocks = [];
-  var highlightGrid = {x: 0, y: 0};
+  var highlightGrid = {x: 5, y: 5};
   var input = document.querySelectorAll("input");
   var z = 0;
   var scrollDistance = 0;
