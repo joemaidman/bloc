@@ -17,57 +17,70 @@
   .Row
 {
     display: table;
-    width: 38%; /*Optional*/
+    /*width: 38%; /*Optional*/*/
     table-layout: fixed; /*Optional*/
     border-spacing: 0px; /*Optional*/
 }
 .Column
 {
+  vertical-align: top;
     display: table-cell;
+    padding: 10px;
+}
+
+.Column-controls
+{
+  vertical-align: top;
+    display: table-cell;
+    padding: 10px;
+    width: 10%;
 }
   </style>
 </head>
 <body>
   <!-- <center> -->
-    <!-- <h1> BLOC </h1> -->
+
     <div id="sessionDiv">
       <button id="newGame">New Game</button>
       <div><ul id="listOfGames"></ul></div>
     </div>
+    <div class="Row" id="gameDiv">
+      <div class="Column">
+        <div>
 
-    <!-- <div id="gameDiv">
-    <div class="Row">
-      <div class="Column" id="positionDiv"></div>
-      <div class="Column" id="blockDiv">C2</div>
-    </div> -->
 
-    <div id="gameDiv">
-    <!-- <div class="Row">
-      <div class="Column" id="positionDiv"></div>
-      <div class="Column" id="blockDiv">C2</div>
-    </div> -->
-      <canvas style="border: 2px black solid;border-radius:5px;" id="canvas" width="1000px" height="766px"></canvas>
+          <canvas style="border: 2px black solid;border-radius:5px;" id="canvas" width="1000px" height="766px"></canvas>
+        </div>
+      </div>
+      <div class="Column-controls">
+        <h1> BLOC </h1>
+        <div id="positionDiv">Grid Pos</div>
+        <div id="blockDiv">Block Count</div>
+        <div id="controls" style="width:580px;padding:10px;margin-top:10px;border: 2px black solid;border-radius:5px;">
+          <br/>
+        X: <input type="number" id="x" min="0" max="10" step="1" value="5"><br/><br/>
+        Y: <input type="number" id="y" min="0" max="10" step="1" value="5"><br/><br/>
+        Z: <input type="number" id="z" min="0" max="10" step="1" value="0"><br/><br/>
+        <button id="add">Add block</button><br/><br/>
+        <button id="delete">Delete block</button><br/><br/>
+        <button id="rotate">Rotate</button><br/><br/>
+        <button id="clear">Clear blocks</button><br/><br/>
+        <button id="toggleGridlines">Toggle gridlines</button><br/><br/>
+        <button id="changeGridlinecolour">Change grid colour</button><br/><br/>
+
+
+        <div class = "colourSelector">
+          Red<input type="range" min="0" max="255" step="1" id="red" value="135"><br/><br/>
+          Green<input type="range" min="0" max="255" step="1" id="green" value= "206"><br/><br/>
+          Blue<input type="range" min="0" max="255" step="1" id="blue" value="250"><br/><br/>
+          <input id="display" type="block"  width="10%">
+        </div>
+        </div>
+
+      </div>
     </div>
-    <div id="controls" style="width:580px;padding:10px;margin-top:10px;border: 2px black solid;border-radius:5px;">
-
-    X: <input type="number" id="x" min="0" max="10" step="1" value="5">
-    Y: <input type="number" id="y" min="0" max="10" step="1" value="5">
-    Z: <input type="number" id="z" min="0" max="10" step="1" value="0">
-    <button id="add">Add block</button>
-    <button id="delete">Delete block</button>
-    <button id="rotate">Rotate</button>
-    <button id="clear">Clear blocks</button>
-    <button id="toggleGridlines">Toggle gridlines</button>
-    <button id="changeGridlinecolour">Change grid colour</button>
 
 
-    <div class = "colourSelector">
-      Red<input type="range" min="0" max="255" step="1" id="red" value="135">
-      Green<input type="range" min="0" max="255" step="1" id="green" value= "206">
-      Blue<input type="range" min="0" max="255" step="1" id="blue" value="250">
-      <input id="display" type="block"  width="10%">
-    </div>
-  </div>
 
   <!-- </center> -->
 </body>

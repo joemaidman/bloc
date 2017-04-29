@@ -105,6 +105,7 @@ document.addEventListener("DOMContentLoaded", function(){
       scrollDistance = 0
       drawWorld();
     }
+    console.log("Im here")
     evt.preventDefault();
   }, false);
 
