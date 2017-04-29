@@ -147,8 +147,8 @@ document.addEventListener("DOMContentLoaded", function(){
     var r = document.getElementById("red").value,
     g = document.getElementById("green").value,
     b = document.getElementById("blue").value;
-
-    iso.add(Shape.Prism(new Point(highlightGrid.x, highlightGrid.y)),new Color(r,g,b));
+    a = 0.4
+    iso.add(Shape.Prism(new Point(highlightGrid.x, highlightGrid.y)),new Color(r,g,b,a));
   }
 
   function drawTestBlocks(){
