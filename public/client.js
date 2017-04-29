@@ -144,12 +144,11 @@ document.addEventListener("DOMContentLoaded", function(){
   }
 
   function drawHighlight(){
-    iso.add(new Path([
-      Point((highlightGrid.x -= z), (highlightGrid.y -= z), z),
-      Point((highlightGrid.x -= z), (highlightGrid.y -= z), z),
-      Point((highlightGrid.x -= z), (highlightGrid.y -= z), z),
-      Point((highlightGrid.x -= z), (highlightGrid.y -= z - 1), z)
-    ]), new Color(255, 0 , 0));
+    var r = document.getElementById("red").value,
+    g = document.getElementById("green").value,
+    b = document.getElementById("blue").value;
+
+    iso.add(Shape.Prism(new Point(highlightGrid.x, highlightGrid.y)),new Color(r,g,b));
   }
 
   function drawTestBlocks(){
@@ -185,7 +184,7 @@ document.addEventListener("DOMContentLoaded", function(){
         new Point(xsize, zVal, 0),
         new Point(xsize, zVal, 0),
         new Point(xsize, zVal, xsize),
-      ]), new Color(255,0,0,a));
+      ]), new Color(140,0,0,a));
     }
 
     for(zValb = 0; zValb < zheight + 1; zValb++){
