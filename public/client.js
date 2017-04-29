@@ -18,9 +18,9 @@ document.addEventListener("DOMContentLoaded", function(){
   var scrollDistance = 0;
   var showGridlines = true;
   var changeColourOfGridlines = false;
-  var gridr = 255
-  var gridg = 0
-  var  gridb = 0
+  var gridr = 255;
+  var gridg = 0;
+  var gridb = 0;
 
   drawGridLines(11,11,0);
   drawOrigin();

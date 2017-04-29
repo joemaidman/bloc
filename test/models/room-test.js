@@ -94,6 +94,12 @@ describe("Room", function(){
     var msg = new MessageDouble(player, "Hi there");
     room.addMessage(msg);
     expect(room.getMessages()).to.eql([msg]);
-  })
+  });
+
+  it("can add a player to the room", function(){
+    var player = new PlayerDouble();
+    room.addPlayer(player);
+    expect(room.getPlayers()).to.eql([player]);
+  });
 
 });

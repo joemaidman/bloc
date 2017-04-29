@@ -15,14 +15,18 @@ var game = new Game();
 var gameController = new GameController(game, gameView);
 server.listen(process.env.PORT || 8080);
 var clientCount = 0;
+var rooms = [];
+var newRoom = new Room(new GameController(new Game()),1,1);
+rooms.push(newRoom);
 
 app.use(express.static(__dirname + '/public'));
 console.log("Server running on port 8080");
 
 io.on('connection', function(socket) {
+
+  newRoom.addPlayer(new Player(socket.id, 'Timmy'));
   clientCount++;
   console.log("A new client connected: " + socket.id + " (" + clientCount + " clients)");
-
   socket.on('add_block', function (data) {
     gameController.createShape(data.block[0], data.block[1], data.block[2], data.block[3], data.block[4], data.block[5]);
     updateWorld();
