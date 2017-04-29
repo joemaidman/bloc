@@ -30,6 +30,17 @@
 <body>
   <center>
     <h1> BLOC </h1>
+    <div id="sessionDiv">
+      <button id="newGame">New Game</button>
+      <div><ul id="listOfGames"></ul></div>
+    </div>
+
+    <div id="gameDiv">
+    <div class="Row">
+      <div class="Column" id="positionDiv"></div>
+      <div class="Column" id="blockDiv">C2</div>
+    </div>
+
     <div id="gameDiv">
     <div class="Row">
       <div class="Column" id="positionDiv"></div>
@@ -48,7 +59,7 @@
     <button id="clear">Clear blocks</button>
     <button id="toggleGridlines">Toggle gridlines</button>
     <button id="changeGridlinecolour">Change grid colour</button>
-    
+
 
     <div class = "colourSelector">
       Red<input type="range" min="0" max="255" step="1" id="red" value="135">

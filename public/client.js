@@ -21,11 +21,21 @@ document.addEventListener("DOMContentLoaded", function(){
   var gridr = 255;
   var gridg = 0;
   var gridb = 0;
+  var roomId;
 
   drawGridLines(11,11,0);
   drawOrigin();
-  drawTestBlocks();
+  // drawTestBlocks();
   setupColorPicker();
+
+  $("#gameDiv").hide();
+
+  $("#newGame").click(function() {
+    console.log("Requesting new game from the server");
+    socket.emit('new_game');
+    $("#sessionDiv").hide();
+    $("#gameDiv").show();
+  });
 
   //UI setup
   function setupColorPicker(){
@@ -118,7 +128,7 @@ document.addEventListener("DOMContentLoaded", function(){
       var r = document.getElementById("red").value,
       g = document.getElementById("green").value,
       b = document.getElementById("blue").value;
-      socket.emit('add_block', {block: [(gridPos.x -=z),(gridPos.y -=z),z,r,g,b]});
+      emitBlock([(gridPos.x -=z),(gridPos.y -=z),z,r,g,b]);
     }
   }, false);
 
@@ -167,12 +177,16 @@ document.addEventListener("DOMContentLoaded", function(){
   }
 
   function drawTestBlocks(){
-    socket.emit('add_block', {block: [0,0,0,0,0,255]});
-    socket.emit('add_block', {block: [3,0,0,0,255,0]});
-    socket.emit('add_block', {block: [0,3,0,255,0,0]});
-    socket.emit('add_block', {block: [3,3,0,100,100,100]});
+    emitBlock([0,0,0,0,0,255]);
+    emitBlock([3,0,0,0,255,0]);
+    emitBlock([0,3,0,255,0,0]);
+    emitBlock([3,3,0,100,100,100]);
   }
 
+  function emitBlock(block){
+    console.log("sending a block");
+    socket.emit('add_block', {block: block, roomId: roomId});
+  }
 
   function drawGridLines (xsize, ysize, zheight, r, g, b, a) {
     for (x = 0; x < xsize+1; x++) {
@@ -289,7 +303,12 @@ document.addEventListener("DOMContentLoaded", function(){
   socket.on('updateWorld', function (data) {
     blocks = data.blocks;
     console.log("Receiving world update and drawing blocks");
+    console.log(blocks)
     drawWorld();
+  });
+
+  socket.on('new_game_id', function (data){
+    roomId = data;
   });
 
   // Socket send events
