@@ -17,6 +17,10 @@ document.addEventListener("DOMContentLoaded", function(){
   var z = 0;
   var scrollDistance = 0;
   var showGridlines = true;
+  var changeColourOfGridlines = false;
+  var gridr = 255
+  var gridg = 0
+  var  gridb = 0
 
   drawGridLines(11,11,0);
   drawOrigin();
@@ -49,6 +53,17 @@ document.addEventListener("DOMContentLoaded", function(){
     showGridlines === true ? showGridlines = false : showGridlines = true;
     drawWorld();
   });
+
+  $("#changeGridlinecolour").click(function() {
+        gridr = document.getElementById("red").value;
+        gridg = document.getElementById("green").value;
+        gridb = document.getElementById("blue").value;
+        drawWalls(11,11,11,gridr,gridg,gridb,1);
+        drawGridLines(11,11,0,255,0,0,1);
+        drawOrigin(255,0,0, 0, 0);
+      drawWorld();
+  });
+
 
   $("#add").click(function() {
     var x = parseInt($("#x").val());
@@ -184,7 +199,7 @@ document.addEventListener("DOMContentLoaded", function(){
         new Point(xsize, zVal, 0),
         new Point(xsize, zVal, 0),
         new Point(xsize, zVal, xsize),
-      ]), new Color(140,0,0,a));
+      ]), new Color(r, g, b,a));
     }
 
     for(zValb = 0; zValb < zheight + 1; zValb++){
@@ -192,7 +207,7 @@ document.addEventListener("DOMContentLoaded", function(){
         new Point(zValb, ysize, 0),
         new Point(zValb, ysize, 0),
         new Point(zValb, ysize, xsize),
-      ]), new Color(255,0,0,a));
+      ]), new Color(r, g, b,a));
     }
 
 
@@ -201,7 +216,7 @@ document.addEventListener("DOMContentLoaded", function(){
         new Point(xsize, ysize, zValc),
         new Point((xsize / 2), ysize, zValc),
         new Point(0, ysize, zValc),
-      ]), new Color(255,0,0,a));
+      ]), new Color(r,g,b,a));
     }
 
     for(zVald = 0; zVald < zheight + 1; zVald++){
@@ -209,7 +224,7 @@ document.addEventListener("DOMContentLoaded", function(){
         new Point(xsize, 0, zVald),
         new Point(xsize, ysize, zVald),
         new Point(xsize, 0, zVald),
-      ]), new Color(255,0,0,a));
+      ]), new Color(r,g,b,a));
     }
   }
 
@@ -244,10 +259,12 @@ document.addEventListener("DOMContentLoaded", function(){
     clearCanvas();
 
     if(showGridlines){
-      drawWalls(11,11,11,222,0,0,1);
+      drawWalls(11,11,11,gridr, gridg, gridb,1);
       drawGridLines(11,11,0,255,0,0,1);
-      drawOrigin(255, 0, 0, 0, 0);
-    }
+      drawOrigin(255,0,0, 0, 0);
+     }
+
+
 
     if(blocks.length === 0){
       drawGridLines(11,11,z,255, 154, 0,1);
