@@ -326,16 +326,10 @@ document.addEventListener("DOMContentLoaded", function(){
   });
 
   socket.on('list_of_games', function(data) {
-    // console.log(data)
-    // console.log(gameid)
     $("#listOfGames").html(data);
-    $("#join").click(function() {
-      var gameId = $('#join').attr('gameId')
-      // console.log(x)
-      // console.log(data)
-      // // console.log('hello')
-      // var gameId = rooms[i].id;
-      // console.log('1')
+    $(".joinButton").click(function(evt) {
+      var gameId = evt.target.id
+       console.log('1')
       console.log(gameId)
       socket.emit('join_game', gameId);
       $("#sessionDiv").hide();

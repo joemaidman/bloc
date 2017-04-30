@@ -39,7 +39,7 @@ io.on('connection', function(socket) {
   function listOfRooms(){
     var listString = ""
     for(var i = 0; i < rooms.length; i++){
-      listString += "<li>" + rooms[i].getName() + " (" + rooms[i].getPlayerCount() + "/" + rooms[i].getLimit() + ")" + "<button id='join' gameId='" + rooms[i].id + "'" + ">Join</button>" +  "</li>";
+      listString += "<li>" + rooms[i].getName() + " (" + rooms[i].getPlayerCount() + "/" + rooms[i].getLimit() + ")" + "<button " + " class ='joinButton' id=" + rooms[i].id  +  '>Join</button>' +  "</li>";
     }
     return listString;
   };
@@ -54,24 +54,17 @@ io.on('connection', function(socket) {
     socket.emit('new_game_id', room.getId());
     console.log("Creating a new game with id: " + room.getId());
     console.log("Adding player " + room.getPlayers()[0].id + " to room " + room.getId());
-    // console.log('start')
-    // console.log(rooms)
-    // console.log(rooms[0].getId());
-    // console.log('end')
   });
 
   socket.on('join_game', function(data){
     var roomId = data;
-    console.log('1')
-    console.log(rooms[0].id)
-    for(var i = 0; i < rooms.length; i++){
+    var room = findRoom(roomId)
+    console.log(roomId)
+    room.addPlayer(new Player(socket.id, 'Timmy'));
+    socket.join(room.getId());
+    socket.emit('new_game_id', room.getId());
+    console.log("Adding player " + room.getPlayers()[0].id + " to room " + room.getId());
 
-      if (rooms[i].id === roomId) {
-        // console.log('2')
-        console.log(i)
-        return i;
-      }
-    }
 
     // var room = new Room(roomName,new GameController(new Game()),2);
     // rooms.push(room);
