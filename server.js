@@ -63,7 +63,6 @@ io.on('connection', function(socket) {
 
   socket.on('delete_block', function (data) {
     var room = findRoom(data.roomId);
-    console.log(data);
     room.gameController.removeShape(data.block[0], data.block[1], data.block[2]);
     updateWorld(room.getId());
   });
