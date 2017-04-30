@@ -70,7 +70,7 @@ document.addEventListener("DOMContentLoaded", function(){
     }
 
     blocks.forEach(function(shape){
-      rotate(shape, currentRotation);
+      rotate(shape, 90);
 
     console.log(currentRotation)
     drawWorld();
@@ -301,7 +301,7 @@ function rotate(shape, degrees = 90){
     console.log(shape)
     console.log(shape.xPos, shape.yPos)
 
-    var newCoordinates = calculateRotation((gridSize/2) - 1, (gridSize/2) - 1, shape.xPos, shape.yPos, degrees);
+    var newCoordinates = calculateRotation(((gridSize-1)/2), ((gridSize-1)/2), shape.xPos, shape.yPos, degrees);
     shape.xPos = newCoordinates[0];
     shape.yPos = newCoordinates[1];
   }
