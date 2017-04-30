@@ -73,6 +73,13 @@ document.addEventListener("DOMContentLoaded", function(){
         drawOrigin(255,0,0, 0, 0);
       drawWorld();
   });
+  $("#changeCanvasColour").click(function() {
+    var r = document.getElementById("red").value,
+    g = document.getElementById("green").value,
+    b = document.getElementById("blue").value;
+    var changeColour = document.getElementById("canvas");
+    changeColour.style.background = "rgb(" + r + "," + g + "," + b + ")"
+  })
 
 
   $("#add").click(function() {
