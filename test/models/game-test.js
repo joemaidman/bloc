@@ -115,7 +115,7 @@ describe("Game", function(){
     expect(game.getShapes()).to.eql([shapeDoubleOne]);
   });
   it("can return the game size", function(){
-    expect(game.getSize()).to.eql(11);
+    expect(game.getSize()).to.eql(10);
   });
 
 });
