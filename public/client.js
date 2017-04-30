@@ -6,8 +6,8 @@ document.addEventListener("DOMContentLoaded", function(){
   var canvas = document.getElementById('canvas');
   var context = canvas.getContext('2d');
   var socket = io.connect();
-  var iso = new Isomer(canvas, { scale: 30});
-    // var iso = new Isomer(canvas, { scale: 30, originY: canvas.height});
+
+  var iso = new Isomer(canvas, { scale: 18, originY: canvas.height});
   var Shape = Isomer.Shape;
   var Point = Isomer.Point;
   var Color = Isomer.Color;
@@ -24,7 +24,7 @@ document.addEventListener("DOMContentLoaded", function(){
   var gridb = 0;
   var roomId;
 
-  drawGridLines(11,11,0);
+  drawGridLines(21,21,0);
   drawOrigin();
   // drawTestBlocks();
   setupColorPicker();
@@ -71,14 +71,23 @@ document.addEventListener("DOMContentLoaded", function(){
   });
 
   $("#changeGridlinecolour").click(function() {
-      gridr = document.getElementById("red").value;
-      gridg = document.getElementById("green").value;
-      gridb = document.getElementById("blue").value;
-      drawWalls(11,11,11,gridr,gridg,gridb,1);
-      drawGridLines(11,11,0,255,0,0,1);
-      drawOrigin(255,0,0, 0, 0);
+
+        gridr = document.getElementById("red").value;
+        gridg = document.getElementById("green").value;
+        gridb = document.getElementById("blue").value;
+        drawWalls(21,21,21,gridr,gridg,gridb,1);
+        drawGridLines(21,21,0,255,0,0,1);
+        drawOrigin(255,0,0, 0, 0);
+
       drawWorld();
   });
+  $("#changeCanvasColour").click(function() {
+    var r = document.getElementById("red").value,
+    g = document.getElementById("green").value,
+    b = document.getElementById("blue").value;
+    var changeColour = document.getElementById("canvas");
+    changeColour.style.background = "rgb(" + r + "," + g + "," + b + ")"
+  })
 
   $("#add").click(function() {
     var x = parseInt($("#x").val());
@@ -110,6 +119,7 @@ document.addEventListener("DOMContentLoaded", function(){
       scrollDistance = 0
       drawWorld();
     }
+    console.log("Im here")
     evt.preventDefault();
   }, false);
 
@@ -278,13 +288,13 @@ document.addEventListener("DOMContentLoaded", function(){
     clearCanvas();
 
     if(showGridlines){
-      drawWalls(11,11,11,gridr, gridg, gridb,1);
-      drawGridLines(11,11,0,255,0,0,1);
+      drawWalls(21,21,21,gridr, gridg, gridb,1);
+      drawGridLines(21,21,0,255,0,0,1);
       drawOrigin(255,0,0, 0, 0);
      }
 
     if(blocks.length === 0){
-      drawGridLines(11,11,z,255, 154, 0,1);
+      drawGridLines(21,21,z,255, 154, 0,1);
       drawOrigin(255, 154, 0,1, z);
     }
     else{
@@ -293,7 +303,7 @@ document.addEventListener("DOMContentLoaded", function(){
       var overBlocks = blocks.filter(isAbove);
 
       drawSomeBlocks(underBlocks);
-      drawGridLines(11,11,z,255, 154, 0,1);
+      drawGridLines(21,21,z,255, 154, 0,1);
       drawOrigin(255, 154, 0,1, z);
       drawSomeBlocks(overBlocks);
     }
