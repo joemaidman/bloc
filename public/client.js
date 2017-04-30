@@ -171,8 +171,8 @@ document.addEventListener("DOMContentLoaded", function(){
 
   // Functions
   function calculateGridPosition(mouseX, mouseY){
-    var x = Math.floor(((mouseX - 300) / 26) + (((mouseX - 300) / 26) + ((mouseY - 540)/ 15)) / -2);
-    var y = Math.floor((((mouseX - 300) / 26) + ((mouseY - 540) / 15)) / -2);
+    var x = Math.floor(((mouseX - (canvas.width / 2)) / (gameScale  * Math.cos(30))) + (((mouseX - (canvas.width / 2)) / (gameScale  * Math.cos(30))) + ((mouseY - (canvas.height))/ (gameScale  * Math.sin(30)))) / -2);
+    var y = Math.floor((((mouseX - (canvas.width / 2)) / (gameScale  * Math.cos(30)))) + ((mouseY - (canvas.height)) / (gameScale  * Math.sin(30))) / -2);
     return {x: x, y: y};
   }
 
