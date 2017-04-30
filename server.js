@@ -47,9 +47,8 @@ io.on('connection', function(socket) {
   socket.on('new_game', function(data){
     var roomName = data.name;
     var size = data.size;
-    var room = new Room(roomName,new GameController(new Game(size)),2);
+    var room = new Room(roomName, new GameController(new Game(size)), 2);
     rooms.push(room);
-    console.log(socket.id)
     room.addPlayer(new Player(socket.id, 'Timmy'));
     socket.join(room.getId());
     socket.emit('new_game_id', room.getId());
@@ -59,25 +58,11 @@ io.on('connection', function(socket) {
 
   socket.on('join_game', function(data){
     var roomId = data;
-    var room = findRoom(roomId)
-    console.log(roomId)
+    var room = findRoom(roomId);
     room.addPlayer(new Player(socket.id, 'Timmy'));
     socket.join(room.getId());
-    socket.emit('new_game_id', room.getId());
+    socket.emit('joined_game',{roomId:room.getId(), gameSize: room.gameController.game.getSize() + 1, blocks: room.gameController.getAllShapes()});
     console.log("Adding player " + room.getPlayers()[0].id + " to room " + room.getId());
-
-
-    // var room = new Room(roomName,new GameController(new Game()),2);
-    // rooms.push(room);
-    // room.addPlayer(new Player(socket.id, 'Timmy'));
-    // socket.join(room.getId());
-    // socket.emit('join_game', roomId);
-    // console.log("Creating a new game with id: " + room.getId());
-    // console.log("Adding player " + room.getPlayers()[0].id + " to room " + room.getId());
-    // console.log('start')
-    // console.log(rooms)
-    // console.log(rooms[0].getId());
-    // console.log('end')
   });
 
   socket.on('add_block', function (data) {

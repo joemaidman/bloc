@@ -1,10 +1,10 @@
 "strict mode";
 
-function Room(name, gameController, limit, id){
+function Room(name, gameController, limit){
   this.name = name;
   this.gameController = gameController;
   this.players = [];
-  this.id = id || this.setId();
+  this.setId();
   this.messages = [];
   this.setLimit(limit);
 }

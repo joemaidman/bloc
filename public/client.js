@@ -28,24 +28,6 @@ document.addEventListener("DOMContentLoaded", function(){
 
   $("#gameDiv").hide();
 
-  $("#newGame").click(function() {
-    var gameName = $("#newGameName").val();
-    $("#inputGridSize option:selected").text() === "Small" ? gridSize = 11 : gridSize = 21;
-    gridSize === 11 ? gameScale = 34 : gameScale = 18;
-    socket.emit('new_game', {name: gameName, size: gridSize });
-    $("#sessionDiv").hide();
-    $("#gameDiv").show();
-    iso = new Isomer(canvas, { scale: gameScale, originY: canvas.height});
-    drawGridLines(gridSize,gridSize,0);
-    drawOrigin();
-    // drawTestBlocks();
-    setupColorPicker();
-    drawWorld();
-
-  });
-
-
-
   //UI setup
   function setupColorPicker(){
     for(var i = 0; i < input.length; i++){
@@ -59,6 +41,21 @@ document.addEventListener("DOMContentLoaded", function(){
     }
   }
   //UI element event listeners
+
+  $("#newGame").click(function() {
+    var gameName = $("#newGameName").val();
+    $("#inputGridSize option:selected").text() === "Small" ? gridSize = 11 : gridSize = 21;
+    gridSize === 11 ? gameScale = 34 : gameScale = 18;
+    socket.emit('new_game', {name: gameName, size: gridSize });
+    $("#sessionDiv").hide();
+    $("#gameDiv").show();
+    iso = new Isomer(canvas, { scale: gameScale, originY: canvas.height });
+    drawGridLines(gridSize,gridSize,0);
+    drawOrigin();
+    setupColorPicker();
+    drawWorld();
+  });
+
   $("#rotate").click(function() {
     if (currentRotation === 270){
       currentRotation = 0
@@ -71,8 +68,10 @@ document.addEventListener("DOMContentLoaded", function(){
       var newCoords = rotate({x: shape.xPos, y: shape.yPos}, 90);
       shape.xPos = newCoords.x;
       shape.yPos = newCoords.y;
-      drawWorld();
+
     });
+    sortBlocks();
+    drawWorld();
   });
 
   $("#clear").click(function() {
@@ -220,20 +219,6 @@ document.addEventListener("DOMContentLoaded", function(){
     emitNewBlock([3,3,0,100,100,100]);
   }
 
-  function emitDeleteBlock(block){
-    var newCoords = rotate( {x: block[0], y: block[1]}, -currentRotation);
-    block[0] = newCoords.x;
-    block[1] = newCoords.y;
-    socket.emit('delete_block', {block: block, roomId: roomId});
-  }
-
-  function emitNewBlock(block){
-    var newCoords = rotate( {x: block[0], y: block[1]}, -currentRotation);
-    block[0] = newCoords.x;
-    block[1] = newCoords.y;
-    socket.emit('add_block', {block: block, roomId: roomId});
-  }
-
   function drawGridLines (xsize, ysize, zheight, r, g, b, a) {
     for (x = 0; x < xsize+1; x++) {
       iso.add(new Path([
@@ -303,15 +288,20 @@ document.addEventListener("DOMContentLoaded", function(){
     }
   }
 
-
-function rotate(coordinates, degrees = 90){
+  function rotate(coordinates, degrees = 90){
     var newCoordinates = calculateRotation(((gridSize-1)/2), ((gridSize-1)/2), coordinates.x, coordinates.y, degrees);
     var x = newCoordinates[0];
     var y = newCoordinates[1];
     return {x: x, y: y};
   }
 
-function calculateRotation(cx, cy, x, y, angle) {
+  function sortBlocks(){
+    blocks.sort(function(obj1, obj2){
+      return (obj1.zPos - obj2.zPos  || obj2.xPos - obj1.xPos || obj2.yPos - obj1.yPos);
+    });
+  }
+
+  function calculateRotation(cx, cy, x, y, angle) {
     var radians = (Math.PI / 180) * angle,
     cos = Math.cos(radians),
     sin = Math.sin(radians),
@@ -339,24 +329,31 @@ function calculateRotation(cx, cy, x, y, angle) {
       drawGridLines(gridSize,gridSize,0,255,0,0,1);
       drawOrigin(255,0,0, 0, 0);
     }
+    var drewBuildGrid = false;
+    if(blocks){
+      if(blocks.length === 0){
+        drawGridLines(gridSize,gridSize,z,255, 154, 0,1);
+        drawOrigin(255, 154, 0,1, z);
+        drewBuildGrid = true;
+        writeMessage("Block Count: 0", "blockDiv");
+      }
+      else{
+        var underBlocks = blocks.filter(isBelow);
+        var overBlocks = blocks.filter(isAbove);
 
-    if(blocks.length === 0){
+        drawSomeBlocks(underBlocks);
+        drawGridLines(gridSize,gridSize,z,255, 154, 0,1);
+        drawOrigin(255, 154, 0,1, z);
+        drawSomeBlocks(overBlocks);
+        drewBuildGrid = true;
+        writeMessage("Block Count: " + blocks.length, "blockDiv");
+      }
+    }
+    if(drewBuildGrid === false){
       drawGridLines(gridSize,gridSize,z,255, 154, 0,1);
       drawOrigin(255, 154, 0,1, z);
     }
-    else{
-
-      var underBlocks = blocks.filter(isBelow);
-      var overBlocks = blocks.filter(isAbove);
-
-      drawSomeBlocks(underBlocks);
-      drawGridLines(gridSize,gridSize,z,255, 154, 0,1);
-      drawOrigin(255, 154, 0,1, z);
-      drawSomeBlocks(overBlocks);
-    }
-
     drawHighlight();
-    writeMessage("Block Count: " + blocks.length, "blockDiv");
   }
 
   function downloadCanvas(link) {
@@ -364,48 +361,65 @@ function calculateRotation(cx, cy, x, y, angle) {
     link.download = 'bloc' + new Date() + '.png';
   }
 
-// Socket receive events
+  // Socket receive events
   socket.on('updateWorld', function (data) {
-    blocks = data.blocks;
-    blocks.forEach(function(shape){
-      var newCoords = rotate({x: shape.xPos, y: shape.yPos}, currentRotation);
-      shape.xPos = newCoords.x;
-      shape.yPos = newCoords.y;
-    });
-    drawWorld();
+    updateWorld(data);
   });
+
+  function updateWorld(data){
+    blocks = data.blocks;
+    if(blocks){
+      blocks.forEach(function(shape){
+        var newCoords = rotate({x: shape.xPos, y: shape.yPos}, currentRotation);
+        shape.xPos = newCoords.x;
+        shape.yPos = newCoords.y;
+      });
+      sortBlocks();
+    }
+    drawWorld();
+  }
 
   socket.on('list_of_games', function(data) {
     $("#listOfGames").html(data);
     $(".joinButton").click(function(evt) {
       var gameId = evt.target.id
-       console.log('1')
-      console.log(gameId)
       socket.emit('join_game', gameId);
       $("#sessionDiv").hide();
       $("#gameDiv").show();
     });
   });
 
-  socket.on('join_game', function (data){
-    roomId = data;
+  socket.on('joined_game', function (data){
+    roomId = data.roomId;
+    blocks = data.blocks;
+    gridSize = data.gameSize;
+    gridSize === 11 ? gameScale = 34 : gameScale = 18;
+    iso = new Isomer(canvas, { scale: gameScale, originY: canvas.height});
+    drawGridLines(gridSize,gridSize,0);
+    drawOrigin();
+    updateWorld(blocks);
+  });
 
-    // $("#join").click(function(roomId) {
-      // console.log(data)
-      // console.log('hello')
-      // var gameId = rooms[i].id;
-      // console.log('1')
-      // console.log(gameId)
-      // socket.emit('join_game', roomId);
-      // $("#sessionDiv").hide();
-      // $("#gameDiv").show();
-  // });
-});
+
 
   socket.on('new_game_id', function (data){
     roomId = data;
   });
 
   // Socket send events
+
+  function emitDeleteBlock(block){
+    var newCoords = rotate( {x: block[0], y: block[1]}, -currentRotation);
+    block[0] = newCoords.x;
+    block[1] = newCoords.y;
+    socket.emit('delete_block', {block: block, roomId: roomId});
+  }
+
+  function emitNewBlock(block){
+    var newCoords = rotate( {x: block[0], y: block[1]}, -currentRotation);
+    block[0] = newCoords.x;
+    block[1] = newCoords.y;
+    socket.emit('add_block', {block: block, roomId: roomId});
+  }
 
 });

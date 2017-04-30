@@ -62,10 +62,11 @@ PlayerDouble.prototype = {
 describe("Room", function(){
   var room;
   var gameDouble;
+  sinon.stub(Math, "random").callsFake(function () { return 23482748273; });
 
   beforeEach(function(){
     gameDouble = new GameDouble();
-    room = new Room("Timmy's Game",gameDouble, 2, 1);
+    room = new Room("Timmy's Game",gameDouble, 2);
   });
 
   it("exists", function(){
@@ -77,7 +78,7 @@ describe("Room", function(){
   });
 
   it("can return an id", function(){
-    expect(room.getId()).to.eql(1);
+    expect(room.getId()).to.eql('_d0sj5');
   });
 
   it("can return the limit of the room", function(){
@@ -110,13 +111,6 @@ describe("Room", function(){
     var player = new PlayerDouble(1, "Timmy");
     room.addPlayer(player);
     expect(room.getPlayerCount()).to.eql(1);
-  });
-
-  it("can set its ID", function(){
-    var mathSpy = sinon.stub(Math, "random").callsFake(function () { return 23482748273; });
-    var roomWithRandomId = new Room("Timmy's Game",gameDouble, 2)
-    roomWithRandomId.setId();
-    expect(roomWithRandomId.getId()).to.eql('_d0sj5');
   });
 
 });
