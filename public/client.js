@@ -6,6 +6,7 @@ document.addEventListener("DOMContentLoaded", function(){
   var canvas = document.getElementById('canvas');
   var context = canvas.getContext('2d');
   var socket = io.connect();
+
   var iso = new Isomer(canvas, { scale: 18, originY: canvas.height});
   var Shape = Isomer.Shape;
   var Point = Isomer.Point;
@@ -27,12 +28,13 @@ document.addEventListener("DOMContentLoaded", function(){
   drawOrigin();
   // drawTestBlocks();
   setupColorPicker();
+  drawWorld();
 
   $("#gameDiv").hide();
 
   $("#newGame").click(function() {
-    console.log("Requesting new game from the server");
-    socket.emit('new_game');
+    var gameName = $("#newGameName").val();
+    socket.emit('new_game', gameName);
     $("#sessionDiv").hide();
     $("#gameDiv").show();
   });
@@ -52,11 +54,11 @@ document.addEventListener("DOMContentLoaded", function(){
 
   //UI element event listeners
   $("#rotate").click(function() {
-    socket.emit('rotate');
+    socket.emit('rotate', roomId );
   });
 
   $("#clear").click(function() {
-    socket.emit('clearBlocks');
+    socket.emit('clearBlocks', roomId);
   });
 
   $("#toggleGridlines").click(function() {
@@ -64,13 +66,19 @@ document.addEventListener("DOMContentLoaded", function(){
     drawWorld();
   });
 
+  $("#saveCanvas").click(function() {
+    downloadCanvas(this);
+  });
+
   $("#changeGridlinecolour").click(function() {
+
         gridr = document.getElementById("red").value;
         gridg = document.getElementById("green").value;
         gridb = document.getElementById("blue").value;
         drawWalls(21,21,21,gridr,gridg,gridb,1);
         drawGridLines(21,21,0,255,0,0,1);
         drawOrigin(255,0,0, 0, 0);
+
       drawWorld();
   });
   $("#changeCanvasColour").click(function() {
@@ -81,7 +89,6 @@ document.addEventListener("DOMContentLoaded", function(){
     changeColour.style.background = "rgb(" + r + "," + g + "," + b + ")"
   })
 
-
   $("#add").click(function() {
     var x = parseInt($("#x").val());
     var y = parseInt($("#y").val());
@@ -89,14 +96,14 @@ document.addEventListener("DOMContentLoaded", function(){
     var r = document.getElementById("red").value,
     g = document.getElementById("green").value,
     b = document.getElementById("blue").value;
-    socket.emit('add_block', {block: [x,y,z,r,g,b]});
+    emitBlock([x,y,z,r,g,b]);
   });
 
   $("#delete").click(function() {
     var x = parseInt($("#x").val());
     var y = parseInt($("#y").val());
     var z = parseInt($("#z").val());
-    socket.emit('delete_block', {block: [x,y,z]});
+    socket.emit('delete_block', {block: [x,y,z], roomId: roomId});
   });
 
   // Canvas event listeners
@@ -130,7 +137,7 @@ document.addEventListener("DOMContentLoaded", function(){
     var mousePos = getMousePos(canvas, evt);
     var gridPos = calculateGridPosition(getMousePos(canvas, evt).x, getMousePos(canvas, evt).y)
     if (evt.which === 3) {
-      socket.emit('delete_block', {block: [(gridPos.x -=z),(gridPos.y -=z), z]});
+      socket.emit('delete_block', {block: [(gridPos.x -=z),(gridPos.y -=z), z], roomId: roomId});
     }
     else if (evt.which === 1) {
       var r = document.getElementById("red").value,
@@ -149,13 +156,14 @@ document.addEventListener("DOMContentLoaded", function(){
     if(evt.keyCode === 38){
       z = Math.min(10,z+=1)
       drawWorld();
+      evt.preventDefault();
     }
     else if (evt.keyCode === 40) {
       z = Math.max(0,z-=1)
       drawWorld();
+      evt.preventDefault();
     }
-    evt.preventDefault();
-  }, false);
+  });
 
   // Functions
   function calculateGridPosition(mouseX, mouseY){
@@ -192,7 +200,6 @@ document.addEventListener("DOMContentLoaded", function(){
   }
 
   function emitBlock(block){
-    console.log("sending a block");
     socket.emit('add_block', {block: block, roomId: roomId});
   }
 
@@ -286,8 +293,6 @@ document.addEventListener("DOMContentLoaded", function(){
       drawOrigin(255,0,0, 0, 0);
      }
 
-
-
     if(blocks.length === 0){
       drawGridLines(21,21,z,255, 154, 0,1);
       drawOrigin(255, 154, 0,1, z);
@@ -307,16 +312,18 @@ document.addEventListener("DOMContentLoaded", function(){
     writeMessage("Block Count: " + blocks.length, "blockDiv");
   }
 
+  function downloadCanvas(link) {
+    link.href = canvas.toDataURL();
+    link.download = 'bloc' + new Date() + '.png';
+}
+
   // Socket receive events
   socket.on('updateWorld', function (data) {
     blocks = data.blocks;
-    console.log("Receiving world update and drawing blocks");
-    console.log(blocks)
     drawWorld();
   });
 
   socket.on('list_of_games', function(data) {
-    console.log(data)
     $("#listOfGames").html(data);
   });
 
