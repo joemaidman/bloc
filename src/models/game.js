@@ -1,13 +1,17 @@
 "strict mode";
 
-function Game(){
+function Game(size){
   this.shapes = [];
+  this.size = size - 1;
 }
 
 Game.prototype = {
   getShapes: function(){
     this._sortShapes();
     return this.shapes;
+  },
+  getSize: function(){
+    return this.size;
   },
   addShape: function(shape){
     if (this._positionEmpty(shape) && this._positionValid(shape)) { this.shapes.push(shape); }
@@ -29,7 +33,7 @@ Game.prototype = {
   },
   _positionValid: function(shape){
     var position = shape.getPosition();
-    return (position.x <= 10 && position.x >= 0 ) && (position.y <= 10 && position.y >= 0) && (position.z <= 10 && position.z >= 0);
+    return (position.x <= this.getSize() && position.x >= 0) && (position.y <= this.getSize() && position.y >= 0) && (position.z <= this.getSize() && position.z >= 0);
   },
   _findShapeIndex: function(coordinates){
     for(var i = 0; i < this.shapes.length; i++){
