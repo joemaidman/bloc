@@ -9,9 +9,6 @@ function ShapeDouble(x=0, y=0, z=0) {
 }
 
 ShapeDouble.prototype = {
-  rotate: function(){
-    return true;
-  },
   getPosition: function(){
     return {x: this.xPos, y: this.yPos, z: this.zPos};
   }
@@ -29,18 +26,6 @@ describe("Game", function(){
 
   it(".getShapes returns an array of shapes", function(){
     expect(game.getShapes()).to.eql([]);
-  });
-
-  it (".addShape adds a shape to the shapes array", function(){
-    var shapeDoubleOne = new ShapeDouble(1, 2, 0);
-    var shapeDoubleTwo = new ShapeDouble(3, 2, 0);
-    var rotateShapeSpyOne = sinon.spy(shapeDoubleOne, "rotate");
-    var rotateShapeSpyTwo = sinon.spy(shapeDoubleTwo, "rotate");
-    game.addShape(shapeDoubleOne);
-    game.addShape(shapeDoubleTwo);
-    game.rotateShapes();
-    expect(rotateShapeSpyOne).to.have.been.calledOnce;
-    expect(rotateShapeSpyTwo).to.have.been.calledOnce;
   });
 
   it (".deleteShape deletes a shape from the shape array", function(){

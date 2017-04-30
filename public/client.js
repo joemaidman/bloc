@@ -56,10 +56,6 @@ document.addEventListener("DOMContentLoaded", function(){
       });
     }
   }
-
-
-
-
   //UI element event listeners
   $("#rotate").click(function() {
     if (currentRotation === 270){
@@ -70,11 +66,10 @@ document.addEventListener("DOMContentLoaded", function(){
     }
 
     blocks.forEach(function(shape){
-      rotate(shape, 90);
-
-    console.log(currentRotation)
-    drawWorld();
-    console.log('redrawn')
+      var newCoords = rotate({x: shape.xPos, y: shape.yPos}, 90);
+      shape.xPos = newCoords.x;
+      shape.yPos = newCoords.y;
+      drawWorld();
     });
   });
 
@@ -117,14 +112,14 @@ document.addEventListener("DOMContentLoaded", function(){
     var r = document.getElementById("red").value,
     g = document.getElementById("green").value,
     b = document.getElementById("blue").value;
-    emitBlock([x,y,z,r,g,b]);
+    emitNewBlock([x,y,z,r,g,b]);
   });
 
   $("#delete").click(function() {
     var x = parseInt($("#x").val());
     var y = parseInt($("#y").val());
     var z = parseInt($("#z").val());
-    socket.emit('delete_block', {block: [x,y,z], roomId: roomId});
+    emitDeleteBlock([x, y, z]);
   });
 
   // Canvas event listeners
@@ -157,13 +152,13 @@ document.addEventListener("DOMContentLoaded", function(){
     var mousePos = getMousePos(canvas, evt);
     var gridPos = calculateGridPosition(getMousePos(canvas, evt).x, getMousePos(canvas, evt).y)
     if (evt.which === 3) {
-      socket.emit('delete_block', {block: [(gridPos.x -=z),(gridPos.y -=z), z], roomId: roomId});
+      emitDeleteBlock([(gridPos.x -=z),(gridPos.y -=z), z]);
     }
     else if (evt.which === 1) {
       var r = document.getElementById("red").value,
       g = document.getElementById("green").value,
       b = document.getElementById("blue").value;
-      emitBlock([(gridPos.x -=z),(gridPos.y -=z),z,r,g,b]);
+      emitNewBlock([(gridPos.x -=z),(gridPos.y -=z),z,r,g,b]);
     }
   }, false);
 
@@ -217,13 +212,23 @@ document.addEventListener("DOMContentLoaded", function(){
   }
 
   function drawTestBlocks(){
-    emitBlock([0,0,0,0,0,255]);
-    emitBlock([3,0,0,0,255,0]);
-    emitBlock([0,3,0,255,0,0]);
-    emitBlock([3,3,0,100,100,100]);
+    emitNewBlock([0,0,0,0,0,255]);
+    emitNewBlock([3,0,0,0,255,0]);
+    emitNewBlock([0,3,0,255,0,0]);
+    emitNewBlock([3,3,0,100,100,100]);
   }
 
-  function emitBlock(block){
+  function emitDeleteBlock(block){
+    var newCoords = rotate( {x: block[0], y: block[1]}, -currentRotation);
+    block[0] = newCoords.x;
+    block[1] = newCoords.y;
+    socket.emit('delete_block', {block: block, roomId: roomId});
+  }
+
+  function emitNewBlock(block){
+    var newCoords = rotate( {x: block[0], y: block[1]}, -currentRotation);
+    block[0] = newCoords.x;
+    block[1] = newCoords.y;
     socket.emit('add_block', {block: block, roomId: roomId});
   }
 
@@ -297,13 +302,11 @@ document.addEventListener("DOMContentLoaded", function(){
   }
 
 
-function rotate(shape, degrees = 90){
-    console.log(shape)
-    console.log(shape.xPos, shape.yPos)
-
-    var newCoordinates = calculateRotation(((gridSize-1)/2), ((gridSize-1)/2), shape.xPos, shape.yPos, degrees);
-    shape.xPos = newCoordinates[0];
-    shape.yPos = newCoordinates[1];
+function rotate(coordinates, degrees = 90){
+    var newCoordinates = calculateRotation(((gridSize-1)/2), ((gridSize-1)/2), coordinates.x, coordinates.y, degrees);
+    var x = newCoordinates[0];
+    var y = newCoordinates[1];
+    return {x: x, y: y};
   }
 
 function calculateRotation(cx, cy, x, y, angle) {
@@ -359,23 +362,16 @@ function calculateRotation(cx, cy, x, y, angle) {
     link.download = 'bloc' + new Date() + '.png';
   }
 
-
-
-
-
-
-  // Socket receive events
+// Socket receive events
   socket.on('updateWorld', function (data) {
     blocks = data.blocks;
+    blocks.forEach(function(shape){
+      var newCoords = rotate({x: shape.xPos, y: shape.yPos}, currentRotation);
+      shape.xPos = newCoords.x;
+      shape.yPos = newCoords.y;
+    });
     drawWorld();
   });
-
-
-
-
-
-
-
 
   socket.on('list_of_games', function(data) {
     $("#listOfGames").html(data);

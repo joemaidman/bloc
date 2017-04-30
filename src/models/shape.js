@@ -21,19 +21,7 @@ Shape.prototype = {
     this.r = r;
     this.g = g;
     this.b = b;
-  },
-  // rotate: function(originX = (gridSize/2) - 1 , originY = (gridSize/2) - 1, degrees = 90){
-  //   var newCoordinates = this._calculateRotation(originX, originY, this.xPos, this.yPos, degrees)
-  //   this.setPosition(newCoordinates[0], newCoordinates[1], this.zPos);
-  // },
-  // _calculateRotation: function(cx, cy, x, y, angle) {
-  //   var radians = (Math.PI / 180) * angle,
-  //   cos = Math.cos(radians),
-  //   sin = Math.sin(radians),
-  //   nx = (cos * (x - cx)) + (sin * (y - cy)) + cx,
-  //   ny = (cos * (y - cy)) - (sin * (x - cx)) + cy;
-  //   return [nx, ny];
-  // }
+  }
 };
 
 module.exports = Shape;

@@ -31,10 +31,5 @@ describe("Shape", function(){
     expect(shape.getColor()).to.eql({r: 0, g: 0, b: 0});
   });
 
-  it(".rotate can update the shape's position", function(){
-    shape.rotate(5, 5, 90);
-    expect(shape.getPosition()).to.eql({x: 0, y: 10, z: 0});
-  });
-
 
 });
