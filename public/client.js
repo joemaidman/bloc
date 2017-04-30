@@ -21,6 +21,9 @@ document.addEventListener("DOMContentLoaded", function(){
   var gridr = 255;
   var gridg = 0;
   var gridb = 0;
+  var floorr = 255;
+  var floorg = 0;
+  var floorb = 0;
   var gridSize = 11;
   var gameScale;
   var roomId;
@@ -99,11 +102,19 @@ document.addEventListener("DOMContentLoaded", function(){
     gridg = document.getElementById("green").value;
     gridb = document.getElementById("blue").value;
     drawWalls(gridSize,gridSize,gridSize,gridr,gridg,gridb,1);
-    drawGridLines(gridSize,gridSize,0,255,0,0,1);
-    drawOrigin(255,0,0, 0, 0);
-
     drawWorld();
   });
+
+  $("#changeFloorColour").click(function() {
+     floorr = document.getElementById("red").value;
+    floorg = document.getElementById("green").value;
+    floorb = document.getElementById("blue").value;
+    drawGridLines(gridSize,gridSize,floorr,floorg,floorb,1);
+    drawOrigin(floorr,floorg,floorb, 0, 0);
+    drawWorld();
+  });
+
+
   $("#changeCanvasColour").click(function() {
     var r = document.getElementById("red").value,
     g = document.getElementById("green").value,
@@ -332,8 +343,8 @@ document.addEventListener("DOMContentLoaded", function(){
     clearCanvas();
     if(showGridlines){
       drawWalls(gridSize,gridSize,gridSize,gridr, gridg, gridb,1);
-      drawGridLines(gridSize,gridSize,0,255,0,0,1);
-      drawOrigin(255,0,0, 0, 0);
+      drawGridLines(gridSize,gridSize,0,floorr, floorg, floorb,1);
+      drawOrigin(floorr, floorg, floorb, 0, 0);
     }
     var drewBuildGrid = false;
     if(blocks){
