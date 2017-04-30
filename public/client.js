@@ -39,6 +39,8 @@ document.addEventListener("DOMContentLoaded", function(){
     $("#gameDiv").show();
   });
 
+
+
   //UI setup
   function setupColorPicker(){
     for(var i = 0; i < input.length; i++){
@@ -324,8 +326,37 @@ document.addEventListener("DOMContentLoaded", function(){
   });
 
   socket.on('list_of_games', function(data) {
+    // console.log(data)
+    // console.log(gameid)
     $("#listOfGames").html(data);
+    $("#join").click(function() {
+      var gameId = $('#join').attr('gameId')
+      // console.log(x)
+      // console.log(data)
+      // // console.log('hello')
+      // var gameId = rooms[i].id;
+      // console.log('1')
+      console.log(gameId)
+      socket.emit('join_game', gameId);
+      $("#sessionDiv").hide();
+      $("#gameDiv").show();
+    });
   });
+
+  socket.on('join_game', function (data){
+    roomId = data;
+
+    // $("#join").click(function(roomId) {
+      // console.log(data)
+      // console.log('hello')
+      // var gameId = rooms[i].id;
+      // console.log('1')
+      // console.log(gameId)
+      // socket.emit('join_game', roomId);
+      // $("#sessionDiv").hide();
+      // $("#gameDiv").show();
+  // });
+});
 
   socket.on('new_game_id', function (data){
     roomId = data;
