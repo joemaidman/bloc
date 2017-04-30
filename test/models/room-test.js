@@ -112,4 +112,11 @@ describe("Room", function(){
     expect(room.getPlayerCount()).to.eql(1);
   });
 
+  it("can set its ID", function(){
+    var mathSpy = sinon.stub(Math, "random").callsFake(function () { return 23482748273; });
+    var roomWithRandomId = new Room("Timmy's Game",gameDouble, 2)
+    roomWithRandomId.setId();
+    expect(roomWithRandomId.getId()).to.eql('_d0sj5');
+  });
+
 });

@@ -81,6 +81,7 @@ io.on('connection', function(socket) {
   });
 
   socket.on('add_block', function (data) {
+    console.log(data);
     var room = findRoom(data.roomId);
     room.gameController.createShape(data.block[0], data.block[1], data.block[2], data.block[3], data.block[4], data.block[5]);
     updateWorld(room.id);
@@ -89,12 +90,6 @@ io.on('connection', function(socket) {
   socket.on('delete_block', function (data) {
     var room = findRoom(data.roomId);
     room.gameController.removeShape(data.block[0], data.block[1], data.block[2]);
-    updateWorld(room.getId());
-  });
-
-  socket.on('rotate', function (data) {
-    var room = findRoom(data);
-    room.gameController.rotateWorld();
     updateWorld(room.getId());
   });
 

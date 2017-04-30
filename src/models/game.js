@@ -23,11 +23,6 @@ Game.prototype = {
   clearShapes: function(){
     this.shapes = [];
   },
-  rotateShapes: function(){
-    for(var i = 0; i < this.shapes.length; i++){
-      this.shapes[i].rotate();
-    }
-  },
   _positionEmpty: function(shape){
     return this._findShapeIndex(shape.getPosition()) === -1;
   },

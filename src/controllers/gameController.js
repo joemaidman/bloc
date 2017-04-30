@@ -18,9 +18,6 @@ GameController.prototype = {
   removeShape: function(xPos, yPos, zPos){
     this.game.deleteShape({x: xPos, y: yPos, z: zPos});
   },
-  rotateWorld: function(){
-    this.game.rotateShapes();
-  },
   resetWorld: function(){
     this.game.clearShapes();
   }
