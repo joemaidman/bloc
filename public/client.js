@@ -24,6 +24,7 @@ document.addEventListener("DOMContentLoaded", function(){
   var gridSize = 11;
   var gameScale;
   var roomId;
+  var currentRotation = 0;
 
   $("#gameDiv").hide();
 
@@ -56,9 +57,25 @@ document.addEventListener("DOMContentLoaded", function(){
     }
   }
 
+
+
+
   //UI element event listeners
   $("#rotate").click(function() {
-    socket.emit('rotate', roomId );
+    if (currentRotation === 270){
+      currentRotation = 0
+    }
+    else {
+      currentRotation += 90
+    }
+
+    blocks.forEach(function(shape){
+      rotate(shape, currentRotation);
+
+    console.log(currentRotation)
+    drawWorld();
+    console.log('redrawn')
+    });
   });
 
   $("#clear").click(function() {
@@ -123,7 +140,6 @@ document.addEventListener("DOMContentLoaded", function(){
       scrollDistance = 0
       drawWorld();
     }
-    console.log("Im here")
     evt.preventDefault();
   }, false);
 
@@ -179,7 +195,7 @@ document.addEventListener("DOMContentLoaded", function(){
   function writeMessage(message, divName) {
     document.getElementById(divName).innerText = message;
   }
-  
+
   function toRadians (angle) {
     return angle * (Math.PI / 180);
   }
@@ -280,6 +296,25 @@ document.addEventListener("DOMContentLoaded", function(){
     }
   }
 
+
+function rotate(shape, degrees = 90){
+    console.log(shape)
+    console.log(shape.xPos, shape.yPos)
+
+    var newCoordinates = calculateRotation((gridSize/2) - 1, (gridSize/2) - 1, shape.xPos, shape.yPos, degrees);
+    shape.xPos = newCoordinates[0];
+    shape.yPos = newCoordinates[1];
+  }
+
+function calculateRotation(cx, cy, x, y, angle) {
+    var radians = (Math.PI / 180) * angle,
+    cos = Math.cos(radians),
+    sin = Math.sin(radians),
+    nx = (cos * (x - cx)) + (sin * (y - cy)) + cx,
+    ny = (cos * (y - cy)) - (sin * (x - cx)) + cy;
+    return [nx, ny];
+  }
+
   function isBelow(block){
     return block.zPos < z;
   }
@@ -294,7 +329,6 @@ document.addEventListener("DOMContentLoaded", function(){
 
   function drawWorld(){
     clearCanvas();
-    console.log(gridSize);
     if(showGridlines){
       drawWalls(gridSize,gridSize,gridSize,gridr, gridg, gridb,1);
       drawGridLines(gridSize,gridSize,0,255,0,0,1);
@@ -325,11 +359,23 @@ document.addEventListener("DOMContentLoaded", function(){
     link.download = 'bloc' + new Date() + '.png';
   }
 
+
+
+
+
+
   // Socket receive events
   socket.on('updateWorld', function (data) {
     blocks = data.blocks;
     drawWorld();
   });
+
+
+
+
+
+
+
 
   socket.on('list_of_games', function(data) {
     $("#listOfGames").html(data);
