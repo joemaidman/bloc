@@ -1,2 +1,5 @@
+engines:
+  rubocop:
+    enabled: true
 exclude_paths:
 - "public/isomer.js"
