@@ -78,6 +78,10 @@ document.addEventListener("DOMContentLoaded", function(){
     socket.emit('clearBlocks', roomId);
   });
 
+  $("#leaveGame").click(function() {
+    leaveGame();
+  });
+
   $("#toggleGridlines").click(function() {
     showGridlines === true ? showGridlines = false : showGridlines = true;
     drawWorld();
@@ -400,8 +404,6 @@ document.addEventListener("DOMContentLoaded", function(){
     updateWorld(blocks);
   });
 
-
-
   socket.on('new_game_id', function (data){
     roomId = data;
   });
@@ -420,6 +422,13 @@ document.addEventListener("DOMContentLoaded", function(){
     block[0] = newCoords.x;
     block[1] = newCoords.y;
     socket.emit('add_block', {block: block, roomId: roomId});
+  }
+
+  function leaveGame(){
+    gameId = "";
+    socket.emit('leaveRoom', roomId);
+    $("#sessionDiv").show();
+    $("#gameDiv").hide();
   }
 
 });

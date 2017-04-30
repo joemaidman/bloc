@@ -113,4 +113,24 @@ describe("Room", function(){
     expect(room.getPlayerCount()).to.eql(1);
   });
 
+  it("can remove a player", function(){
+    var player = new PlayerDouble(1, "Timmy");
+    room.addPlayer(player);
+    room.removePlayer(player.id);
+    expect(room.getPlayers()).to.eql([]);
+  });
+
+  it("cannot remove a player that isn't in the room", function(){
+    var player = new PlayerDouble(1, "Timmy");
+    room.addPlayer(player);
+    room.removePlayer(2);
+    expect(room.getPlayers()).to.eql([player]);
+  });
+
+  it("can return a single player by ID", function(){
+    var player = new PlayerDouble(1, "Timmy");
+    room.addPlayer(player);
+    expect(room.getPlayerById(1)).to.eql(player);
+  });
+
 });
