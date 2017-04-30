@@ -171,13 +171,17 @@ document.addEventListener("DOMContentLoaded", function(){
 
   // Functions
   function calculateGridPosition(mouseX, mouseY){
-    var x = Math.floor(((mouseX - (canvas.width / 2)) / (gameScale  * Math.cos(30))) + (((mouseX - (canvas.width / 2)) / (gameScale  * Math.cos(30))) + ((mouseY - (canvas.height))/ (gameScale  * Math.sin(30)))) / -2);
-    var y = Math.floor((((mouseX - (canvas.width / 2)) / (gameScale  * Math.cos(30)))) + ((mouseY - (canvas.height)) / (gameScale  * Math.sin(30))) / -2);
+    var x = Math.floor(((mouseX - (canvas.width / 2)) / (gameScale  * Math.cos(toRadians(30)))) + (((mouseX - (canvas.width / 2)) / (gameScale  * Math.cos(toRadians(30)))) + ((mouseY - (canvas.height))/ (gameScale  * Math.sin(toRadians(30))))) / -2);
+    var y = Math.floor((((mouseX - (canvas.width / 2)) / (gameScale  * Math.cos(toRadians(30)))) + ((mouseY - (canvas.height)) / (gameScale  * Math.sin(toRadians(30))))) / -2);
     return {x: x, y: y};
   }
 
   function writeMessage(message, divName) {
     document.getElementById(divName).innerText = message;
+  }
+  
+  function toRadians (angle) {
+    return angle * (Math.PI / 180);
   }
 
   function getMousePos(canvas, evt) {
