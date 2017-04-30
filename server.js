@@ -45,8 +45,9 @@ io.on('connection', function(socket) {
   };
 
   socket.on('new_game', function(data){
-    var roomName = data;
-    var room = new Room(roomName,new GameController(new Game()),2);
+    var roomName = data.name;
+    var size = data.size;
+    var room = new Room(roomName,new GameController(new Game(size)),2);
     rooms.push(room);
     room.addPlayer(new Player(socket.id, 'Timmy'));
     socket.join(room.getId());

@@ -6,8 +6,7 @@ document.addEventListener("DOMContentLoaded", function(){
   var canvas = document.getElementById('canvas');
   var context = canvas.getContext('2d');
   var socket = io.connect();
-
-  var iso = new Isomer(canvas, { scale: 18, originY: canvas.height});
+  var iso;
   var Shape = Isomer.Shape;
   var Point = Isomer.Point;
   var Color = Isomer.Color;
@@ -22,21 +21,26 @@ document.addEventListener("DOMContentLoaded", function(){
   var gridr = 255;
   var gridg = 0;
   var gridb = 0;
+  var gridSize = 11;
+  var gameScale;
   var roomId;
-
-  drawGridLines(21,21,0);
-  drawOrigin();
-  // drawTestBlocks();
-  setupColorPicker();
-  drawWorld();
 
   $("#gameDiv").hide();
 
   $("#newGame").click(function() {
     var gameName = $("#newGameName").val();
-    socket.emit('new_game', gameName);
+    $("#inputGridSize option:selected").text() === "Small" ? gridSize = 11 : gridSize = 21;
+    gridSize === 11 ? gameScale = 34 : gameScale = 18;
+    socket.emit('new_game', {name: gameName, size: gridSize });
     $("#sessionDiv").hide();
     $("#gameDiv").show();
+    iso = new Isomer(canvas, { scale: gameScale, originY: canvas.height});
+    drawGridLines(gridSize,gridSize,0);
+    drawOrigin();
+    // drawTestBlocks();
+    setupColorPicker();
+    drawWorld();
+
   });
 
   //UI setup
@@ -72,14 +76,14 @@ document.addEventListener("DOMContentLoaded", function(){
 
   $("#changeGridlinecolour").click(function() {
 
-        gridr = document.getElementById("red").value;
-        gridg = document.getElementById("green").value;
-        gridb = document.getElementById("blue").value;
-        drawWalls(21,21,21,gridr,gridg,gridb,1);
-        drawGridLines(21,21,0,255,0,0,1);
-        drawOrigin(255,0,0, 0, 0);
+    gridr = document.getElementById("red").value;
+    gridg = document.getElementById("green").value;
+    gridb = document.getElementById("blue").value;
+    drawWalls(gridSize,gridSize,gridSize,gridr,gridg,gridb,1);
+    drawGridLines(gridSize,gridSize,0,255,0,0,1);
+    drawOrigin(255,0,0, 0, 0);
 
-      drawWorld();
+    drawWorld();
   });
   $("#changeCanvasColour").click(function() {
     var r = document.getElementById("red").value,
@@ -110,7 +114,7 @@ document.addEventListener("DOMContentLoaded", function(){
   canvas.addEventListener('mousewheel',function(evt){
     scrollDistance+= evt.deltaY
     if( scrollDistance> 10){
-      z = Math.min(10,z+=1)
+      z = Math.min(gridSize - 1,z+=1)
       scrollDistance = 0
       drawWorld();
     }
@@ -154,7 +158,7 @@ document.addEventListener("DOMContentLoaded", function(){
   //Key down listeners
   window.addEventListener('keydown', function(evt){
     if(evt.keyCode === 38){
-      z = Math.min(10,z+=1)
+      z = Math.min(gridSize - 1,z+=1)
       drawWorld();
       evt.preventDefault();
     }
@@ -167,13 +171,17 @@ document.addEventListener("DOMContentLoaded", function(){
 
   // Functions
   function calculateGridPosition(mouseX, mouseY){
-    var x = Math.floor(((mouseX - 300) / 26) + (((mouseX - 300) / 26) + ((mouseY - 540)/ 15)) / -2);
-    var y = Math.floor((((mouseX - 300) / 26) + ((mouseY - 540) / 15)) / -2);
+    var x = Math.floor(((mouseX - (canvas.width / 2)) / (gameScale  * Math.cos(toRadians(30)))) + (((mouseX - (canvas.width / 2)) / (gameScale  * Math.cos(toRadians(30)))) + ((mouseY - (canvas.height))/ (gameScale  * Math.sin(toRadians(30))))) / -2);
+    var y = Math.floor((((mouseX - (canvas.width / 2)) / (gameScale  * Math.cos(toRadians(30)))) + ((mouseY - (canvas.height)) / (gameScale  * Math.sin(toRadians(30))))) / -2);
     return {x: x, y: y};
   }
 
   function writeMessage(message, divName) {
     document.getElementById(divName).innerText = message;
+  }
+  
+  function toRadians (angle) {
+    return angle * (Math.PI / 180);
   }
 
   function getMousePos(canvas, evt) {
@@ -259,10 +267,10 @@ document.addEventListener("DOMContentLoaded", function(){
 
   function drawOrigin(r, g, b, a, zIndex){
     iso.add(new Path([
-      Point(4, 4, zIndex + 2),
-      Point(4, 3, zIndex + 2),
-      Point(4, 4, zIndex + 1),
-      Point(4, 5, zIndex + 1)
+      Point(Math.floor(gridSize / 2) -1, Math.floor(gridSize / 2) -1, zIndex + 2),
+      Point(Math.floor(gridSize / 2) -1, Math.floor(gridSize / 2) -2, zIndex + 2),
+      Point(Math.floor(gridSize / 2) -1, Math.floor(gridSize / 2) -1, zIndex + 1),
+      Point(Math.floor(gridSize / 2) -1, Math.floor(gridSize / 2), zIndex + 1)
     ]), new Color(r, g, b,a));
   }
 
@@ -286,15 +294,15 @@ document.addEventListener("DOMContentLoaded", function(){
 
   function drawWorld(){
     clearCanvas();
-
+    console.log(gridSize);
     if(showGridlines){
-      drawWalls(21,21,21,gridr, gridg, gridb,1);
-      drawGridLines(21,21,0,255,0,0,1);
+      drawWalls(gridSize,gridSize,gridSize,gridr, gridg, gridb,1);
+      drawGridLines(gridSize,gridSize,0,255,0,0,1);
       drawOrigin(255,0,0, 0, 0);
-     }
+    }
 
     if(blocks.length === 0){
-      drawGridLines(21,21,z,255, 154, 0,1);
+      drawGridLines(gridSize,gridSize,z,255, 154, 0,1);
       drawOrigin(255, 154, 0,1, z);
     }
     else{
@@ -303,7 +311,7 @@ document.addEventListener("DOMContentLoaded", function(){
       var overBlocks = blocks.filter(isAbove);
 
       drawSomeBlocks(underBlocks);
-      drawGridLines(21,21,z,255, 154, 0,1);
+      drawGridLines(gridSize,gridSize,z,255, 154, 0,1);
       drawOrigin(255, 154, 0,1, z);
       drawSomeBlocks(overBlocks);
     }
@@ -315,7 +323,7 @@ document.addEventListener("DOMContentLoaded", function(){
   function downloadCanvas(link) {
     link.href = canvas.toDataURL();
     link.download = 'bloc' + new Date() + '.png';
-}
+  }
 
   // Socket receive events
   socket.on('updateWorld', function (data) {

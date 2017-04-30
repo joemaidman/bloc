@@ -20,7 +20,7 @@ describe("Game", function(){
   var game;
 
   beforeEach(function(){
-    game = new Game();
+    game = new Game(11);
   });
 
   it("exists", function(){
@@ -113,6 +113,9 @@ describe("Game", function(){
     game.addShape(shapeDoubleThree);
     game.addShape(shapeDoubleFour);
     expect(game.getShapes()).to.eql([shapeDoubleOne]);
+  });
+  it("can return the game size", function(){
+    expect(game.getSize()).to.eql(10);
   });
 
 });
