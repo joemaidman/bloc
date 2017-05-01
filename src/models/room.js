@@ -16,6 +16,14 @@ Room.prototype = {
   getPlayers: function(){
     return this.players;
   },
+  getPlayerById: function(id){
+    var playerIndex = this._findPlayerIndex(id);
+    return this.players[playerIndex];
+  },
+  removePlayer: function(id){
+    var playerIndex = this._findPlayerIndex(id);
+    if(playerIndex >= 0){this.players.splice(playerIndex,1)};
+  },
   setId: function(){
     this.id = this._generateId();
   },
@@ -42,6 +50,14 @@ Room.prototype = {
   },
   _generateId: function(){
     return '_' + Math.random().toString(36).substr(2, 9);
+  },
+  _findPlayerIndex: function(id){
+    for(var i = 0; i < this.players.length; i++){
+      if(this.players[i].id === id ){
+        return i;
+      }
+    }
+    return -1;
   }
 };
 

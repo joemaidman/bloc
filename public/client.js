@@ -48,6 +48,8 @@ document.addEventListener("DOMContentLoaded", function(){
   document.getElementById('blue').value = RandomColour()
   //UI element event listeners
 
+
+  //UI element event listeners
   $("#newGame").click(function() {
     var gameName = $("#newGameName").val();
     $("#inputGridSize option:selected").text() === "Small" ? gridSize = 11 : gridSize = 21;
@@ -63,25 +65,18 @@ document.addEventListener("DOMContentLoaded", function(){
   });
 
   $("#rotate").click(function() {
-    if (currentRotation === 270){
-      currentRotation = 0
-    }
-    else {
-      currentRotation += 90
-    }
-
-    blocks.forEach(function(shape){
-      var newCoords = rotate({x: shape.xPos, y: shape.yPos}, 90);
-      shape.xPos = newCoords.x;
-      shape.yPos = newCoords.y;
-
-    });
+    updateRotationClockwise();
+    rotateAllBlocks(90);
     sortBlocks();
     drawWorld();
   });
 
   $("#clear").click(function() {
     socket.emit('clearBlocks', roomId);
+  });
+
+  $("#leaveGame").click(function() {
+    leaveGame();
   });
 
   $("#toggleGridlines").click(function() {
@@ -185,6 +180,20 @@ document.addEventListener("DOMContentLoaded", function(){
       drawWorld();
       evt.preventDefault();
     }
+    else if (evt.keyCode === 37) {
+      updateRotationAntiClockwise();
+      rotateAllBlocks(-90);
+      sortBlocks();
+      drawWorld();
+      evt.preventDefault();
+    }
+    else if (evt.keyCode === 39) {
+      updateRotationClockwise();
+      rotateAllBlocks(90);
+      sortBlocks();
+      drawWorld();
+      evt.preventDefault();
+    }
   });
 
   // Functions
@@ -192,6 +201,22 @@ document.addEventListener("DOMContentLoaded", function(){
     var x = Math.floor(((mouseX - (canvas.width / 2)) / (gameScale  * Math.cos(toRadians(30)))) + (((mouseX - (canvas.width / 2)) / (gameScale  * Math.cos(toRadians(30)))) + ((mouseY - (canvas.height))/ (gameScale  * Math.sin(toRadians(30))))) / -2);
     var y = Math.floor((((mouseX - (canvas.width / 2)) / (gameScale  * Math.cos(toRadians(30)))) + ((mouseY - (canvas.height)) / (gameScale  * Math.sin(toRadians(30))))) / -2);
     return {x: x, y: y};
+  }
+
+  function updateRotationClockwise(){
+    currentRotation === 270 ? currentRotation = 0 : currentRotation += 90;
+  }
+
+  function updateRotationAntiClockwise(){
+    currentRotation === 0 ? currentRotation = 270 : currentRotation -= 90;
+  }
+
+  function rotateAllBlocks(degree){
+    blocks.forEach(function(shape){
+      var newCoords = rotate({x: shape.xPos, y: shape.yPos}, degree);
+      shape.xPos = newCoords.x;
+      shape.yPos = newCoords.y;
+    });
   }
 
   function writeMessage(message, divName) {
@@ -375,11 +400,7 @@ document.addEventListener("DOMContentLoaded", function(){
   function updateWorld(data){
     blocks = data.blocks;
     if(blocks){
-      blocks.forEach(function(shape){
-        var newCoords = rotate({x: shape.xPos, y: shape.yPos}, currentRotation);
-        shape.xPos = newCoords.x;
-        shape.yPos = newCoords.y;
-      });
+      rotateAllBlocks(currentRotation);
       sortBlocks();
     }
     drawWorld();
@@ -406,14 +427,11 @@ document.addEventListener("DOMContentLoaded", function(){
     updateWorld(blocks);
   });
 
-
-
   socket.on('new_game_id', function (data){
     roomId = data;
   });
 
   // Socket send events
-
   function emitDeleteBlock(block){
     var newCoords = rotate( {x: block[0], y: block[1]}, -currentRotation);
     block[0] = newCoords.x;
@@ -426,6 +444,13 @@ document.addEventListener("DOMContentLoaded", function(){
     block[0] = newCoords.x;
     block[1] = newCoords.y;
     socket.emit('add_block', {block: block, roomId: roomId});
+  }
+
+  function leaveGame(){
+    gameId = "";
+    socket.emit('leaveRoom', roomId);
+    $("#sessionDiv").show();
+    $("#gameDiv").hide();
   }
 
 });
