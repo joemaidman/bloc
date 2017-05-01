@@ -17,6 +17,7 @@ document.addEventListener("DOMContentLoaded", function(){
   var z = 0;
   var scrollDistance = 0;
   var showGridlines = true;
+  var showFloor = true;
   var changeColourOfGridlines = false;
   var gridr = 255;
   var gridg = 0;
@@ -91,6 +92,10 @@ document.addEventListener("DOMContentLoaded", function(){
     showGridlines === true ? showGridlines = false : showGridlines = true;
     drawWorld();
   });
+  $("#toggleFloor").click(function() {
+    showFloor === true ? showFloor = false : showFloor = true;
+    drawWorld();
+  })
 
   $("#saveCanvas").click(function() {
     downloadCanvas(this);
@@ -343,9 +348,13 @@ document.addEventListener("DOMContentLoaded", function(){
     clearCanvas();
     if(showGridlines){
       drawWalls(gridSize,gridSize,gridSize,gridr, gridg, gridb,1);
-      drawGridLines(gridSize,gridSize,0,floorr, floorg, floorb,1);
-      drawOrigin(floorr, floorg, floorb, 0, 0);
+
     }
+
+   if(showFloor){
+     drawGridLines(gridSize,gridSize,0,floorr, floorg, floorb,1);
+     drawOrigin(floorr, floorg, floorb, 0, 0);
+   }
     var drewBuildGrid = false;
     if(blocks){
       if(blocks.length === 0){
