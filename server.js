@@ -15,7 +15,6 @@ url = 'mongodb://localhost:27017/bloc';
 //passport
 var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
-
 // file dependencies
 GameView = require('./src/views/gameView.js'),
 Game = require('./src/models/game.js'),
@@ -33,9 +32,10 @@ var clientCount = 0;
 var rooms = [];
 
 // express app setup
-app.use(express.cookieParser());
-app.use(express.bodyParser());
-app.use(express.session({ secret: 'SECRET' }));
+// app.use(express.cookieParser());
+var bodyParser = require('body-parser')
+app.use(bodyParser.json());
+// app.use(express.session({ secret: 'SECRET' }));
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(express.static(__dirname + '/public'));
