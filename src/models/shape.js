@@ -1,8 +1,10 @@
 "strict mode";
 
-function Shape(xPos = 0, yPos = 0, zPos = 0, r = 0, g = 0, b = 0){
+function Shape(xPos = 0, yPos = 0, zPos = 0, r = 0, g = 0, b = 0, type = 0, texture = false){
   this.setPosition(xPos, yPos, zPos);
   this.setColor(r, g, b);
+  this.setTexture(texture);
+  this.setType(type);
 }
 
 Shape.prototype = {
@@ -21,6 +23,18 @@ Shape.prototype = {
     this.r = r;
     this.g = g;
     this.b = b;
+  },
+  setTexture: function(texture){
+    this.texture = texture;
+  },
+  getTexture: function(){
+    return this.texture;
+  },
+  setType: function(type){
+    this.type = type;
+  },
+  getType: function(){
+    return this.type;
   }
 };
 
