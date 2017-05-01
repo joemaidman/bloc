@@ -45,7 +45,7 @@ io.on('connection', function(socket) {
     var roomId = data;
     var room = findRoom(roomId);
     if(room.isFull()){
-      console.log("Unable to join a room that is full");
+      console.log("Unable to join a room that is full (player: " + socket.id +")");
     }
     else {
       room.addPlayer(new Player(socket.id, 'Timmy'));
