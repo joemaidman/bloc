@@ -17,10 +17,18 @@ document.addEventListener("DOMContentLoaded", function(){
   var z = 0;
   var scrollDistance = 0;
   var showGridlines = true;
+  var showFloor = true;
+  var showBuildGrid =true;
   var changeColourOfGridlines = false;
   var gridr = 255;
   var gridg = 0;
   var gridb = 0;
+  var bgridr = 255;
+  var bgridg = 154;
+  var bgridb = 0;
+  var floorr = 255;
+  var floorg = 0;
+  var floorb = 0;
   var gridSize = 11;
   var gameScale;
   var roomId;
@@ -32,13 +40,21 @@ document.addEventListener("DOMContentLoaded", function(){
   function setupColorPicker(){
     for(var i = 0; i < input.length; i++){
       input[i].addEventListener("input",function(){
-        var r = document.getElementById("red").value,
-        g = document.getElementById("green").value,
-        b = document.getElementById("blue").value;
-        var display = document.getElementById("display")
-        display.style.background = "rgb(" + r + "," + g + "," + b + ")"
+        setColour()
       });
     }
+    document.getElementById('red').value = RandomColour()
+    document.getElementById('green').value = RandomColour()
+    document.getElementById('blue').value = RandomColour()
+  setColour()
+  }
+
+  function setColour() {
+    var r = document.getElementById('red').value,
+    g = document.getElementById('green').value,
+    b = document.getElementById('blue').value
+    var display = document.getElementById("display")
+    display.style.background = "rgb(" + r + "," + g + "," + b + ")"
   }
   function RandomColour(){
   return  Math.round(Math.random()*225)
@@ -83,6 +99,16 @@ document.addEventListener("DOMContentLoaded", function(){
     showGridlines === true ? showGridlines = false : showGridlines = true;
     drawWorld();
   });
+  $("#toggleFloor").click(function() {
+    showFloor === true ? showFloor = false : showFloor = true;
+    drawWorld();
+  })
+
+  $("#toggleBuildGrid").click(function() {
+    showBuildGrid === true ? showBuildGrid = false : showBuildGrid = true;
+
+    drawWorld();
+  })
 
   $("#saveCanvas").click(function() {
     downloadCanvas(this);
@@ -94,11 +120,28 @@ document.addEventListener("DOMContentLoaded", function(){
     gridg = document.getElementById("green").value;
     gridb = document.getElementById("blue").value;
     drawWalls(gridSize,gridSize,gridSize,gridr,gridg,gridb,1);
-    drawGridLines(gridSize,gridSize,0,255,0,0,1);
-    drawOrigin(255,0,0, 0, 0);
-
     drawWorld();
   });
+
+  $("#changeBuildGridColour").click(function() {
+    bgridr = document.getElementById("red").value;
+    bgridg = document.getElementById("green").value;
+    bgridb = document.getElementById("blue").value;
+    drawWalls(gridSize,gridSize,gridSize,bgridr,bgridg,bgridb,1);
+    drawWorld();
+  });
+
+
+  $("#changeFloorColour").click(function() {
+     floorr = document.getElementById("red").value;
+    floorg = document.getElementById("green").value;
+    floorb = document.getElementById("blue").value;
+    drawGridLines(gridSize,gridSize,floorr,floorg,floorb,1);
+    drawOrigin(floorr,floorg,floorb, 0, 0);
+    drawWorld();
+  });
+
+
   $("#changeCanvasColour").click(function() {
     var r = document.getElementById("red").value,
     g = document.getElementById("green").value,
@@ -357,32 +400,41 @@ document.addEventListener("DOMContentLoaded", function(){
     clearCanvas();
     if(showGridlines){
       drawWalls(gridSize,gridSize,gridSize,gridr, gridg, gridb,1);
-      drawGridLines(gridSize,gridSize,0,255,0,0,1);
-      drawOrigin(255,0,0, 0, 0);
+
     }
+
+   if(showFloor){
+     drawGridLines(gridSize,gridSize,0,floorr, floorg, floorb,1);
+     drawOrigin(floorr, floorg, floorb, 0, 0);
+   }
+
     var drewBuildGrid = false;
+
     if(blocks){
       if(blocks.length === 0){
-        drawGridLines(gridSize,gridSize,z,255, 154, 0,1);
-        drawOrigin(255, 154, 0,1, z);
+        if (showBuildGrid){
+        drawGridLines(gridSize,gridSize,z,bgridr,bgridg, bgridb);
+        drawOrigin(bgridr,bgridg, bgridb,1, z);}
         drewBuildGrid = true;
         writeMessage("Block Count: 0", "blockDiv");
       }
       else{
+
         var underBlocks = blocks.filter(isBelow);
         var overBlocks = blocks.filter(isAbove);
 
         drawSomeBlocks(underBlocks);
-        drawGridLines(gridSize,gridSize,z,255, 154, 0,1);
-        drawOrigin(255, 154, 0,1, z);
+        if(showBuildGrid){
+        drawGridLines(gridSize,gridSize,z,bgridr,bgridg, bgridb,1);
+        drawOrigin(bgridr,bgridg, bgridb,1, z);}
         drawSomeBlocks(overBlocks);
         drewBuildGrid = true;
         writeMessage("Block Count: " + blocks.length, "blockDiv");
       }
     }
-    if(drewBuildGrid === false){
-      drawGridLines(gridSize,gridSize,z,255, 154, 0,1);
-      drawOrigin(255, 154, 0,1, z);
+    if(drewBuildGrid === false && showBuildGrid){
+      drawGridLines(gridSize,gridSize,z,bgridr,bgridg, bgridb,1);
+      drawOrigin(bgridr,bgridg, bgridb,1, z);
     }
     drawHighlight();
   }
