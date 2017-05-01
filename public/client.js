@@ -46,7 +46,7 @@ document.addEventListener("DOMContentLoaded", function(){
     document.getElementById('red').value = RandomColour()
     document.getElementById('green').value = RandomColour()
     document.getElementById('blue').value = RandomColour()
-  setColour()
+    setColour()
   }
 
   function setColour() {
@@ -57,8 +57,8 @@ document.addEventListener("DOMContentLoaded", function(){
     display.style.background = "rgb(" + r + "," + g + "," + b + ")"
   }
   function RandomColour(){
-  return  Math.round(Math.random()*225)
-}
+    return  Math.round(Math.random()*225)
+  }
   document.getElementById('red').value = RandomColour()
   document.getElementById('green').value = RandomColour()
   document.getElementById('blue').value = RandomColour()
@@ -134,7 +134,7 @@ document.addEventListener("DOMContentLoaded", function(){
 
 
   $("#changeFloorColour").click(function() {
-     floorr = document.getElementById("red").value;
+    floorr = document.getElementById("red").value;
     floorg = document.getElementById("green").value;
     floorb = document.getElementById("blue").value;
     drawGridLines(gridSize,gridSize,floorr,floorg,floorb,1);
@@ -256,6 +256,7 @@ document.addEventListener("DOMContentLoaded", function(){
   }
 
   function rotateAllBlocks(degree){
+    console.log("Rotating now by " + degree + " degrees. New rotation is " + currentRotation);
     blocks.forEach(function(shape){
       var newCoords = rotate({x: shape.xPos, y: shape.yPos}, degree);
       shape.xPos = newCoords.x;
@@ -364,9 +365,11 @@ document.addEventListener("DOMContentLoaded", function(){
   }
 
   function rotate(coordinates, degrees = 90){
-    var newCoordinates = calculateRotation(((gridSize-1)/2), ((gridSize-1)/2), coordinates.x, coordinates.y, degrees);
-    var x = newCoordinates[0];
-    var y = newCoordinates[1];
+    console.log("X:" + coordinates.x + " Y:" + coordinates.y + " Degrees: " + degrees);
+    var newCoordinates = calculateRotation(5, 5, coordinates.x, coordinates.y, degrees);
+    var x = Math.round(newCoordinates[0],0);
+    var y = Math.round(newCoordinates[1],0);
+    console.log("Generated X:" + x + " Y:" + y);
     return {x: x, y: y};
   }
 
@@ -404,106 +407,109 @@ document.addEventListener("DOMContentLoaded", function(){
 
     }
 
-   if(showFloor){
-     drawGridLines(gridSize,gridSize,0,floorr, floorg, floorb,1);
-     drawOrigin(floorr, floorg, floorb, 0, 0);
-   }
+    if(showFloor){
+      drawGridLines(gridSize,gridSize,0,floorr, floorg, floorb,1);
+      drawOrigin(floorr, floorg, floorb, 0, 0);
+    }
 
     var drewBuildGrid = false;
 
     if(blocks){
       if(blocks.length === 0){
         if (showBuildGrid){
-        drawGridLines(gridSize,gridSize,z,bgridr,bgridg, bgridb);
-        drawOrigin(bgridr,bgridg, bgridb,1, z);}
-        drewBuildGrid = true;
-        writeMessage("Block Count: 0", "blockDiv");
+          drawGridLines(gridSize,gridSize,z,bgridr,bgridg, bgridb);
+          drawOrigin(bgridr,bgridg, bgridb,1, z);}
+          drewBuildGrid = true;
+          writeMessage("Block Count: 0", "blockDiv");
+        }
+        else{
+
+          var underBlocks = blocks.filter(isBelow);
+          var overBlocks = blocks.filter(isAbove);
+
+          drawSomeBlocks(underBlocks);
+          if(showBuildGrid){
+            drawGridLines(gridSize,gridSize,z,bgridr,bgridg, bgridb,1);
+            drawOrigin(bgridr,bgridg, bgridb,1, z);}
+            drawSomeBlocks(overBlocks);
+            drewBuildGrid = true;
+            writeMessage("Block Count: " + blocks.length, "blockDiv");
+          }
+        }
+        if(drewBuildGrid === false && showBuildGrid){
+          drawGridLines(gridSize,gridSize,z,bgridr,bgridg, bgridb,1);
+          drawOrigin(bgridr,bgridg, bgridb,1, z);
+        }
+        drawHighlight();
       }
-      else{
 
-        var underBlocks = blocks.filter(isBelow);
-        var overBlocks = blocks.filter(isAbove);
-
-        drawSomeBlocks(underBlocks);
-        if(showBuildGrid){
-        drawGridLines(gridSize,gridSize,z,bgridr,bgridg, bgridb,1);
-        drawOrigin(bgridr,bgridg, bgridb,1, z);}
-        drawSomeBlocks(overBlocks);
-        drewBuildGrid = true;
-        writeMessage("Block Count: " + blocks.length, "blockDiv");
+      function downloadCanvas(link) {
+        link.href = canvas.toDataURL();
+        link.download = 'bloc' + new Date() + '.png';
       }
-    }
-    if(drewBuildGrid === false && showBuildGrid){
-      drawGridLines(gridSize,gridSize,z,bgridr,bgridg, bgridb,1);
-      drawOrigin(bgridr,bgridg, bgridb,1, z);
-    }
-    drawHighlight();
-  }
 
-  function downloadCanvas(link) {
-    link.href = canvas.toDataURL();
-    link.download = 'bloc' + new Date() + '.png';
-  }
+      // Socket receive events
+      socket.on('updateWorld', function (data) {
+        console.log("receiving world update")
+        updateWorld(data);
+      });
 
-  // Socket receive events
-  socket.on('updateWorld', function (data) {
-    updateWorld(data);
-  });
+      function updateWorld(data){
+        blocks = data.blocks;
+        if(blocks){
+          rotateAllBlocks(currentRotation);
+          sortBlocks();
+        }
+        drawWorld();
+      }
 
-  function updateWorld(data){
-    blocks = data.blocks;
-    if(blocks){
-      rotateAllBlocks(currentRotation);
-      sortBlocks();
-    }
-    drawWorld();
-  }
+      socket.on('list_of_games', function(data) {
+        $("#listOfGames").html(data);
+        $(".joinButton").click(function(evt) {
+          var gameId = evt.target.id
+          socket.emit('join_game', gameId);
+        });
+      });
 
-  socket.on('list_of_games', function(data) {
-    $("#listOfGames").html(data);
-    $(".joinButton").click(function(evt) {
-      var gameId = evt.target.id
-      socket.emit('join_game', gameId);
+      socket.on('joined_game', function (data){
+        roomId = data.roomId;
+        blocks = data.blocks;
+        gridSize = data.gameSize;
+        gridSize === 11 ? gameScale = 34 : gameScale = 18;
+        iso = new Isomer(canvas, { scale: gameScale, originY: canvas.height});
+        $("#sessionDiv").hide();
+        $("#gameDiv").show();
+        drawGridLines(gridSize,gridSize,0);
+        drawOrigin();
+        updateWorld(blocks);
+      });
+
+      socket.on('new_game_id', function (data){
+        roomId = data;
+      });
+
+      // Socket send events
+      function emitDeleteBlock(block){
+        var newCoords = rotate( {x: block[0], y: block[1]}, -currentRotation);
+        block[0] = newCoords.x;
+        block[1] = newCoords.y;
+        socket.emit('delete_block', {block: block, roomId: roomId});
+      }
+
+      function emitNewBlock(block){
+        var newCoords = rotate( {x: block[0], y: block[1]}, -currentRotation);
+        console.log("Old: X" + block[0] + " Y: " + block[1])
+        block[0] = newCoords.x;
+        block[1] = newCoords.y;
+        console.log("New: X" + block[0] + " Y: " + block[1])
+        socket.emit('add_block', {block: block, roomId: roomId});
+      }
+
+      function leaveGame(){
+        gameId = "";
+        socket.emit('leaveRoom', roomId);
+        $("#sessionDiv").show();
+        $("#gameDiv").hide();
+      }
+
     });
-  });
-
-  socket.on('joined_game', function (data){
-    roomId = data.roomId;
-    blocks = data.blocks;
-    gridSize = data.gameSize;
-    gridSize === 11 ? gameScale = 34 : gameScale = 18;
-    iso = new Isomer(canvas, { scale: gameScale, originY: canvas.height});
-    $("#sessionDiv").hide();
-    $("#gameDiv").show();
-    drawGridLines(gridSize,gridSize,0);
-    drawOrigin();
-    updateWorld(blocks);
-  });
-
-  socket.on('new_game_id', function (data){
-    roomId = data;
-  });
-
-  // Socket send events
-  function emitDeleteBlock(block){
-    var newCoords = rotate( {x: block[0], y: block[1]}, -currentRotation);
-    block[0] = newCoords.x;
-    block[1] = newCoords.y;
-    socket.emit('delete_block', {block: block, roomId: roomId});
-  }
-
-  function emitNewBlock(block){
-    var newCoords = rotate( {x: block[0], y: block[1]}, -currentRotation);
-    block[0] = newCoords.x;
-    block[1] = newCoords.y;
-    socket.emit('add_block', {block: block, roomId: roomId});
-  }
-
-  function leaveGame(){
-    gameId = "";
-    socket.emit('leaveRoom', roomId);
-    $("#sessionDiv").show();
-    $("#gameDiv").hide();
-  }
-
-});

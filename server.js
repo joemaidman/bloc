@@ -60,8 +60,8 @@ io.on('connection', function(socket) {
   });
 
   socket.on('add_block', function (data) {
-    console.log(data);
     var room = findRoom(data.roomId);
+    console.log("Server adding block at X:" + data.block[0] + " Y: " + data.block[1]);
     room.gameController.createShape(data.block[0], data.block[1], data.block[2], data.block[3], data.block[4], data.block[5]);
     updateWorld(room.id);
   });
