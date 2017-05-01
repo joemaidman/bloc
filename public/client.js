@@ -291,7 +291,7 @@ document.addEventListener("DOMContentLoaded", function(){
     b = document.getElementById("blue").value;
     a = 0.4
     if(currentShapeType === 0){
-      iso.add(Shape.Prism(new Point(highlightGrid.x, highlightGrid.y)),new Color(r,g,b,a));
+      iso.add(Shape.Prism(new Point(highlightGrid.x, highlightGrid.y)),new Color(r,g,b,a), true, "wood");
     }
     else if(currentShapeType === 1){
       iso.add(Shape.Pyramid(new Point(highlightGrid.x, highlightGrid.y)),new Color(r,g,b,a));
@@ -388,15 +388,15 @@ document.addEventListener("DOMContentLoaded", function(){
   }
 
   function drawCube(block){
-    iso.add(Shape.Prism(new Point(block.xPos, block.yPos, block.zPos)),new Color(block.r,block.g,block.b));
+    iso.add(Shape.Prism(new Point(block.xPos, block.yPos, block.zPos)),new Color(block.r,block.g,block.b), true,"wood");
   }
 
   function drawPyramid(block){
-    iso.add(Shape.Pyramid(new Point(block.xPos, block.yPos, block.zPos)),new Color(block.r,block.g,block.b));
+    iso.add(Shape.Pyramid(new Point(block.xPos, block.yPos, block.zPos)),new Color(block.r,block.g,block.b), true, "wood");
   }
 
   function drawCylinder(block){
-    iso.add(Shape.Cylinder(new Point(block.xPos + 0.5, block.yPos + 0.5, block.zPos), 0.5, 50, 1),new Color(block.r,block.g,block.b));
+    iso.add(Shape.Cylinder(new Point(block.xPos + 0.5, block.yPos + 0.5, block.zPos), 0.5, 10, 1),new Color(block.r,block.g,block.b), true, "wood");
   }
 
   function rotate(coordinates, degrees = 90){

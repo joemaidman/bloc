@@ -397,23 +397,25 @@ return /******/ (function(modules) { // webpackBootstrap
 	  this.ctx.beginPath();
 	  this.ctx.moveTo(points[0].x, points[0].y);
 
-	  for (var i = 1; i < points.length; i++) {
+		for (var i = 1; i < points.length; i++) {
 	    this.ctx.lineTo(points[i].x, points[i].y);
 	  }
-
 	  this.ctx.closePath();
 
 	  /* Set the strokeStyle and fillStyle */
 	  this.ctx.save();
 
-	  this.ctx.globalAlpha = color.a;
-		if(isTexture){
-
-		}
+		this.ctx.globalAlpha = color.a;
+		if(isFace && isTexture){
+		 var img =new Image();
+		 img.src = "http://localhost:8080/"+ isTexture +".jpg";
+		 var pattern = this.ctx.createPattern(img, "repeat");
+		 this.ctx.fillStyle =  pattern;
+     this.ctx.strokeStyle = color.toHex();
+	  }
 		else{
-			 this.ctx.fillStyle = this.ctx.strokeStyle = color.toHex();
+			this.ctx.fillStyle = this.ctx.strokeStyle = color.toHex()
 		}
-
 
 	  this.ctx.stroke();
 	  this.ctx.fill();
@@ -630,7 +632,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 *
 	 * This method also accepts arrays
 	 */
-	Isomer.prototype.add = function(item, baseColor) {
+	Isomer.prototype.add = function(item, baseColor,isFace = false, texture = false) {
 	  if (Object.prototype.toString.call(item) == '[object Array]') {
 	    for (var i = 0; i < item.length; i++) {
 	      this.add(item[i], baseColor);
@@ -642,7 +644,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    var paths = item.orderedPaths();
 
 	    for (var j = 0; j < paths.length; j++) {
-	      this._addPath(paths[j], baseColor);
+	      this._addPath(paths[j], baseColor, isFace, texture);
 	    }
 	  }
 	};
@@ -651,7 +653,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	/**
 	 * Adds a path to the scene
 	 */
-	Isomer.prototype._addPath = function(path, baseColor) {
+	Isomer.prototype._addPath = function(path, baseColor, isFace, texture) {
 	  /* Default baseColor */
 	  baseColor = baseColor || new Color(120, 120, 120);
 
@@ -668,7 +670,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  var brightness = Vector.dotProduct(normal, this.lightAngle);
 	  var color = baseColor.lighten(brightness * this.colorDifference, this.lightColor);
 
-	  this.canvas.path(path.points.map(this._translatePoint.bind(this)), color);
+	  this.canvas.path(path.points.map(this._translatePoint.bind(this)), color, isFace, texture);
 	};
 
 	/**
