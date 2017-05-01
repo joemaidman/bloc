@@ -9,7 +9,7 @@
   }
   #display{
     width: 10%;
-    
+
   }
   .colourSelector{
     padding-top: 10px;
@@ -49,6 +49,8 @@
       <option value="small">Small</option>
       <option value="large">Large</option>
     </select>
+    Player limit
+    <input type="number" id="roomLimit" min="0" max="10" step="1" value="2">
     <h3> Join a game </h3>
     <div><ul id="listOfGames"></ul></div>
   </div>
@@ -82,7 +84,7 @@
         <button id="changeBuildGridColour">Change build grid  colour</button><br/><br/>
         <button><a class="button" id="saveCanvas">Save as image</a></button>
 
-        
+
         <button id="leaveGame">Leave game</button><br/><br/>
 
 

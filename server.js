@@ -30,7 +30,8 @@ io.on('connection', function(socket) {
   socket.on('new_game', function(data){
     var roomName = data.name;
     var size = data.size;
-    var room = new Room(roomName, new GameController(new Game(size)), 2);
+    var playerLimit = data.roomLimit;
+    var room = new Room(roomName, new GameController(new Game(size)), playerLimit);
     rooms.push(room);
     room.addPlayer(new Player(socket.id, 'Timmy'));
     socket.join(room.getId());
@@ -43,10 +44,15 @@ io.on('connection', function(socket) {
   socket.on('join_game', function(data){
     var roomId = data;
     var room = findRoom(roomId);
-    room.addPlayer(new Player(socket.id, 'Timmy'));
-    socket.join(room.getId());
-    socket.emit('joined_game',{roomId:room.getId(), gameSize: room.gameController.game.getSize() + 1, blocks: room.gameController.getAllShapes()});
-    console.log("Adding player " + room.getPlayers()[0].id + " to room " + room.getId());
+    if(room.isFull()){
+      console.log("Unable to join a room that is full");
+    }
+    else {
+      room.addPlayer(new Player(socket.id, 'Timmy'));
+      socket.join(room.getId());
+      socket.emit('joined_game',{roomId:room.getId(), gameSize: room.gameController.game.getSize() + 1, blocks: room.gameController.getAllShapes()});
+      console.log("Adding player " + room.getPlayers()[0].id + " to room " + room.getId());
+    }
   });
 
   socket.on('leaveRoom', function(data){
@@ -133,9 +139,11 @@ io.on('connection', function(socket) {
   }
 
   function listOfRooms(){
-    var listString = ""
+    var listString = "";
     for(var i = 0; i < rooms.length; i++){
-      listString += "<li>" + rooms[i].getName() + " (" + rooms[i].getPlayerCount() + "/" + rooms[i].getLimit() + ")" + "<button " + " class ='joinButton' id=" + rooms[i].id  +  '>Join</button>' +  "</li>";
+      var buttonStatus;
+      rooms[i].isFull() ? buttonStatus = "disabled" : buttonStatus = "";
+      listString += "<li>" + rooms[i].getName() + " (" + rooms[i].getPlayerCount() + "/" + rooms[i].getLimit() + ")" + "<button " + " class ='joinButton' id='" + rooms[i].id  +  "' " + buttonStatus + ">Join</button>" +  "</li>";
     }
     return listString;
   };

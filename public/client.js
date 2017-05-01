@@ -70,7 +70,8 @@ document.addEventListener("DOMContentLoaded", function(){
     var gameName = $("#newGameName").val();
     $("#inputGridSize option:selected").text() === "Small" ? gridSize = 11 : gridSize = 21;
     gridSize === 11 ? gameScale = 34 : gameScale = 18;
-    socket.emit('new_game', {name: gameName, size: gridSize });
+    var roomLimit = $("#roomLimit").val();
+    socket.emit('new_game', {name: gameName, size: gridSize, roomLimit: roomLimit });
     $("#sessionDiv").hide();
     $("#gameDiv").show();
     iso = new Isomer(canvas, { scale: gameScale, originY: canvas.height });
@@ -463,8 +464,6 @@ document.addEventListener("DOMContentLoaded", function(){
     $(".joinButton").click(function(evt) {
       var gameId = evt.target.id
       socket.emit('join_game', gameId);
-      $("#sessionDiv").hide();
-      $("#gameDiv").show();
     });
   });
 
@@ -474,6 +473,8 @@ document.addEventListener("DOMContentLoaded", function(){
     gridSize = data.gameSize;
     gridSize === 11 ? gameScale = 34 : gameScale = 18;
     iso = new Isomer(canvas, { scale: gameScale, originY: canvas.height});
+    $("#sessionDiv").hide();
+    $("#gameDiv").show();
     drawGridLines(gridSize,gridSize,0);
     drawOrigin();
     updateWorld(blocks);

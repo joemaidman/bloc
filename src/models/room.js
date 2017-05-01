@@ -48,6 +48,9 @@ Room.prototype = {
   addMessage: function(message){
     this.messages.push(message);
   },
+  isFull: function(){
+    return this.getPlayerCount() >= this.getLimit();
+  },
   _generateId: function(){
     return '_' + Math.random().toString(36).substr(2, 9);
   },
