@@ -4,11 +4,32 @@ var express = require('express'),
 app = express(),
 http = require('http'),
 socketIo = require('socket.io'),
-GameView = require('./src/views/gameView.js'),
-Game = require('./src/models/game.js'),
-Room = require('./src/models/room.js'),
-Player = require('./src/models/player.js'),
-GameController = require('./src/controllers/gameController.js');
+GameView = require('./app/views/gameView.js'),
+Game = require('./app/models/game.js'),
+Room = require('./app/models/room.js'),
+Player = require('./app/models/player.js'),
+GameController = require('./app/controllers/gameController.js'),
+mongoose = require('mongoose'),
+passport = require('passport'),
+flash = require('connect-flash'),
+morgan = require('morgan'),
+cookieParser = require('cookie-parser'),
+bodyParser = require('body-parser'),
+session = require('express-session'),
+configDB = require('./config/database.js');
+require('./config/passport')(passport); 
+mongoose.connect(configDB.url);
+app.use(morgan('dev')); // log every request to the console
+app.use(cookieParser()); // read cookies (needed for auth)
+app.use(bodyParser()); // get information from html forms
+
+app.set('view engine', 'ejs'); // set up ejs for templating
+app.use(session({ secret: 'ilovescotchscotchyscotchscotch' })); // session secret
+app.use(passport.initialize());
+app.use(passport.session()); // persistent login sessions
+app.use(flash()); // use connect-flash for flash messages stored in session
+require('./app/routes.js')(app, passport);
+
 
 var server = http.createServer(app);
 var io = socketIo.listen(server);
