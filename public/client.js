@@ -35,11 +35,19 @@ document.addEventListener("DOMContentLoaded", function(){
         var r = document.getElementById("red").value,
         g = document.getElementById("green").value,
         b = document.getElementById("blue").value;
-        var display = document.getElementById("display");
+        var display = document.getElementById("display")
         display.style.background = "rgb(" + r + "," + g + "," + b + ")"
       });
     }
   }
+  function RandomColour(){
+  return  Math.round(Math.random()*225)
+}
+  document.getElementById('red').value = RandomColour()
+  document.getElementById('green').value = RandomColour()
+  document.getElementById('blue').value = RandomColour()
+  //UI element event listeners
+
 
   //UI element event listeners
   $("#newGame").click(function() {
