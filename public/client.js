@@ -18,6 +18,7 @@ document.addEventListener("DOMContentLoaded", function(){
   var scrollDistance = 0;
   var showGridlines = true;
   var showFloor = true;
+  var showBuildGrid =true;
   var changeColourOfGridlines = false;
   var gridr = 255;
   var gridg = 0;
@@ -94,6 +95,11 @@ document.addEventListener("DOMContentLoaded", function(){
   });
   $("#toggleFloor").click(function() {
     showFloor === true ? showFloor = false : showFloor = true;
+    drawWorld();
+  })
+
+  $("#toggleBuildGrid").click(function() {
+    showBuildGrid === true ? showBuildGrid = false : showBuildGrid = true;
     drawWorld();
   })
 
@@ -355,7 +361,9 @@ document.addEventListener("DOMContentLoaded", function(){
      drawGridLines(gridSize,gridSize,0,floorr, floorg, floorb,1);
      drawOrigin(floorr, floorg, floorb, 0, 0);
    }
+   if (showBuildGrid){
     var drewBuildGrid = false;
+
     if(blocks){
       if(blocks.length === 0){
         drawGridLines(gridSize,gridSize,z,255, 154, 0,1);
@@ -381,7 +389,7 @@ document.addEventListener("DOMContentLoaded", function(){
     }
     drawHighlight();
   }
-
+}
   function downloadCanvas(link) {
     link.href = canvas.toDataURL();
     link.download = 'bloc' + new Date() + '.png';
