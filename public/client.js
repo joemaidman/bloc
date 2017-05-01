@@ -23,6 +23,9 @@ document.addEventListener("DOMContentLoaded", function(){
   var gridr = 255;
   var gridg = 0;
   var gridb = 0;
+  var bgridr = 255;
+  var bgridg = 154;
+  var bgridb = 0;
   var floorr = 255;
   var floorg = 0;
   var floorb = 0;
@@ -115,6 +118,15 @@ document.addEventListener("DOMContentLoaded", function(){
     drawWalls(gridSize,gridSize,gridSize,gridr,gridg,gridb,1);
     drawWorld();
   });
+
+  $("#changeBuildGridColour").click(function() {
+    bgridr = document.getElementById("red").value;
+    bgridg = document.getElementById("green").value;
+    bgridb = document.getElementById("blue").value;
+    drawWalls(gridSize,gridSize,gridSize,bgridr,bgridg,bgridb,1);
+    drawWorld();
+  });
+
 
   $("#changeFloorColour").click(function() {
      floorr = document.getElementById("red").value;
@@ -366,8 +378,8 @@ document.addEventListener("DOMContentLoaded", function(){
 
     if(blocks){
       if(blocks.length === 0){
-        drawGridLines(gridSize,gridSize,z,255, 154, 0,1);
-        drawOrigin(255, 154, 0,1, z);
+        drawGridLines(gridSize,gridSize,z,bgridr,bgridg, bgridb);
+        drawOrigin(bgridr,bgridg, bgridb,1, z);
         drewBuildGrid = true;
         writeMessage("Block Count: 0", "blockDiv");
       }
@@ -376,16 +388,16 @@ document.addEventListener("DOMContentLoaded", function(){
         var overBlocks = blocks.filter(isAbove);
 
         drawSomeBlocks(underBlocks);
-        drawGridLines(gridSize,gridSize,z,255, 154, 0,1);
-        drawOrigin(255, 154, 0,1, z);
+        drawGridLines(gridSize,gridSize,z,bgridr,bgridg, bgridb,1);
+        drawOrigin(bgridr,bgridg, bgridb,1, z);
         drawSomeBlocks(overBlocks);
         drewBuildGrid = true;
         writeMessage("Block Count: " + blocks.length, "blockDiv");
       }
     }
     if(drewBuildGrid === false){
-      drawGridLines(gridSize,gridSize,z,255, 154, 0,1);
-      drawOrigin(255, 154, 0,1, z);
+      drawGridLines(gridSize,gridSize,z,bgridr,bgridg, bgridb,1);
+      drawOrigin(bgridr,bgridg, bgridb,1, z);
     }
     drawHighlight();
   }
