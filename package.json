@@ -21,8 +21,9 @@
     "webpack": "^2.4.1"
   },
   "dependencies": {
-    "socket.io": "^1.7.3",
     "express": "^4.15.2",
-    "http": "0.0.0"
+    "http": "0.0.0",
+    "mongodb": "^2.2.26",
+    "socket.io": "^1.7.3"
   }
 }

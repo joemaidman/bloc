@@ -4,6 +4,11 @@ var express = require('express'),
 app = express(),
 http = require('http'),
 socketIo = require('socket.io'),
+// database
+mongodb = require('mongodb')
+MongoClient = mongodb.MongoClient,
+url = 'mongodb://localhost:27017/bloc',
+// file dependencies
 GameView = require('./src/views/gameView.js'),
 Game = require('./src/models/game.js'),
 Room = require('./src/models/room.js'),
@@ -140,4 +145,11 @@ io.on('connection', function(socket) {
     return listString;
   };
 
+});
+
+MongoClient.connect(url, function(err, db) {
+  if(err) throw err;
+  console.log("Connected successfully to db server");
+
+  db.close();
 });
