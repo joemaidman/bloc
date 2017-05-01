@@ -2,12 +2,20 @@
 
 var express = require('express'),
 app = express(),
+path = require('path'),
 http = require('http'),
 socketIo = require('socket.io'),
+routes = require('./routes/index');
+
 // database
 mongodb = require('mongodb');
 MongoClient = mongodb.MongoClient,
-url = 'mongodb://localhost:27017/bloc',
+url = 'mongodb://localhost:27017/bloc';
+
+//passport
+var passport = require('passport');
+var LocalStrategy = require('passport-local').Strategy;
+
 // file dependencies
 GameView = require('./src/views/gameView.js'),
 Game = require('./src/models/game.js'),
@@ -24,8 +32,19 @@ server.listen(process.env.PORT || 8080);
 var clientCount = 0;
 var rooms = [];
 
+// express app setup
+app.use(express.cookieParser());
+app.use(express.bodyParser());
+app.use(express.session({ secret: 'SECRET' }));
+app.use(passport.initialize());
+app.use(passport.session());
 app.use(express.static(__dirname + '/public'));
 console.log("Server running on port 8080");
+app.set('views', path.join(__dirname, '/src/views'));
+app.set('view engine', 'ejs');
+
+app.use('/', routes);
+
 
 io.on('connection', function(socket) {
   clientCount++;
@@ -153,3 +172,5 @@ MongoClient.connect(url, function(err, db) {
 
   db.close();
 });
+
+module.exports = app;
