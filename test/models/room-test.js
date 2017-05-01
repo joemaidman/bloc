@@ -133,4 +133,12 @@ describe("Room", function(){
     expect(room.getPlayerById(1)).to.eql(player);
   });
 
+  it("can determine if it is full", function(){
+    var player1 = new PlayerDouble(1, "Timmy");
+    var player2 = new PlayerDouble(2, "Jimmy");
+    room.addPlayer(player1);
+    room.addPlayer(player2);
+    expect(room.isFull()).to.be.true;
+  });
+
 });
