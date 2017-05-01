@@ -5,7 +5,7 @@ app = express(),
 http = require('http'),
 socketIo = require('socket.io'),
 // database
-mongodb = require('mongodb')
+mongodb = require('mongodb');
 MongoClient = mongodb.MongoClient,
 url = 'mongodb://localhost:27017/bloc',
 // file dependencies
@@ -94,7 +94,7 @@ io.on('connection', function(socket) {
   function leaveRoom(roomId, playerId){
     var roomId = roomId;
     var room = findRoom(roomId);
-    var player = room.getPlayerById(playerId)
+    var player = room.getPlayerById(playerId);
     room.removePlayer(playerId);
     socket.leave(room.getId());
     console.log("Player " + socket.id + " left room: " + room.getId());
@@ -138,7 +138,7 @@ io.on('connection', function(socket) {
   }
 
   function listOfRooms(){
-    var listString = ""
+    var listString = "";
     for(var i = 0; i < rooms.length; i++){
       listString += "<li>" + rooms[i].getName() + " (" + rooms[i].getPlayerCount() + "/" + rooms[i].getLimit() + ")" + "<button " + " class ='joinButton' id=" + rooms[i].id  +  '>Join</button>' +  "</li>";
     }
