@@ -40,13 +40,21 @@ document.addEventListener("DOMContentLoaded", function(){
   function setupColorPicker(){
     for(var i = 0; i < input.length; i++){
       input[i].addEventListener("input",function(){
-        var r = document.getElementById("red").value,
-        g = document.getElementById("green").value,
-        b = document.getElementById("blue").value;
-        var display = document.getElementById("display")
-        display.style.background = "rgb(" + r + "," + g + "," + b + ")"
+        setColour()
       });
     }
+    document.getElementById('red').value = RandomColour()
+    document.getElementById('green').value = RandomColour()
+    document.getElementById('blue').value = RandomColour()
+  setColour()
+  }
+
+  function setColour() {
+    var r = document.getElementById('red').value,
+    g = document.getElementById('green').value,
+    b = document.getElementById('blue').value
+    var display = document.getElementById("display")
+    display.style.background = "rgb(" + r + "," + g + "," + b + ")"
   }
   function RandomColour(){
   return  Math.round(Math.random()*225)
@@ -103,6 +111,7 @@ document.addEventListener("DOMContentLoaded", function(){
 
   $("#toggleBuildGrid").click(function() {
     showBuildGrid === true ? showBuildGrid = false : showBuildGrid = true;
+
     drawWorld();
   })
 
@@ -373,35 +382,38 @@ document.addEventListener("DOMContentLoaded", function(){
      drawGridLines(gridSize,gridSize,0,floorr, floorg, floorb,1);
      drawOrigin(floorr, floorg, floorb, 0, 0);
    }
-   if (showBuildGrid){
+
     var drewBuildGrid = false;
 
     if(blocks){
       if(blocks.length === 0){
+        if (showBuildGrid){
         drawGridLines(gridSize,gridSize,z,bgridr,bgridg, bgridb);
-        drawOrigin(bgridr,bgridg, bgridb,1, z);
+        drawOrigin(bgridr,bgridg, bgridb,1, z);}
         drewBuildGrid = true;
         writeMessage("Block Count: 0", "blockDiv");
       }
       else{
+
         var underBlocks = blocks.filter(isBelow);
         var overBlocks = blocks.filter(isAbove);
 
         drawSomeBlocks(underBlocks);
+        if(showBuildGrid){
         drawGridLines(gridSize,gridSize,z,bgridr,bgridg, bgridb,1);
-        drawOrigin(bgridr,bgridg, bgridb,1, z);
+        drawOrigin(bgridr,bgridg, bgridb,1, z);}
         drawSomeBlocks(overBlocks);
         drewBuildGrid = true;
         writeMessage("Block Count: " + blocks.length, "blockDiv");
       }
     }
-    if(drewBuildGrid === false){
+    if(drewBuildGrid === false && showBuildGrid){
       drawGridLines(gridSize,gridSize,z,bgridr,bgridg, bgridb,1);
       drawOrigin(bgridr,bgridg, bgridb,1, z);
     }
     drawHighlight();
   }
-}
+
   function downloadCanvas(link) {
     link.href = canvas.toDataURL();
     link.download = 'bloc' + new Date() + '.png';
