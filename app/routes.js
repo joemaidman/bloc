@@ -52,6 +52,7 @@ module.exports = function(app, passport) {
       // console.log("Here 5:" + util.inspect(req, {depth: null}));
         res.render('game.ejs', {
 
+
             user : req.user // get the user out of session and pass to template
         });
     });

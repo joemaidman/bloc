@@ -11,6 +11,7 @@ Player = require('./app/models/player.js'),
 GameController = require('./app/controllers/gameController.js'),
 mongoose = require('mongoose'),
 passport = require('passport'),
+passportSocketIo = require('passport.socketio')
 flash = require('connect-flash'),
 morgan = require('morgan'),
 cookieParser = require('cookie-parser'),
@@ -20,17 +21,24 @@ configDB = require('./config/database.js');
 require('./config/passport')(passport);
 mongoose.connect(configDB.url);
 const MongoStore = require('connect-mongo')(session);
+var sessionStore = new MongoStore({ mongooseConnection: mongoose.connection });
+
 app.use(morgan('dev')); // log every request to the console
 app.use(cookieParser()); // read cookies (needed for auth)
 app.use(bodyParser()); // get information from html forms
 app.set('view engine', 'ejs'); // set up ejs for templating
-app.use(session({ secret: 'ilovescotchscotchyscotchscotch' })); // session secret
+
+app.use(session({
+    secret:"ilovescotchscotchyscotchscotch", // Keep your secret key
+    key:"connect.sid",
+    store: new MongoStore({ mongooseConnection: mongoose.connection })}));
+
 app.use(passport.initialize());
 app.use(passport.session()); // persistent login sessions
 app.use(flash()); // use connect-flash for flash messages stored in session
 require('./app/routes.js')(app, passport);
 
-var sessionStore = new MongoStore({ mongooseConnection: mongoose.connection });
+
 
 
 var sessionSettings = {
@@ -51,9 +59,35 @@ var rooms = [];
 app.use(express.static(__dirname + '/public'));
 console.log("Server running on port 8080");
 
+io.use(passportSocketIo.authorize({
+  key: 'connect.sid',
+  secret: 'ilovescotchscotchyscotchscotch',
+  store: sessionStore,
+  passport: passport,
+  cookieParser: cookieParser,
+  success: authorizeSuccess,
+  fail: authorizeFail
+}));
+//
+// var eventSocket = io.of('/');
+// // on connection event
+// eventSocket.on('connection', function(socket) {
+// console.log(user);
+//
+// });
+
+function authorizeSuccess(data, accept){
+  console.log(data.user.id);
+}
+
+function authorizeFail(data, message, error, accept){
+  console.log("Data is: " + message);
+}
+
+
 io.on('connection', function(socket) {
   clientCount++;
-  console.log("User is :" +socket.request.user)
+  console.log("User is :" + user)
   console.log("A new client connected: " + socket.id + " (" + clientCount + " clients)");
   socket.emit("list_of_games", listOfRooms());
 
