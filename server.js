@@ -17,6 +17,7 @@ morgan = require('morgan'),
 cookieParser = require('cookie-parser'),
 bodyParser = require('body-parser'),
 session = require('express-session'),
+connect = require('connect'),
 configDB = require('./config/database.js');
 require('./config/passport')(passport);
 mongoose.connect(configDB.url);
@@ -38,9 +39,6 @@ app.use(passport.session()); // persistent login sessions
 app.use(flash()); // use connect-flash for flash messages stored in session
 require('./app/routes.js')(app, passport);
 
-
-
-
 var sessionSettings = {
       "store": sessionStore, // or session.MemoryStore
       "secret": "ilovescotchscotchyscotchscotch",
@@ -59,35 +57,22 @@ var rooms = [];
 app.use(express.static(__dirname + '/public'));
 console.log("Server running on port 8080");
 
-io.use(passportSocketIo.authorize({
+
+
+io.set('authorization', passportSocketIo.authorize({
   key: 'connect.sid',
   secret: 'ilovescotchscotchyscotchscotch',
   store: sessionStore,
   passport: passport,
   cookieParser: cookieParser,
-  success: authorizeSuccess,
-  fail: authorizeFail
+  success: function(data, accept){accept(null, true)}
 }));
-//
-// var eventSocket = io.of('/');
-// // on connection event
-// eventSocket.on('connection', function(socket) {
-// console.log(user);
-//
-// });
-
-function authorizeSuccess(data, accept){
-  console.log(data.user.id);
-}
-
-function authorizeFail(data, message, error, accept){
-  console.log("Data is: " + message);
-}
 
 
-io.on('connection', function(socket) {
+io.sockets.on('connection', function(socket) {
   clientCount++;
-  console.log("User is :" + user)
+  console.log("ID: " + socket.request.user)
+  // console.log("User is :" + user)
   console.log("A new client connected: " + socket.id + " (" + clientCount + " clients)");
   socket.emit("list_of_games", listOfRooms());
 
