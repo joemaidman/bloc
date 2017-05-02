@@ -31,5 +31,19 @@ describe("Shape", function(){
     expect(shape.getColor()).to.eql({r: 0, g: 0, b: 0});
   });
 
+  it("can set and get its texture", function(){
+    shape.setTexture("wood");
+    expect(shape.getTexture()).to.eq("wood");
+  });
+
+  it(".getTexture returns false if not textured", function(){
+    expect(shape.getTexture()).to.eq(false);
+  });
+
+  it("can set and get the type of shape", function(){
+    shape.setType(1);
+    expect(shape.getType()).to.eq(1);
+  });
+
 
 });

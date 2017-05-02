@@ -33,10 +33,15 @@ document.addEventListener("DOMContentLoaded", function(){
   var gameScale;
   var roomId;
   var currentRotation = 0;
+  var currentShapeType = 0;
 
   $("#gameDiv").hide();
 
   //UI setup
+
+  $('#shapeType').change(function(){
+    currentShapeType = parseInt($("#shapeType option:selected").val());
+  })
   function setupColorPicker(){
     for(var i = 0; i < input.length; i++){
       input[i].addEventListener("input",function(){
@@ -158,7 +163,8 @@ document.addEventListener("DOMContentLoaded", function(){
     var r = document.getElementById("red").value,
     g = document.getElementById("green").value,
     b = document.getElementById("blue").value;
-    emitNewBlock([x,y,z,r,g,b]);
+    var texture = $("#texture option:selected").val();
+    emitNewBlock([x,y,z,r,g,b, currentShapeType, texture]);
   });
 
   $("#delete").click(function() {
@@ -204,7 +210,8 @@ document.addEventListener("DOMContentLoaded", function(){
       var r = document.getElementById("red").value,
       g = document.getElementById("green").value,
       b = document.getElementById("blue").value;
-      emitNewBlock([(gridPos.x -=z),(gridPos.y -=z),z,r,g,b]);
+      var texture = $("#texture option:selected").val();
+      emitNewBlock([(gridPos.x -=z),(gridPos.y -=z),z,r,g,b,currentShapeType, texture]);
     }
   }, false);
 
@@ -281,18 +288,29 @@ document.addEventListener("DOMContentLoaded", function(){
   }
 
   function drawHighlight(){
+    var texture = $("#texture option:selected").val();
     var r = document.getElementById("red").value,
     g = document.getElementById("green").value,
     b = document.getElementById("blue").value;
     a = 0.4
-    iso.add(Shape.Prism(new Point(highlightGrid.x, highlightGrid.y)),new Color(r,g,b,a));
+    if(currentShapeType === 0){
+      iso.add(Shape.Prism(new Point(highlightGrid.x, highlightGrid.y)),new Color(r,g,b,a), true, texture);
+    }
+    else if(currentShapeType === 1){
+      iso.add(Shape.Pyramid(new Point(highlightGrid.x, highlightGrid.y)),new Color(r,g,b,a));
+    }
+    else if(currentShapeType === 2){
+      // iso.add(Shape.Cylinder(new Point(block.xPos + 0.5, block.yPos + 0.5, block.zPos), 0.5, 50, 1),new Color(block.r,block.g,block.b));
+
+      iso.add(Shape.Cylinder(new Point(highlightGrid.x + 0.5, highlightGrid.y + 0.5), 0.5, 50, 1),new Color(r,g,b,a));
+    }
   }
 
   function drawTestBlocks(){
-    emitNewBlock([0,0,0,0,0,255]);
-    emitNewBlock([3,0,0,0,255,0]);
-    emitNewBlock([0,3,0,255,0,0]);
-    emitNewBlock([3,3,0,100,100,100]);
+    emitNewBlock([0,0,0,0,0,255,currentShapeType]);
+    emitNewBlock([3,0,0,0,255,0,currentShapeType]);
+    emitNewBlock([0,3,0,255,0,0,currentShapeType]);
+    emitNewBlock([3,3,0,100,100,100,currentShapeType]);
   }
 
   function drawGridLines (xsize, ysize, zheight, r, g, b, a) {
@@ -360,8 +378,29 @@ document.addEventListener("DOMContentLoaded", function(){
 
   function drawSomeBlocks(someBlocks){
     for (var i = 0; i<someBlocks.length; i++ ){
-      iso.add(Shape.Prism(new Point(someBlocks[i].xPos, someBlocks[i].yPos, someBlocks[i].zPos)),new Color(someBlocks[i].r,someBlocks[i].g,someBlocks[i].b));
+      if(parseInt(someBlocks[i].type) === 0){
+        drawCube(someBlocks[i]);
+      }
+      else if (parseInt(someBlocks[i].type) === 1){
+        drawPyramid(someBlocks[i]);
+      }
+      else if (parseInt(someBlocks[i].type) === 2){
+        drawCylinder(someBlocks[i]);
+      }
     }
+  }
+
+  function drawCube(block){
+    console.log("Texture is: "+ block.texture)
+    iso.add(Shape.Prism(new Point(block.xPos, block.yPos, block.zPos)),new Color(block.r,block.g,block.b), true,block.texture);
+  }
+
+  function drawPyramid(block){
+    iso.add(Shape.Pyramid(new Point(block.xPos, block.yPos, block.zPos)),new Color(block.r,block.g,block.b), true, block.texture);
+  }
+
+  function drawCylinder(block){
+    iso.add(Shape.Cylinder(new Point(block.xPos + 0.5, block.yPos + 0.5, block.zPos), 0.5, 10, 1),new Color(block.r,block.g,block.b), true, block.texture);
   }
 
   function rotate(coordinates, degrees = 90){
@@ -456,6 +495,7 @@ document.addEventListener("DOMContentLoaded", function(){
 
       function updateWorld(data){
         blocks = data.blocks;
+        console.log(blocks);
         if(blocks){
           rotateAllBlocks(currentRotation);
           sortBlocks();
@@ -498,10 +538,9 @@ document.addEventListener("DOMContentLoaded", function(){
 
       function emitNewBlock(block){
         var newCoords = rotate( {x: block[0], y: block[1]}, -currentRotation);
-        console.log("Old: X" + block[0] + " Y: " + block[1])
         block[0] = newCoords.x;
         block[1] = newCoords.y;
-        console.log("New: X" + block[0] + " Y: " + block[1])
+        console.log("Sending" + block);
         socket.emit('add_block', {block: block, roomId: roomId});
       }
 

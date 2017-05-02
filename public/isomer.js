@@ -393,22 +393,32 @@ return /******/ (function(modules) { // webpackBootstrap
 	  this.ctx.clearRect(0, 0, this.width, this.height);
 	};
 
-	Canvas.prototype.path = function(points, color) {
+	Canvas.prototype.path = function(points, color, isFace, isTexture) {
 	  this.ctx.beginPath();
 	  this.ctx.moveTo(points[0].x, points[0].y);
 
-	  for (var i = 1; i < points.length; i++) {
+		for (var i = 1; i < points.length; i++) {
 	    this.ctx.lineTo(points[i].x, points[i].y);
 	  }
-
 	  this.ctx.closePath();
 
 	  /* Set the strokeStyle and fillStyle */
 	  this.ctx.save();
 
-	  this.ctx.globalAlpha = color.a;
-	  this.ctx.fillStyle = this.ctx.strokeStyle = color.toHex();
+		this.ctx.globalAlpha = color.a;
+		if(isFace && isTexture){
+		 var img =new Image();
+		 img.src = "http://localhost:8080/"+ isTexture +".jpg";
+		 var pattern = this.ctx.createPattern(img, "repeat");
+		 this.ctx.fillStyle =  pattern;
+     this.ctx.strokeStyle = color.toHex();
+	  }
+		else{
+			this.ctx.fillStyle = this.ctx.strokeStyle = color.toHex()
+		}
+
 	  this.ctx.stroke();
+
 	  this.ctx.fill();
 	  this.ctx.restore();
 	};
@@ -623,7 +633,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 *
 	 * This method also accepts arrays
 	 */
-	Isomer.prototype.add = function(item, baseColor) {
+	Isomer.prototype.add = function(item, baseColor,isFace = false, texture = false) {
 	  if (Object.prototype.toString.call(item) == '[object Array]') {
 	    for (var i = 0; i < item.length; i++) {
 	      this.add(item[i], baseColor);
@@ -635,7 +645,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    var paths = item.orderedPaths();
 
 	    for (var j = 0; j < paths.length; j++) {
-	      this._addPath(paths[j], baseColor);
+	      this._addPath(paths[j], baseColor, isFace, texture);
 	    }
 	  }
 	};
@@ -644,7 +654,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	/**
 	 * Adds a path to the scene
 	 */
-	Isomer.prototype._addPath = function(path, baseColor) {
+	Isomer.prototype._addPath = function(path, baseColor, isFace, texture) {
 	  /* Default baseColor */
 	  baseColor = baseColor || new Color(120, 120, 120);
 
@@ -661,7 +671,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  var brightness = Vector.dotProduct(normal, this.lightAngle);
 	  var color = baseColor.lighten(brightness * this.colorDifference, this.lightColor);
 
-	  this.canvas.path(path.points.map(this._translatePoint.bind(this)), color);
+	  this.canvas.path(path.points.map(this._translatePoint.bind(this)), color, isFace, texture);
 	};
 
 	/**
@@ -840,7 +850,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	/**
 	 * A prism located at origin with dimensions dx, dy, dz
 	 */
-	Shape.Prism = function(origin, dx, dy, dz) {
+	Shape.Prism = function(origin, dx, dy, dz,isFace, texture) {
 	  dx = (typeof dx === 'number') ? dx : 1;
 	  dy = (typeof dy === 'number') ? dy : 1;
 	  dz = (typeof dz === 'number') ? dz : 1;
@@ -851,14 +861,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	  /* Squares parallel to the x-axis */
 	  var face1 = new Path([
 	    origin,
-	    new Point(origin.x + dx, origin.y, origin.z),
-	    new Point(origin.x + dx, origin.y, origin.z + dz),
-	    new Point(origin.x, origin.y, origin.z + dz)
+	    new Point(origin.x + dx, origin.y, origin.z,texture),
+	    new Point(origin.x + dx, origin.y, origin.z + dz,texture),
+	    new Point(origin.x, origin.y, origin.z + dz,texture)
 	  ]);
 
 	  /* Push this face and its opposite */
 	  prism.push(face1);
-	  prism.push(face1.reverse().translate(0, dy, 0));
+	  prism.push(face1.reverse().translate(0, dy, 0, texture ));
 
 	  /* Square parallel to the y-axis */
 	  var face2 = new Path([
