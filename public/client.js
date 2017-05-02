@@ -174,6 +174,12 @@ document.addEventListener("DOMContentLoaded", function(){
     emitDeleteBlock([x, y, z]);
   });
 
+  $("#sendMessage").click(function() {
+    var message = $("#text").val()
+      socket.emit('newMessage', {message:message, roomId:roomId});
+
+  });
+
   // Canvas event listeners
   canvas.addEventListener('mousewheel',function(evt){
     scrollDistance+= evt.deltaY
@@ -527,6 +533,16 @@ document.addEventListener("DOMContentLoaded", function(){
       socket.on('new_game_id', function (data){
         roomId = data;
       });
+
+      socket.on('updateChat', function(data) {
+        var div = $("#chat");
+        var time = new Date(data.time)
+        var message = data.player.name + " " + time.getHours() + ":" + time.getMinutes() + " - " + data.body
+        div.append(message + "<br/>");
+        div.scrollTop(div.prop("scrollHeight"));
+        console.log(data)
+
+      })
 
       // Socket send events
       function emitDeleteBlock(block){

@@ -20,6 +20,7 @@ session = require('express-session'),
 connect = require('connect'),
 configDB = require('./config/database.js');
 require('./config/passport')(passport);
+var Message = require("./app/models/message.js");
 mongoose.connect(configDB.url);
 const MongoStore = require('connect-mongo')(session);
 var sessionStore = new MongoStore({ mongooseConnection: mongoose.connection });
@@ -107,6 +108,16 @@ io.sockets.on('connection', function(socket) {
   socket.on('leaveRoom', function(data){
     leaveRoom(data, socket.id);
   });
+
+socket.on('newMessage', function(data) {
+  var room = findRoom(data.roomId);
+      var player = room.getPlayerById(socket.id)
+  var message = new Message(player, data.message)
+  room.addMessage(message)
+  io.sockets.in(data.roomId).emit("updateChat", room.getMessages()[room.getMessages().length - 1]);
+
+})
+
 
   socket.on('add_block', function (data) {
     var room = findRoom(data.roomId);
