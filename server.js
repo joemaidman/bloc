@@ -17,7 +17,7 @@ cookieParser = require('cookie-parser'),
 bodyParser = require('body-parser'),
 session = require('express-session'),
 configDB = require('./config/database.js');
-require('./config/passport')(passport); 
+require('./config/passport')(passport);
 mongoose.connect(configDB.url);
 app.use(morgan('dev')); // log every request to the console
 app.use(cookieParser()); // read cookies (needed for auth)

@@ -6,14 +6,44 @@
   <script src="client.js"></script>
   <script src="isomer.js"></script>
   <script src="jquery-3.2.1.min.js"></script>
-    <title>Node Authentication</title>
-    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css">
-    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">
-    <style>
-        body        { padding-top:80px; word-wrap:break-word; }
+    <title>Bloc</title>
+    <style type="text/css">
+    body{
+    }
+    #display{
+      width: 10%;
+
+    }
+    .colourSelector{
+      padding-top: 10px;
+    }
+    .Row
+  {
+      display: table;
+      /*width: 38%; /*Optional*/*/
+      table-layout: fixed; /*Optional*/
+      border-spacing: 0px; /*Optional*/
+  }
+  .Column
+  {
+    vertical-align: top;
+      display: table-cell;
+      padding: 10px;
+  }
+
+  .Column-controls
+  {
+    vertical-align: top;
+      display: table-cell;
+      padding: 10px;
+      width: 10%;
+  }
     </style>
 </head>
 <body>
+  <strong>Welcome</strong>: <%= user.facebook.displayName %><br>  <a href="/logout" class="btn btn-default btn-sm">Logout</a>
+  <!-- <strong>token</strong>: <%= user.facebook.token %><br>
+  <strong>email</strong>: <%= user.facebook.email %><br> -->
   <div id="sessionDiv">
     <h3> Start new game </h3>
     <input type="text" id="newGameName">
@@ -79,17 +109,17 @@
       </div>
     </div>
   <!-- </center> -->
-<div class="container">
+<!-- <div class="container">
 
     <div class="page-header text-center">
-        <h1><span class="fa fa-anchor"></span> Profile Page</h1>
-        <a href="/logout" class="btn btn-default btn-sm">Logout</a>
-    </div>
+        <h1><span class="fa fa-anchor"></span> Profile Page</h1> -->
 
-    <div class="row">
+    <!-- </div>
+
+    <div class="row"> -->
 
         <!-- LOCAL INFORMATION -->
-        <div class="col-sm-6">
+        <!-- <div class="col-sm-6">
             <div class="well">
                 <h3><span class="fa fa-user"></span> Local</h3>
 
@@ -100,20 +130,20 @@
                     </p>
 
             </div>
-        </div>
+        </div> -->
 
 
         <!-- FACEBOOK INFORMATION -->
-        <div class="col-sm-6">
+        <!-- <div class="col-sm-6">
             <div class="well">
                 <h3 class="text-primary"><span class="fa fa-facebook"></span> Facebook</h3>
 
                     <p>
-                        <strong>id</strong>: <%= user.facebook.id %><br>
+                        <strong>id</strong>: <%= user.facebook.displayName %><br>
                         <strong>token</strong>: <%= user.facebook.token %><br>
                         <strong>email</strong>: <%= user.facebook.email %><br>
-                        <strong>name</strong>: <%= user.facebook.name %>
-                    </p>
+                        <!-- <strong>name</strong>: <%= user.facebook %> -->
+                    <!-- </p>
 
             </div>
         </div>
