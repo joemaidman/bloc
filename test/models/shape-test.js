@@ -1,6 +1,6 @@
 "strict mode";
 
-var Shape = require('../../src/models/shape.js');
+var Shape = require('../../app/models/shape.js');
 
 describe("Shape", function(){
   var shape;

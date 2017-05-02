@@ -1,6 +1,6 @@
 "strict mode";
 
-var Game = require('../../src/models/game.js');
+var Game = require('../../app/models/game.js');
 
 function ShapeDouble(x=0, y=0, z=0) {
   this.xPos = x;

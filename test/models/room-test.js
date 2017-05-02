@@ -1,29 +1,14 @@
 "strict mode";
 
-var Room = require('../../src/models/room.js');
+var Room = require('../../app/models/room.js');
 
 function GameDouble() {
   this.shapes = [];
 }
 
 GameDouble.prototype = {
-  getShapes: function(){
-    return true;
-  },
-  addShape: function(){
-    return true;
-  },
-  deleteShape: function(coordinates){
-    return true;
-  },
-  rotateShapes: function(){
-    return true;
-  },
-  getScale: function(){
-    return true;
-  },
-  clearShapes: function(){
-    return true;
+  createShape: function(){
+
   }
 };
 
@@ -139,6 +124,14 @@ describe("Room", function(){
     room.addPlayer(player1);
     room.addPlayer(player2);
     expect(room.isFull()).to.be.true;
+  });
+
+  it("can pass an array of saved blocks to the game", function(){
+    var dummySavedBlocks  = [ { type: 0, texture: null, b: '23', g: '41', r: '40', zPos: 0, yPos: 1, xPos: 4 }];
+    var spyCreateShapes = sinon.spy(gameDouble, "createShape");
+    room.loadBlocks(dummySavedBlocks);
+    expect(spyCreateShapes).to.have.been.calledWith(4, 1, 0, '40', '41', '23', 0, null);
+    expect(spyCreateShapes).to.have.been.calledOnce;
   });
 
 });
