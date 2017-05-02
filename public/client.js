@@ -86,9 +86,38 @@ document.addEventListener("DOMContentLoaded", function(){
     drawWorld();
   });
 
-  $("#loadGame").click(function() {
-    
+  // $("#loadGame").click(function() {
+  //
+  // });
+
+
+
+
+
+
+
+  $("#saveGame").click(function() {
+    socket.emit('saveBlocks', {blocks});
+    console.log(blocks);
+    console.log('client socket sent');
   });
+
+
+
+    // 
+    // $("#loadGame").click(function() {
+    //   socket.emit('loadBlocks', {blocks});
+    //   console.log(blocks);
+    //   console.log('client socket sent');
+    // });
+    //
+
+
+
+
+
+
+
 
   $("#rotate").click(function() {
     updateRotationClockwise();
@@ -408,6 +437,7 @@ document.addEventListener("DOMContentLoaded", function(){
   }
 
   function rotate(coordinates, degrees = 90){
+    console.log(blocks)
     console.log("X:" + coordinates.x + " Y:" + coordinates.y + " Degrees: " + degrees);
     var newCoordinates = calculateRotation(5, 5, coordinates.x, coordinates.y, degrees);
     var x = Math.round(newCoordinates[0],0);
@@ -554,5 +584,9 @@ document.addEventListener("DOMContentLoaded", function(){
         $("#sessionDiv").show();
         $("#gameDiv").hide();
       }
+
+      // function saveGame(){
+      //
+      // }
 
     });

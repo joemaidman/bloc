@@ -15,6 +15,9 @@ passport = require('passport'),
 passportSocketIo = require('passport.socketio')
 flash = require('connect-flash'),
 morgan = require('morgan'),
+
+mongo = require('mongodb'),
+
 cookieParser = require('cookie-parser'),
 bodyParser = require('body-parser'),
 session = require('express-session'),
@@ -75,14 +78,17 @@ io.sockets.on('connection', function(socket) {
   // console.log('hello')
   // console.log(socket.request.user.id)
   // console.log('hello2')
-
-  var save = new Save({userForSave: socket.request.user.id})
-  save.save();
   // console.log(save)
   console.log("ID: " + socket.request.user)
   // console.log("User is :" + user)
   console.log("A new client connected: " + socket.id + " (" + clientCount + " clients)");
+  loadSaves()
+
+
+  console.log("got here")
   socket.emit("list_of_games", listOfRooms());
+
+
 
   socket.on('new_game', function(data){
     var roomName = data.name;
@@ -144,6 +150,44 @@ io.sockets.on('connection', function(socket) {
     }
     console.log("A client disconnected: " + socket.id + " (" + clientCount + " clients)");
   });
+
+
+
+
+
+
+
+
+
+
+  socket.on('saveBlocks', function(data) {
+    console.log('server socket reached')
+    var saveArray = data.blocks;
+    var save = new Save({blocks: saveArray, userForSave: socket.request.user.id});
+    save.save();
+  });
+
+  //
+  // socket.on('loadBlocks', function(data) {
+  //   console.log('server socket reached')
+  //   var saveArray = data.blocks;
+  //   var save = new Save({blocks: saveArray, userForSave: socket.request.user.id});
+  //   save.save();
+  // });
+  //
+  //
+
+
+  function loadSaves(){
+    var userId = socket.request.user.id;
+    var saves = mongo.db.saves.find({userForSave: userId});
+    console.log(saves)
+  }
+
+
+
+
+
 
   function updateWorld(roomId){
     var room = findRoom(roomId);
