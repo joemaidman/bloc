@@ -1,6 +1,6 @@
 "strict mode";
 
-var Room = require('../../src/models/room.js');
+var Room = require('../../app/models/room.js');
 
 function GameDouble() {
   this.shapes = [];

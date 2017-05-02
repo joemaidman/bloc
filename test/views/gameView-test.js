@@ -1,6 +1,6 @@
 "strict mode";
 
-var GameView = require('../../src/views/gameView.js');
+var GameView = require('../../app/views/gameView.js');
 
 describe("GameView", function(){
   var gameView;

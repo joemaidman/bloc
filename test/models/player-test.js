@@ -1,6 +1,6 @@
 "strict mode";
 
-var Player = require('../../src/models/player.js');
+var Player = require('../../app/models/player.js');
 
 describe("Player", function(){
   var player;

@@ -1,6 +1,6 @@
 "strict mode";
 
-var Message = require('../../src/models/message.js');
+var Message = require('../../app/models/message.js');
 
 function PlayerDouble(id, name){
   this.id = id;

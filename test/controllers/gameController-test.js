@@ -1,6 +1,6 @@
 "strict mode";
-var GameController = require('../../src/controllers/gameController.js');
-var Shape = require('../../src/models/shape.js');
+var GameController = require('../../app/controllers/gameController.js');
+var Shape = require('../../app/models/shape.js');
 function GameViewDouble() {
 
 }

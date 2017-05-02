@@ -405,7 +405,7 @@ document.addEventListener("DOMContentLoaded", function(){
 
   function rotate(coordinates, degrees = 90){
     console.log("X:" + coordinates.x + " Y:" + coordinates.y + " Degrees: " + degrees);
-    var newCoordinates = calculateRotation(5, 5, coordinates.x, coordinates.y, degrees);
+    var newCoordinates = calculateRotation((gridSize - 1)/2, (gridSize - 1)/2, coordinates.x, coordinates.y, degrees);
     var x = Math.round(newCoordinates[0],0);
     var y = Math.round(newCoordinates[1],0);
     console.log("Generated X:" + x + " Y:" + y);
