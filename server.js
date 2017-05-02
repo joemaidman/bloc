@@ -19,10 +19,10 @@ session = require('express-session'),
 configDB = require('./config/database.js');
 require('./config/passport')(passport);
 mongoose.connect(configDB.url);
+const MongoStore = require('connect-mongo')(session);
 app.use(morgan('dev')); // log every request to the console
 app.use(cookieParser()); // read cookies (needed for auth)
 app.use(bodyParser()); // get information from html forms
-
 app.set('view engine', 'ejs'); // set up ejs for templating
 app.use(session({ secret: 'ilovescotchscotchyscotchscotch' })); // session secret
 app.use(passport.initialize());
@@ -30,6 +30,14 @@ app.use(passport.session()); // persistent login sessions
 app.use(flash()); // use connect-flash for flash messages stored in session
 require('./app/routes.js')(app, passport);
 
+var sessionStore = new MongoStore({ mongooseConnection: mongoose.connection });
+
+
+var sessionSettings = {
+      "store": sessionStore, // or session.MemoryStore
+      "secret": "ilovescotchscotchyscotchscotch",
+      "cookie": { "path": '/', "httpOnly": true, "secure": false,  "maxAge": null }
+    };
 
 var server = http.createServer(app);
 var io = socketIo.listen(server);
@@ -45,6 +53,7 @@ console.log("Server running on port 8080");
 
 io.on('connection', function(socket) {
   clientCount++;
+  console.log("User is :" +socket.request.user)
   console.log("A new client connected: " + socket.id + " (" + clientCount + " clients)");
   socket.emit("list_of_games", listOfRooms());
 
