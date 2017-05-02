@@ -180,8 +180,15 @@ io.sockets.on('connection', function(socket) {
 
   function loadSaves(){
     var userId = socket.request.user.id;
-    var saves = mongo.db.saves.find({userForSave: userId});
-    console.log(saves)
+    // var saves = mongoose.saves.find({userForSave: userId});
+    // console.log(saves)
+    var save = mongoose.model('Save')
+    // console.log(user)
+    var x = save.findOne( {'userForSave' : userId } )
+    console.log(x)
+    // var userId = socket.request.user.id;
+    // var saves = mongoose.saves.find({userForSave: userId});
+    // console.log(saves)
   }
 
 
