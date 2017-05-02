@@ -74,7 +74,7 @@ document.addEventListener("DOMContentLoaded", function(){
   $("#newGame").click(function() {
     var gameName = $("#newGameName").val();
     $("#inputGridSize option:selected").text() === "Small" ? gridSize = 11 : gridSize = 21;
-    gridSize === 11 ? gameScale = 34 : gameScale = 18;
+    gridSize === 11 ? gameScale = 30 : gameScale = 16;
     var roomLimit = $("#roomLimit").val();
     socket.emit('new_game', {name: gameName, size: gridSize, roomLimit: roomLimit });
     $("#sessionDiv").hide();
@@ -176,8 +176,20 @@ document.addEventListener("DOMContentLoaded", function(){
 
   $("#sendMessage").click(function() {
     var message = $("#text").val()
-      socket.emit('newMessage', {message:message, roomId:roomId});
+    socket.emit('newMessage', {message:message, roomId:roomId});
+    $("#text").val('');
+  });
 
+  $("#text").keyup(function(event){
+    if(event.keyCode == 13){
+      $("#sendMessage").click();
+    }
+  });
+
+  $("#newGameName").keyup(function(event){
+    if(event.keyCode == 13){
+      $("#newGame").click();
+    }
   });
 
   // Canvas event listeners
