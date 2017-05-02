@@ -418,6 +418,7 @@ return /******/ (function(modules) { // webpackBootstrap
 		}
 
 	  this.ctx.stroke();
+
 	  this.ctx.fill();
 	  this.ctx.restore();
 	};
@@ -849,7 +850,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	/**
 	 * A prism located at origin with dimensions dx, dy, dz
 	 */
-	Shape.Prism = function(origin, dx, dy, dz) {
+	Shape.Prism = function(origin, dx, dy, dz,isFace, texture) {
 	  dx = (typeof dx === 'number') ? dx : 1;
 	  dy = (typeof dy === 'number') ? dy : 1;
 	  dz = (typeof dz === 'number') ? dz : 1;
@@ -860,14 +861,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	  /* Squares parallel to the x-axis */
 	  var face1 = new Path([
 	    origin,
-	    new Point(origin.x + dx, origin.y, origin.z),
-	    new Point(origin.x + dx, origin.y, origin.z + dz),
-	    new Point(origin.x, origin.y, origin.z + dz)
+	    new Point(origin.x + dx, origin.y, origin.z,texture),
+	    new Point(origin.x + dx, origin.y, origin.z + dz,texture),
+	    new Point(origin.x, origin.y, origin.z + dz,texture)
 	  ]);
 
 	  /* Push this face and its opposite */
 	  prism.push(face1);
-	  prism.push(face1.reverse().translate(0, dy, 0));
+	  prism.push(face1.reverse().translate(0, dy, 0, texture ));
 
 	  /* Square parallel to the y-axis */
 	  var face2 = new Path([
