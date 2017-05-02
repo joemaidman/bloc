@@ -1,0 +1,155 @@
+<!-- views/profile.ejs -->
+<!doctype html>
+<html>
+<head>
+  <script src="socket.io/socket.io.js"></script>
+  <script src="client.js"></script>
+  <script src="isomer.js"></script>
+  <script src="jquery-3.2.1.min.js"></script>
+    <title>Bloc</title>
+    <style type="text/css">
+    body{
+    }
+    #display{
+      width: 10%;
+
+    }
+    .colourSelector{
+      padding-top: 10px;
+    }
+    .Row
+  {
+      display: table;
+      /*width: 38%; /*Optional*/*/
+      table-layout: fixed; /*Optional*/
+      border-spacing: 0px; /*Optional*/
+  }
+  .Column
+  {
+    vertical-align: top;
+      display: table-cell;
+      padding: 10px;
+  }
+
+  .Column-controls
+  {
+    vertical-align: top;
+      display: table-cell;
+      padding: 10px;
+      width: 10%;
+  }
+    </style>
+</head>
+<body>
+  <strong>Welcome</strong>: <%= user.facebook.displayName %><br>  <a href="/logout" class="btn btn-default btn-sm">Logout</a>
+  <!-- <strong>token</strong>: <%= user.facebook.token %><br>
+  <strong>email</strong>: <%= user.facebook.email %><br> -->
+  <div id="sessionDiv">
+    <h3> Start new game </h3>
+    <input type="text" id="newGameName">
+    <button id="newGame">New Game</button>
+    Grid size
+    <select id="inputGridSize">
+      <option value="small">Small</option>
+      <option value="large">Large</option>
+    </select>
+    Player limit
+    <input type="number" id="roomLimit" min="0" max="10" step="1" value="2">
+    <h3> Join a game </h3>
+    <div><ul id="listOfGames"></ul></div>
+  </div>
+    <div class="Row" id="gameDiv">
+      <div class="Column">
+        <div>
+
+
+          <canvas style="border: 2px black solid;border-radius:5px;background:white;" id="canvas" width="1000px" height="766px" ></canvas>
+        </div>
+      </div>
+      <div class="Column-controls">
+        <h1> BLOC </h1>
+        <div id="positionDiv">Grid Pos</div>
+        <div id="blockDiv">Block Count</div>
+        <div id="controls" style="width:580px;padding:10px;margin-top:10px;border: 2px black solid;border-radius:5px;">
+          <br/>
+        X: <input type="number" id="x" min="0" max="10" step="1" value="5"><br/><br/>
+        Y: <input type="number" id="y" min="0" max="10" step="1" value="5"><br/><br/>
+        Z: <input type="number" id="z" min="0" max="10" step="1" value="0"><br/><br/>
+        <select id="shapeType">
+          <option value="0">Cube</option>
+          <option value="1">Pyramid</option>
+          <option value="2">Cylinder</option>
+        </select>
+        <button id="add">Add block</button><br/><br/>
+        <button id="delete">Delete block</button><br/><br/>
+        <button id="rotate">Rotate</button><br/><br/>
+        <button id="clear">Clear blocks</button><br/><br/>
+        <button id="toggleGridlines">Toggle gridlines</button><br/><br/>
+        <button id="toggleFloor">Toggle floor</button><br/><br/>
+        <button id="toggleBuildGrid">Toggle build grid</button><br/><br/>
+        <button id="changeGridlinecolour">Change grid colour</button><br/><br/>
+        <button id="changeCanvasColour">Change background colour</button><br/><br/>
+        <button id="changeFloorColour">Change floor colour</button><br/><br/>
+        <button id="changeBuildGridColour">Change build grid  colour</button><br/><br/>
+        <button><a class="button" id="saveCanvas">Save as image</a></button>
+
+
+        <button id="leaveGame">Leave game</button><br/><br/>
+
+
+
+        <div class = "colourSelector">
+          Red<input type="range" min="0" max="255" step="1" id="red" ><br/><br/>
+          Green<input type="range" min="0" max="255" step="1" id="green" ><br/><br/>
+          Blue<input type="range" min="0" max="255" step="1" id="blue" ><br/><br/>
+          <input id="display" type="block"  width="10%">
+        </div>
+        </div>
+
+      </div>
+    </div>
+  <!-- </center> -->
+<!-- <div class="container">
+
+    <div class="page-header text-center">
+        <h1><span class="fa fa-anchor"></span> Profile Page</h1> -->
+
+    <!-- </div>
+
+    <div class="row"> -->
+
+        <!-- LOCAL INFORMATION -->
+        <!-- <div class="col-sm-6">
+            <div class="well">
+                <h3><span class="fa fa-user"></span> Local</h3>
+
+                    <p>
+                        <strong>id</strong>: <%= user._id %><br>
+                        <strong>email</strong>: <%= user.local.email %><br>
+                        <strong>password</strong>: <%= user.local.password %>
+                    </p>
+
+            </div>
+        </div> -->
+
+
+        <!-- FACEBOOK INFORMATION -->
+        <!-- <div class="col-sm-6">
+            <div class="well">
+                <h3 class="text-primary"><span class="fa fa-facebook"></span> Facebook</h3>
+
+                    <p>
+                        <strong>id</strong>: <%= user.facebook.displayName %><br>
+                        <strong>token</strong>: <%= user.facebook.token %><br>
+                        <strong>email</strong>: <%= user.facebook.email %><br>
+                        <!-- <strong>name</strong>: <%= user.facebook %> -->
+                    <!-- </p>
+
+            </div>
+        </div>
+
+    </div>
+
+</div>
+</body>
+</html>
