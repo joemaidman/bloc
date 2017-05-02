@@ -28,6 +28,13 @@ mongoose.connect(configDB.url);
 const MongoStore = require('connect-mongo')(session);
 var sessionStore = new MongoStore({ mongooseConnection: mongoose.connection });
 
+var db;
+const MongoClient = require('mongodb').MongoClient
+MongoClient.connect(configDB.url, (err, database) => {
+  if (err) return console.log(err)
+  db = database
+})
+
 app.use(morgan('dev')); // log every request to the console
 app.use(cookieParser()); // read cookies (needed for auth)
 app.use(bodyParser()); // get information from html forms
@@ -177,20 +184,66 @@ io.sockets.on('connection', function(socket) {
   //
   //
 
+function printStuff(stuff){
+  stuff.forEach(function(thing){
+    console.log(thing)
+  });
+}
 
   function loadSaves(){
 
     // var saveSchema = require('./app/models/save.js')
     var userId = socket.request.user.id;
+// var y = Save.find({'userForSave' : userId }, function (err, docs) {
+//
+// });
+
+db.collection('saves').find().toArray((err, result) => {
+   if (err) return console.log(err)
+   printStuff(result);
+ })
+    //
+    // var cursor = mongoose.collection('saves').find();
+    //
+    // // Execute the each command, triggers for each document
+    // cursor.each(function(err, item) {
+    //     // If the item is null then the cursor is exhausted/empty and closed
+    //     if(item == null) {
+    //         db.close(); // you may not want to close the DB if you have more code....
+    //         return;
+    //     }
+    //     // otherwise, do something with the item
+    // });
+    //
+    //
+
+
+
     // var saves = mongoose.saves.find({userForSave: userId});
     // console.log(saves)
     // var save = mongoose.model('Save', saveSchema)
-    // console.log(user)
-    var x = Save.find( {'userForSave' : userId }, 'blocks', function(err, save){
-      if(err) throw err;
-      console.log(save);
-      console.log(userId)
-    } )
+  //   // console.log(user)
+  //   var y = Save.findOne({'userForSave' : userId }, function (err, docs) {
+  //     var z = [];
+  //     console.log(docs.blocks)
+  // //
+  //
+  // for(var i = 0; i < docs.blocks.length -1; i++){
+  //     z.push(docs.blocks[i]);
+  // }
+  // //
+  // // docs.blocks.forEach(function(block){
+  //
+  //
+//   //
+//   // });
+//     console.log(z);
+// });
+//     // var x = Save.find( {'userForSave' : userId }, 'blocks', function(err, save){
+    //   if(err) throw err;
+    //   console.log(save);
+    //   console.log(userId)
+    // } )
     // var userId = socket.request.user.id;
     // var saves = mongoose.saves.find({userForSave: userId});
     // console.log(saves)

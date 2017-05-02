@@ -3,7 +3,7 @@ var mongoose = require('mongoose');
 // define the schema for our user model
 var saveSchema = mongoose.Schema({
 
-        blocks     : String,
+        blocks     : Array,
         grid       : String,
         userForSave: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User'}]
 });
