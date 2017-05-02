@@ -8,6 +8,7 @@ GameView = require('./app/views/gameView.js'),
 Game = require('./app/models/game.js'),
 Room = require('./app/models/room.js'),
 Player = require('./app/models/player.js'),
+Save = require('./app/models/save.js'),
 GameController = require('./app/controllers/gameController.js'),
 mongoose = require('mongoose'),
 passport = require('passport'),
@@ -71,6 +72,13 @@ io.set('authorization', passportSocketIo.authorize({
 
 io.sockets.on('connection', function(socket) {
   clientCount++;
+  // console.log('hello')
+  // console.log(socket.request.user.id)
+  // console.log('hello2')
+
+  var save = new Save({userForSave: socket.request.user.id})
+  save.save();
+  // console.log(save)
   console.log("ID: " + socket.request.user)
   // console.log("User is :" + user)
   console.log("A new client connected: " + socket.id + " (" + clientCount + " clients)");

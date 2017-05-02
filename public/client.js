@@ -86,6 +86,10 @@ document.addEventListener("DOMContentLoaded", function(){
     drawWorld();
   });
 
+  $("#loadGame").click(function() {
+    
+  });
+
   $("#rotate").click(function() {
     updateRotationClockwise();
     rotateAllBlocks(90);
