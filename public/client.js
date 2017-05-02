@@ -76,7 +76,7 @@ document.addEventListener("DOMContentLoaded", function(){
     var gameName = $("#newGameName").val();
     $("#inputGridSize option:selected").text() === "Small" ? gridSize = 11 : gridSize = 21;
     gridSize === 11 ? gameScale = 34 : gameScale = 18;
-    var roomLimit = $("#inputGridSize option:selected").val();
+    var roomLimit = $("#roomLimit").val();
     var saveId = $("#saves").val();
     socket.emit('new_game', {name: gameName, size: gridSize, roomLimit: roomLimit, saveId: saveId });
     $("#sessionDiv").hide();
@@ -91,10 +91,7 @@ document.addEventListener("DOMContentLoaded", function(){
 
   $("#saveGame").click(function() {
     var saveName = prompt("Please enter a name for your save");
-    console.log(saveName);
-    console.log(saveName != null && saveName != "")
     if (saveName != null && saveName != "") {
-
       socket.emit('saveBlocks', {blocks: blocks, name: saveName});
     }
   });
@@ -276,7 +273,6 @@ document.addEventListener("DOMContentLoaded", function(){
   }
 
   function rotateAllBlocks(degree){
-    console.log("Rotating now by " + degree + " degrees. New rotation is " + currentRotation);
     blocks.forEach(function(shape){
       var newCoords = rotate({x: shape.xPos, y: shape.yPos}, degree);
       shape.xPos = newCoords.x;
@@ -499,13 +495,11 @@ document.addEventListener("DOMContentLoaded", function(){
 
       // Socket receive events
       socket.on('updateWorld', function (data) {
-        console.log("receiving world update")
         updateWorld(data);
       });
 
       function updateWorld(data){
         blocks = data.blocks;
-        console.log(blocks);
         if(blocks){
           rotateAllBlocks(currentRotation);
           sortBlocks();
@@ -539,10 +533,9 @@ document.addEventListener("DOMContentLoaded", function(){
       });
 
       socket.on('listOfSaves', function(data){
-        console.log("Loading the saves in...")
-        console.log(data)
         saves = data;
         $('#saves').empty();
+        $('#saves').append("<option value='0'>None</option>");
         data.forEach(function(save){
           $('#saves').append('<option value="' + save._id + '">' + save.name + '</option>');
         })
@@ -560,7 +553,6 @@ document.addEventListener("DOMContentLoaded", function(){
         var newCoords = rotate( {x: block[0], y: block[1]}, -currentRotation);
         block[0] = newCoords.x;
         block[1] = newCoords.y;
-        console.log("Sending" + block);
         socket.emit('add_block', {block: block, roomId: roomId});
       }
 

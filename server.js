@@ -82,17 +82,9 @@ io.set('authorization', passportSocketIo.authorize({
 
 io.sockets.on('connection', function(socket) {
   clientCount++;
-  // console.log('hello')
-  // console.log(socket.request.user.id)
-  // console.log('hello2')
-  // console.log(save)
-  // console.log("ID: " + socket.request.user)
-  // console.log("User is :" + user)
   console.log("A new client connected: " + socket.id + " (" + clientCount + " clients)");
   loadSaves()
   socket.emit("list_of_games", listOfRooms());
-
-
 
   socket.on('new_game', function(data){
     var roomName = data.name;
@@ -102,7 +94,7 @@ io.sockets.on('connection', function(socket) {
     var room = new Room(roomName, new GameController(new Game(size)), playerLimit);
     rooms.push(room);
     room.addPlayer(new Player(socket.id, 'Timmy'));
-    if(data.saveId){
+    if(data.saveId && data.saveId != 0){
       loadSavedGame(data.saveId, room)
     }
     socket.join(room.getId());
@@ -132,7 +124,6 @@ io.sockets.on('connection', function(socket) {
 
   socket.on('add_block', function (data) {
     var room = findRoom(data.roomId);
-    console.log("Server adding block at X:" + data.block[0] + " Y: " + data.block[1]);
     room.gameController.createShape(data.block[0], data.block[1], data.block[2], data.block[3], data.block[4], data.block[5], data.block[6], data.block[7]);
     updateWorld(room.id);
   });
@@ -177,7 +168,6 @@ io.sockets.on('connection', function(socket) {
     stuff.forEach(function(thing){
       savesToSend.push(thing);
     });
-    console.log("Sending update for saves with: " + savesToSend)
     socket.emit("listOfSaves", savesToSend);
   }
 
