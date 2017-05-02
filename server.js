@@ -179,13 +179,18 @@ io.sockets.on('connection', function(socket) {
 
 
   function loadSaves(){
+
+    // var saveSchema = require('./app/models/save.js')
     var userId = socket.request.user.id;
     // var saves = mongoose.saves.find({userForSave: userId});
     // console.log(saves)
-    var save = mongoose.model('Save')
+    // var save = mongoose.model('Save', saveSchema)
     // console.log(user)
-    var x = save.findOne( {'userForSave' : userId } )
-    console.log(x)
+    var x = Save.find( {'userForSave' : userId }, 'blocks', function(err, save){
+      if(err) throw err;
+      console.log(save);
+      console.log(userId)
+    } )
     // var userId = socket.request.user.id;
     // var saves = mongoose.saves.find({userForSave: userId});
     // console.log(saves)
