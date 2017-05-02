@@ -27,7 +27,7 @@ require('./config/passport')(passport);
 mongoose.connect(configDB.url);
 const MongoStore = require('connect-mongo')(session);
 var sessionStore = new MongoStore({ mongooseConnection: mongoose.connection });
-
+var ObjectId = require('mongodb').ObjectID;
 var db;
 const MongoClient = require('mongodb').MongoClient
 MongoClient.connect(configDB.url, (err, database) => {
@@ -86,13 +86,10 @@ io.sockets.on('connection', function(socket) {
   // console.log(socket.request.user.id)
   // console.log('hello2')
   // console.log(save)
-  console.log("ID: " + socket.request.user)
+  // console.log("ID: " + socket.request.user)
   // console.log("User is :" + user)
   console.log("A new client connected: " + socket.id + " (" + clientCount + " clients)");
   loadSaves()
-
-
-  console.log("got here")
   socket.emit("list_of_games", listOfRooms());
 
 
@@ -101,9 +98,13 @@ io.sockets.on('connection', function(socket) {
     var roomName = data.name;
     var size = data.size;
     var playerLimit = data.roomLimit;
+    var saveId = data.saveId;
     var room = new Room(roomName, new GameController(new Game(size)), playerLimit);
     rooms.push(room);
     room.addPlayer(new Player(socket.id, 'Timmy'));
+    if(data.saveId){
+      loadSavedGame(data.saveId, room)
+    }
     socket.join(room.getId());
     socket.emit('new_game_id', room.getId());
     console.log("Creating a new game with id: " + room.getId());
@@ -132,7 +133,6 @@ io.sockets.on('connection', function(socket) {
   socket.on('add_block', function (data) {
     var room = findRoom(data.roomId);
     console.log("Server adding block at X:" + data.block[0] + " Y: " + data.block[1]);
-    console.log("Texture is: " + data.block[7])
     room.gameController.createShape(data.block[0], data.block[1], data.block[2], data.block[3], data.block[4], data.block[5], data.block[6], data.block[7]);
     updateWorld(room.id);
   });
@@ -158,101 +158,45 @@ io.sockets.on('connection', function(socket) {
     console.log("A client disconnected: " + socket.id + " (" + clientCount + " clients)");
   });
 
-
-
-
-
-
-
-
-
-
   socket.on('saveBlocks', function(data) {
-    console.log('server socket reached')
-    var saveArray = data.blocks;
-    var save = new Save({blocks: saveArray, userForSave: socket.request.user.id});
+    var save = new Save({name: data.name, blocks: data.blocks, userForSave: socket.request.user.id});
     save.save();
   });
 
-  //
-  // socket.on('loadBlocks', function(data) {
-  //   console.log('server socket reached')
-  //   var saveArray = data.blocks;
-  //   var save = new Save({blocks: saveArray, userForSave: socket.request.user.id});
-  //   save.save();
-  // });
-  //
-  //
-
-function printStuff(stuff){
-  stuff.forEach(function(thing){
-    console.log(thing)
-  });
-}
 
   function loadSaves(){
-
-    // var saveSchema = require('./app/models/save.js')
-    var userId = socket.request.user.id;
-// var y = Save.find({'userForSave' : userId }, function (err, docs) {
-//
-// });
-
-db.collection('saves').find().toArray((err, result) => {
-   if (err) return console.log(err)
-   printStuff(result);
- })
-    //
-    // var cursor = mongoose.collection('saves').find();
-    //
-    // // Execute the each command, triggers for each document
-    // cursor.each(function(err, item) {
-    //     // If the item is null then the cursor is exhausted/empty and closed
-    //     if(item == null) {
-    //         db.close(); // you may not want to close the DB if you have more code....
-    //         return;
-    //     }
-    //     // otherwise, do something with the item
-    // });
-    //
-    //
-
-
-
-    // var saves = mongoose.saves.find({userForSave: userId});
-    // console.log(saves)
-    // var save = mongoose.model('Save', saveSchema)
-  //   // console.log(user)
-  //   var y = Save.findOne({'userForSave' : userId }, function (err, docs) {
-  //     var z = [];
-  //     console.log(docs.blocks)
-  // //
-  //
-  // for(var i = 0; i < docs.blocks.length -1; i++){
-  //     z.push(docs.blocks[i]);
-  // }
-  // //
-  // // docs.blocks.forEach(function(block){
-  //
-  //
-//   //
-//   // });
-//     console.log(z);
-// });
-//     // var x = Save.find( {'userForSave' : userId }, 'blocks', function(err, save){
-    //   if(err) throw err;
-    //   console.log(save);
-    //   console.log(userId)
-    // } )
-    // var userId = socket.request.user.id;
-    // var saves = mongoose.saves.find({userForSave: userId});
-    // console.log(saves)
+  var userId = socket.request.user.id;
+  db.collection('saves').find({userForSave: userId}).toArray((err, result) => {
+     if (err) return console.log(err)
+     printStuff(result, userId);
+   })
   }
 
+  function printStuff(stuff, id){
+    var savesToSend = []
+    stuff.forEach(function(thing){
+      savesToSend.push(thing);
+    });
+    console.log("Sending update for saves with: " + savesToSend)
+    socket.emit("listOfSaves", savesToSend);
+  }
 
+  function loadSavedGame(id, room){
+    db.collection('saves').find({_id: ObjectId(id)}).toArray((err, result) => {
+       if (err) return console.log(err)
+       emitSaveToRoom(result, room);
+     })
+  }
 
+  function emitSaveToRoom(result, room){
+    var savesToSend = []
+    result.forEach(function(thing){
+      savesToSend.push(thing);
+    });
 
-
+    room.loadBlocks(savesToSend[0].blocks);
+    updateWorld(room.id);
+  }
 
   function updateWorld(roomId){
     var room = findRoom(roomId);
@@ -273,6 +217,7 @@ db.collection('saves').find().toArray((err, result) => {
       rooms.splice(roomIndex, 1);
     }
     io.sockets.emit("list_of_games", listOfRooms());
+    loadSaves();
   }
 
   function findRoom(id){

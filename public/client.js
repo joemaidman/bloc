@@ -34,6 +34,7 @@ document.addEventListener("DOMContentLoaded", function(){
   var roomId;
   var currentRotation = 0;
   var currentShapeType = 0;
+  var saves;
 
   $("#gameDiv").hide();
 
@@ -75,8 +76,9 @@ document.addEventListener("DOMContentLoaded", function(){
     var gameName = $("#newGameName").val();
     $("#inputGridSize option:selected").text() === "Small" ? gridSize = 11 : gridSize = 21;
     gridSize === 11 ? gameScale = 34 : gameScale = 18;
-    var roomLimit = $("#roomLimit").val();
-    socket.emit('new_game', {name: gameName, size: gridSize, roomLimit: roomLimit });
+    var roomLimit = $("#inputGridSize option:selected").val();
+    var saveId = $("#saves").val();
+    socket.emit('new_game', {name: gameName, size: gridSize, roomLimit: roomLimit, saveId: saveId });
     $("#sessionDiv").hide();
     $("#gameDiv").show();
     iso = new Isomer(canvas, { scale: gameScale, originY: canvas.height });
@@ -86,38 +88,16 @@ document.addEventListener("DOMContentLoaded", function(){
     drawWorld();
   });
 
-  // $("#loadGame").click(function() {
-  //
-  // });
-
-
-
-
-
-
 
   $("#saveGame").click(function() {
-    socket.emit('saveBlocks', {blocks});
-    console.log(blocks);
-    console.log('client socket sent');
+    var saveName = prompt("Please enter a name for your save");
+    console.log(saveName);
+    console.log(saveName != null && saveName != "")
+    if (saveName != null && saveName != "") {
+
+      socket.emit('saveBlocks', {blocks: blocks, name: saveName});
+    }
   });
-
-
-
-    // 
-    // $("#loadGame").click(function() {
-    //   socket.emit('loadBlocks', {blocks});
-    //   console.log(blocks);
-    //   console.log('client socket sent');
-    // });
-    //
-
-
-
-
-
-
-
 
   $("#rotate").click(function() {
     updateRotationClockwise();
@@ -424,7 +404,6 @@ document.addEventListener("DOMContentLoaded", function(){
   }
 
   function drawCube(block){
-    console.log("Texture is: "+ block.texture)
     iso.add(Shape.Prism(new Point(block.xPos, block.yPos, block.zPos)),new Color(block.r,block.g,block.b), true,block.texture);
   }
 
@@ -437,12 +416,9 @@ document.addEventListener("DOMContentLoaded", function(){
   }
 
   function rotate(coordinates, degrees = 90){
-    console.log(blocks)
-    console.log("X:" + coordinates.x + " Y:" + coordinates.y + " Degrees: " + degrees);
     var newCoordinates = calculateRotation(5, 5, coordinates.x, coordinates.y, degrees);
     var x = Math.round(newCoordinates[0],0);
     var y = Math.round(newCoordinates[1],0);
-    console.log("Generated X:" + x + " Y:" + y);
     return {x: x, y: y};
   }
 
@@ -560,6 +536,16 @@ document.addEventListener("DOMContentLoaded", function(){
 
       socket.on('new_game_id', function (data){
         roomId = data;
+      });
+
+      socket.on('listOfSaves', function(data){
+        console.log("Loading the saves in...")
+        console.log(data)
+        saves = data;
+        $('#saves').empty();
+        data.forEach(function(save){
+          $('#saves').append('<option value="' + save._id + '">' + save.name + '</option>');
+        })
       });
 
       // Socket send events
