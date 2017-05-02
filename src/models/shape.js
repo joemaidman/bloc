@@ -5,6 +5,7 @@ function Shape(xPos = 0, yPos = 0, zPos = 0, r = 0, g = 0, b = 0, type = 0, text
   this.setColor(r, g, b);
   this.setTexture(texture);
   this.setType(type);
+  console.log("My texture is:" + this.getTexture());
 }
 
 Shape.prototype = {

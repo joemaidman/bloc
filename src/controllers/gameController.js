@@ -12,8 +12,8 @@ GameController.prototype = {
   getAllShapes: function(){
     return this.game.getShapes();
   },
-  createShape: function(xPos = 0, yPos = 0, zPos = 0, r = 0, g = 0, b = 0, type = 0){
-    this.game.addShape(new Shape(xPos, yPos, zPos, r, g, b, type));
+  createShape: function(xPos = 0, yPos = 0, zPos = 0, r = 0, g = 0, b = 0, type = 0, texture = false){
+    this.game.addShape(new Shape(xPos, yPos, zPos, r, g, b, type, texture));
   },
   removeShape: function(xPos, yPos, zPos){
     this.game.deleteShape({x: xPos, y: yPos, z: zPos});

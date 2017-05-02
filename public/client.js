@@ -163,7 +163,8 @@ document.addEventListener("DOMContentLoaded", function(){
     var r = document.getElementById("red").value,
     g = document.getElementById("green").value,
     b = document.getElementById("blue").value;
-    emitNewBlock([x,y,z,r,g,b, currentShapeType]);
+    var texture = $("#texture option:selected").val();
+    emitNewBlock([x,y,z,r,g,b, currentShapeType, texture]);
   });
 
   $("#delete").click(function() {
@@ -209,7 +210,8 @@ document.addEventListener("DOMContentLoaded", function(){
       var r = document.getElementById("red").value,
       g = document.getElementById("green").value,
       b = document.getElementById("blue").value;
-      emitNewBlock([(gridPos.x -=z),(gridPos.y -=z),z,r,g,b,currentShapeType]);
+      var texture = $("#texture option:selected").val();
+      emitNewBlock([(gridPos.x -=z),(gridPos.y -=z),z,r,g,b,currentShapeType, texture]);
     }
   }, false);
 
@@ -286,12 +288,13 @@ document.addEventListener("DOMContentLoaded", function(){
   }
 
   function drawHighlight(){
+    var texture = $("#texture option:selected").val();
     var r = document.getElementById("red").value,
     g = document.getElementById("green").value,
     b = document.getElementById("blue").value;
     a = 0.4
     if(currentShapeType === 0){
-      iso.add(Shape.Prism(new Point(highlightGrid.x, highlightGrid.y)),new Color(r,g,b,a), true, "wood");
+      iso.add(Shape.Prism(new Point(highlightGrid.x, highlightGrid.y)),new Color(r,g,b,a), true, texture);
     }
     else if(currentShapeType === 1){
       iso.add(Shape.Pyramid(new Point(highlightGrid.x, highlightGrid.y)),new Color(r,g,b,a));
@@ -388,15 +391,16 @@ document.addEventListener("DOMContentLoaded", function(){
   }
 
   function drawCube(block){
-    iso.add(Shape.Prism(new Point(block.xPos, block.yPos, block.zPos)),new Color(block.r,block.g,block.b), true,"wood");
+    console.log("Texture is: "+ block.texture)
+    iso.add(Shape.Prism(new Point(block.xPos, block.yPos, block.zPos)),new Color(block.r,block.g,block.b), true,block.texture);
   }
 
   function drawPyramid(block){
-    iso.add(Shape.Pyramid(new Point(block.xPos, block.yPos, block.zPos)),new Color(block.r,block.g,block.b), true, "wood");
+    iso.add(Shape.Pyramid(new Point(block.xPos, block.yPos, block.zPos)),new Color(block.r,block.g,block.b), true, block.texture);
   }
 
   function drawCylinder(block){
-    iso.add(Shape.Cylinder(new Point(block.xPos + 0.5, block.yPos + 0.5, block.zPos), 0.5, 10, 1),new Color(block.r,block.g,block.b), true, "wood");
+    iso.add(Shape.Cylinder(new Point(block.xPos + 0.5, block.yPos + 0.5, block.zPos), 0.5, 10, 1),new Color(block.r,block.g,block.b), true, block.texture);
   }
 
   function rotate(coordinates, degrees = 90){
@@ -536,7 +540,7 @@ document.addEventListener("DOMContentLoaded", function(){
         var newCoords = rotate( {x: block[0], y: block[1]}, -currentRotation);
         block[0] = newCoords.x;
         block[1] = newCoords.y;
-        console.log(block);
+        console.log("Sending" + block);
         socket.emit('add_block', {block: block, roomId: roomId});
       }
 
