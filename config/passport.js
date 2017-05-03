@@ -96,24 +96,30 @@ function(token, refreshToken, profile, done) {
         passReqToCallback : true // allows us to pass back the entire request to the callback
     },
     function(req, email, password, done) { // callback with email and password from our form
-
+      var randomGuestName = 'Guest'+ (Math.round(Math.random() * 1000, 0)).toString();
         // find a user whose email is the same as the forms email
         // we are checking to see if the user trying to login already exists
-        User.findOne({ 'local.email' :  email }, function(err, user) {
-            // if there are any errors, return the error before anything else
-            if (err)
-                return done(err);
+        console.log(randomGuestName);
+        User.findOne({ displayName: randomGuestName }, function(err, user) {
+            if (err)  return done(err);
+            if (!user) {
 
-            // if no user is found, return the message
-            if (!user)
-                return done(null, false, req.flash('loginMessage', 'No user found.')); // req.flash is the way to set flashdata using connect-flash
+                /* HERE, INSTEAD OF REJECTING THE AUTHENTICATION */
+                // return done(null, false, { message: 'Incorrect username.' });
 
-            // if the user is found but the password is wrong
-            if (!user.validPassword(password))
-                return done(null, false, req.flash('loginMessage', 'Oops! Wrong password.')); // create the loginMessage and save it to session as flashdata
+                /* SIMPLY CREATE A NEW USER */
+                var newUser = new User();
+                newUser.local.displayName = randomGuestName;
+                /* AND AUTHENTICATE WITH THAT */
+                newUser.save(function(err) {
+                    if (err)
+                        throw err;
+                        console.log("Creating a new user called: " + newUser.local.displayName);
+                    return done(null, newUser);
+                });
 
-            // all is well, return successful user
-            return done(null, user);
+            }
+
         });
 
     }));

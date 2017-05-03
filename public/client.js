@@ -34,6 +34,7 @@ document.addEventListener("DOMContentLoaded", function(){
   var roomId;
   var currentRotation = 0;
   var currentShapeType = 0;
+  var canvasBackgroundColor = "rgb(255, 255, 255)"
 
   $("#gameDiv").hide();
 
@@ -68,7 +69,12 @@ document.addEventListener("DOMContentLoaded", function(){
   document.getElementById('green').value = RandomColour()
   document.getElementById('blue').value = RandomColour()
   //UI element event listeners
+  function drawBackground(){
+    var ctx = canvas.getContext("2d");
+    ctx.fillStyle = canvasBackgroundColor;
+    ctx.fillRect( 0, 0, canvas.width, canvas.height);
 
+  }
 
   //UI element event listeners
   $("#newGame").click(function() {
@@ -152,8 +158,8 @@ document.addEventListener("DOMContentLoaded", function(){
     var r = document.getElementById("red").value,
     g = document.getElementById("green").value,
     b = document.getElementById("blue").value;
-    var changeColour = document.getElementById("canvas");
-    changeColour.style.background = "rgb(" + r + "," + g + "," + b + ")"
+    canvasBackgroundColor = "rgb(" + r + "," + g + "," + b + ")"
+    drawWorld();
   })
 
   $("#add").click(function() {
@@ -453,6 +459,7 @@ document.addEventListener("DOMContentLoaded", function(){
 
   function drawWorld(){
     clearCanvas();
+    drawBackground();
     if(showGridlines){
       drawWalls(gridSize,gridSize,gridSize,gridr, gridg, gridb,1);
 

@@ -41,7 +41,12 @@
     </style>
 </head>
 <body>
+
+  <% if (user.facebook.displayName){ %>
   <strong>Welcome</strong>: <%= user.facebook.displayName %><br>  <a href="/logout" class="btn btn-default btn-sm">Logout</a>
+  <% } else { %>
+    <strong>Welcome</strong>: <%= user.local.displayName %><br>  <a href="/logout" class="btn btn-default btn-sm">Logout</a>
+    <% } %>
   <!-- <strong>token</strong>: <%= user.facebook.token %><br>
   <strong>email</strong>: <%= user.facebook.email %><br> -->
   <div id="sessionDiv">

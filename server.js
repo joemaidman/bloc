@@ -83,7 +83,14 @@ io.sockets.on('connection', function(socket) {
     var playerLimit = data.roomLimit;
     var room = new Room(roomName, new GameController(new Game(size)), playerLimit);
     rooms.push(room);
-    room.addPlayer(new Player(socket.id, socket.request.user.facebook.displayName));
+    var playerName;
+    if(socket.request.user.facebook.displayName){
+      playerName = socket.request.user.facebook.displayName;
+    }
+    else{
+      playerName = socket.request.user.local.displayName
+    }
+    room.addPlayer(new Player(socket.id, playerName));
     socket.join(room.getId());
     socket.emit('new_game_id', room.getId());
     console.log("Creating a new game with id: " + room.getId());
