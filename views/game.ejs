@@ -5,7 +5,7 @@
 
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css">
-  
+
   <script src="socket.io/socket.io.js"></script>
   <script src="client.js"></script>
   <script src="isomer.js"></script>
@@ -45,12 +45,16 @@
     </style>
 </head>
 <body>
+ <nav class="navbar navbar-default">
+   <div class="navbar-header">
 
-  <% if (user.facebook.displayName){ %>
-  <strong>Welcome</strong>: <%= user.facebook.displayName %><br>  <a href="/logout" class="btn btn-default btn-sm">Logout</a>
+   <p classs ="navbar-text"><% if (user.facebook.displayName){ %></p>
+  <strong>Welcome</strong>: <%= user.facebook.displayName %><br>  <a href="/logout" class="btn btn-default btn-sm navbar-btn ">Logout</a>
   <% } else { %>
-    <strong>Welcome</strong>: <%= user.local.displayName %><br>  <a href="/logout" class="btn btn-default btn-sm">Logout</a>
+    <strong>Welcome</strong>: <%= user.local.displayName %><br>  <a href="/logout" class="btn btn-default btn-sm navbar-btn">Logout</a>
     <% } %>
+</div>
+</nav>
   <!-- <strong>token</strong>: <%= user.facebook.token %><br>
   <strong>email</strong>: <%= user.facebook.email %><br> -->
   <div id="sessionDiv">

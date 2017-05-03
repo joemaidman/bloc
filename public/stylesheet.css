@@ -3,3 +3,10 @@ h1 {
   font-size: 150px;
 
 }
+body{
+  background-image: url(background.jpg);
+  background-position: top;
+  background-size: 1300px 900px;
+  background-repeat: no-repeat;
+
+}
