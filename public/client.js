@@ -34,6 +34,7 @@ document.addEventListener("DOMContentLoaded", function(){
   var roomId;
   var currentRotation = 0;
   var currentShapeType = 0;
+  var canvasBackgroundColor = "rgb(255, 255, 255)"
 
   $("#gameDiv").hide();
 
@@ -68,13 +69,18 @@ document.addEventListener("DOMContentLoaded", function(){
   document.getElementById('green').value = RandomColour()
   document.getElementById('blue').value = RandomColour()
   //UI element event listeners
+  function drawBackground(){
+    var ctx = canvas.getContext("2d");
+    ctx.fillStyle = canvasBackgroundColor;
+    ctx.fillRect( 0, 0, canvas.width, canvas.height);
 
+  }
 
   //UI element event listeners
   $("#newGame").click(function() {
     var gameName = $("#newGameName").val();
     $("#inputGridSize option:selected").text() === "Small" ? gridSize = 11 : gridSize = 21;
-    gridSize === 11 ? gameScale = 34 : gameScale = 18;
+    gridSize === 11 ? gameScale = 30 : gameScale = 16;
     var roomLimit = $("#roomLimit").val();
     socket.emit('new_game', {name: gameName, size: gridSize, roomLimit: roomLimit });
     $("#sessionDiv").hide();
@@ -152,8 +158,8 @@ document.addEventListener("DOMContentLoaded", function(){
     var r = document.getElementById("red").value,
     g = document.getElementById("green").value,
     b = document.getElementById("blue").value;
-    var changeColour = document.getElementById("canvas");
-    changeColour.style.background = "rgb(" + r + "," + g + "," + b + ")"
+    canvasBackgroundColor = "rgb(" + r + "," + g + "," + b + ")"
+    drawWorld();
   })
 
   $("#add").click(function() {
@@ -172,6 +178,24 @@ document.addEventListener("DOMContentLoaded", function(){
     var y = parseInt($("#y").val());
     var z = parseInt($("#z").val());
     emitDeleteBlock([x, y, z]);
+  });
+
+  $("#sendMessage").click(function() {
+    var message = $("#text").val()
+    socket.emit('newMessage', {message:message, roomId:roomId});
+    $("#text").val('');
+  });
+
+  $("#text").keyup(function(event){
+    if(event.keyCode == 13){
+      $("#sendMessage").click();
+    }
+  });
+
+  $("#newGameName").keyup(function(event){
+    if(event.keyCode == 13){
+      $("#newGame").click();
+    }
   });
 
   // Canvas event listeners
@@ -263,7 +287,6 @@ document.addEventListener("DOMContentLoaded", function(){
   }
 
   function rotateAllBlocks(degree){
-    console.log("Rotating now by " + degree + " degrees. New rotation is " + currentRotation);
     blocks.forEach(function(shape){
       var newCoords = rotate({x: shape.xPos, y: shape.yPos}, degree);
       shape.xPos = newCoords.x;
@@ -300,8 +323,6 @@ document.addEventListener("DOMContentLoaded", function(){
       iso.add(Shape.Pyramid(new Point(highlightGrid.x, highlightGrid.y)),new Color(r,g,b,a));
     }
     else if(currentShapeType === 2){
-      // iso.add(Shape.Cylinder(new Point(block.xPos + 0.5, block.yPos + 0.5, block.zPos), 0.5, 50, 1),new Color(block.r,block.g,block.b));
-
       iso.add(Shape.Cylinder(new Point(highlightGrid.x + 0.5, highlightGrid.y + 0.5), 0.5, 50, 1),new Color(r,g,b,a));
     }
   }
@@ -391,7 +412,6 @@ document.addEventListener("DOMContentLoaded", function(){
   }
 
   function drawCube(block){
-    console.log("Texture is: "+ block.texture)
     iso.add(Shape.Prism(new Point(block.xPos, block.yPos, block.zPos)),new Color(block.r,block.g,block.b), true,block.texture);
   }
 
@@ -404,11 +424,9 @@ document.addEventListener("DOMContentLoaded", function(){
   }
 
   function rotate(coordinates, degrees = 90){
-    console.log("X:" + coordinates.x + " Y:" + coordinates.y + " Degrees: " + degrees);
     var newCoordinates = calculateRotation((gridSize - 1)/2, (gridSize - 1)/2, coordinates.x, coordinates.y, degrees);
     var x = Math.round(newCoordinates[0],0);
     var y = Math.round(newCoordinates[1],0);
-    console.log("Generated X:" + x + " Y:" + y);
     return {x: x, y: y};
   }
 
@@ -441,6 +459,7 @@ document.addEventListener("DOMContentLoaded", function(){
 
   function drawWorld(){
     clearCanvas();
+    drawBackground();
     if(showGridlines){
       drawWalls(gridSize,gridSize,gridSize,gridr, gridg, gridb,1);
 
@@ -489,13 +508,12 @@ document.addEventListener("DOMContentLoaded", function(){
 
       // Socket receive events
       socket.on('updateWorld', function (data) {
-        console.log("receiving world update")
+        console.log("Receiving world update")
         updateWorld(data);
       });
 
       function updateWorld(data){
         blocks = data.blocks;
-        console.log(blocks);
         if(blocks){
           rotateAllBlocks(currentRotation);
           sortBlocks();
@@ -528,6 +546,17 @@ document.addEventListener("DOMContentLoaded", function(){
         roomId = data;
       });
 
+      socket.on('updateChat', function(data) {
+        var div = $("#chat");
+        var time = new Date(data.time)
+        var timeString = (time.getHours()<10?'0':'') + time.getHours() + ":" + (time.getMinutes()<10?'0':'') + time.getMinutes();
+        var message = data.player.name + " " + timeString + " - " + data.body
+        div.append(message + "<br/>");
+        div.scrollTop(div.prop("scrollHeight"));
+      })
+
+
+
       // Socket send events
       function emitDeleteBlock(block){
         var newCoords = rotate( {x: block[0], y: block[1]}, -currentRotation);
@@ -540,7 +569,6 @@ document.addEventListener("DOMContentLoaded", function(){
         var newCoords = rotate( {x: block[0], y: block[1]}, -currentRotation);
         block[0] = newCoords.x;
         block[1] = newCoords.y;
-        console.log("Sending" + block);
         socket.emit('add_block', {block: block, roomId: roomId});
       }
 

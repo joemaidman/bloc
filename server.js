@@ -20,9 +20,11 @@ session = require('express-session'),
 connect = require('connect'),
 configDB = require('./config/database.js');
 require('./config/passport')(passport);
+var Message = require("./app/models/message.js");
 mongoose.connect(configDB.url);
 const MongoStore = require('connect-mongo')(session);
 var sessionStore = new MongoStore({ mongooseConnection: mongoose.connection });
+var systemPlayer = new Player(0, "System");
 
 app.use(morgan('dev')); // log every request to the console
 app.use(cookieParser()); // read cookies (needed for auth)
@@ -71,7 +73,6 @@ io.set('authorization', passportSocketIo.authorize({
 
 io.sockets.on('connection', function(socket) {
   clientCount++;
-  console.log("ID: " + socket.request.user)
   // console.log("User is :" + user)
   console.log("A new client connected: " + socket.id + " (" + clientCount + " clients)");
   socket.emit("list_of_games", listOfRooms());
@@ -82,7 +83,14 @@ io.sockets.on('connection', function(socket) {
     var playerLimit = data.roomLimit;
     var room = new Room(roomName, new GameController(new Game(size)), playerLimit);
     rooms.push(room);
-    room.addPlayer(new Player(socket.id, 'Timmy'));
+    var playerName;
+    if(socket.request.user.facebook.displayName){
+      playerName = socket.request.user.facebook.displayName;
+    }
+    else{
+      playerName = socket.request.user.local.displayName
+    }
+    room.addPlayer(new Player(socket.id, playerName));
     socket.join(room.getId());
     socket.emit('new_game_id', room.getId());
     console.log("Creating a new game with id: " + room.getId());
@@ -97,9 +105,12 @@ io.sockets.on('connection', function(socket) {
       console.log("Unable to join a room that is full (player: " + socket.id +")");
     }
     else {
-      room.addPlayer(new Player(socket.id, 'Timmy'));
+      room.addPlayer(new Player(socket.id, socket.request.user.facebook.displayName));
       socket.join(room.getId());
       socket.emit('joined_game',{roomId:room.getId(), gameSize: room.gameController.game.getSize() + 1, blocks: room.gameController.getAllShapes()});
+      var message = new Message(systemPlayer, socket.request.user.facebook.displayName + " joined the room");
+      room.addMessage(message);
+      sendMessage(roomId);
       console.log("Adding player " + room.getPlayers()[0].id + " to room " + room.getId());
     }
   });
@@ -108,10 +119,22 @@ io.sockets.on('connection', function(socket) {
     leaveRoom(data, socket.id);
   });
 
+socket.on('newMessage', function(data) {
+  var room = findRoom(data.roomId);
+  var player = room.getPlayerById(socket.id);
+  var message = new Message(player, data.message);
+  room.addMessage(message);
+  sendMessage(data.roomId);
+})
+
+function sendMessage(roomId){
+  var room = findRoom(roomId);
+  io.sockets.in(roomId).emit("updateChat", room.getMessages()[room.getMessages().length - 1]);
+}
+
+
   socket.on('add_block', function (data) {
     var room = findRoom(data.roomId);
-    console.log("Server adding block at X:" + data.block[0] + " Y: " + data.block[1]);
-    console.log("Texture is: " + data.block[7])
     room.gameController.createShape(data.block[0], data.block[1], data.block[2], data.block[3], data.block[4], data.block[5], data.block[6], data.block[7]);
     updateWorld(room.id);
   });
@@ -149,6 +172,9 @@ io.sockets.on('connection', function(socket) {
     room.removePlayer(playerId);
     socket.leave(room.getId());
     console.log("Player " + socket.id + " left room: " + room.getId());
+    var message = new Message(systemPlayer, socket.request.user.facebook.displayName + " left the room");
+    room.addMessage(message);
+    sendMessage(roomId);
     if(room.getPlayerCount() === 0)
     {
       console.log("Closing room " + room.getId() + " (no players left)");

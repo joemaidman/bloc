@@ -41,7 +41,12 @@
     </style>
 </head>
 <body>
+
+  <% if (user.facebook.displayName){ %>
   <strong>Welcome</strong>: <%= user.facebook.displayName %><br>  <a href="/logout" class="btn btn-default btn-sm">Logout</a>
+  <% } else { %>
+    <strong>Welcome</strong>: <%= user.local.displayName %><br>  <a href="/logout" class="btn btn-default btn-sm">Logout</a>
+    <% } %>
   <!-- <strong>token</strong>: <%= user.facebook.token %><br>
   <strong>email</strong>: <%= user.facebook.email %><br> -->
   <div id="sessionDiv">
@@ -63,7 +68,7 @@
         <div>
 
 
-          <canvas style="border: 2px black solid;border-radius:5px;background:white;" id="canvas" width="1000px" height="766px" ></canvas>
+          <canvas style="border: 2px black solid;border-radius:5px;background:white;" id="canvas" width="600px" height="660px" ></canvas>
         </div>
       </div>
       <div class="Column-controls">
@@ -72,9 +77,6 @@
         <div id="blockDiv">Block Count</div>
         <div id="controls" style="width:580px;padding:10px;margin-top:10px;border: 2px black solid;border-radius:5px;">
           <br/>
-        X: <input type="number" id="x" min="0" max="10" step="1" value="5"><br/><br/>
-        Y: <input type="number" id="y" min="0" max="10" step="1" value="5"><br/><br/>
-        Z: <input type="number" id="z" min="0" max="10" step="1" value="0"><br/><br/>
         <select id="shapeType">
           <option value="0">Cube</option>
           <option value="1">Pyramid</option>
@@ -92,8 +94,6 @@
           <option value="ice">Ice</option>
           <option value="log_oak">Oak</option>
         </select>
-        <button id="add">Add block</button><br/><br/>
-        <button id="delete">Delete block</button><br/><br/>
         <button id="rotate">Rotate</button><br/><br/>
         <button id="clear">Clear blocks</button><br/><br/>
         <button id="toggleGridlines">Toggle gridlines</button><br/><br/>
@@ -118,6 +118,11 @@
         </div>
         </div>
 
+<div id="chat" style="width:580px;padding:10px;margin-top:10px;border: 2px black solid;border-radius:5px; overflow:auto;height:200px;">
+
+  </div>
+  <input id="text" type=text>
+  <button id="sendMessage">Send</button>
       </div>
     </div>
   <!-- </center> -->
