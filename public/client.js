@@ -34,7 +34,9 @@ document.addEventListener("DOMContentLoaded", function(){
   var roomId;
   var currentRotation = 0;
   var currentShapeType = 0;
+  var saves;
   var canvasBackgroundColor = "rgb(255, 255, 255)"
+
 
   $("#gameDiv").hide();
 
@@ -82,7 +84,8 @@ document.addEventListener("DOMContentLoaded", function(){
     $("#inputGridSize option:selected").text() === "Small" ? gridSize = 11 : gridSize = 21;
     gridSize === 11 ? gameScale = 30 : gameScale = 16;
     var roomLimit = $("#roomLimit").val();
-    socket.emit('new_game', {name: gameName, size: gridSize, roomLimit: roomLimit });
+    var saveId = $("#saves").val();
+    socket.emit('new_game', {name: gameName, size: gridSize, roomLimit: roomLimit, saveId: saveId });
     $("#sessionDiv").hide();
     $("#gameDiv").show();
     iso = new Isomer(canvas, { scale: gameScale, originY: canvas.height });
@@ -90,6 +93,14 @@ document.addEventListener("DOMContentLoaded", function(){
     drawOrigin();
     setupColorPicker();
     drawWorld();
+  });
+
+
+  $("#saveGame").click(function() {
+    var saveName = prompt("Please enter a name for your save");
+    if (saveName != null && saveName != "") {
+      socket.emit('saveBlocks', {blocks: blocks, name: saveName});
+    }
   });
 
   $("#rotate").click(function() {
@@ -424,6 +435,7 @@ document.addEventListener("DOMContentLoaded", function(){
   }
 
   function rotate(coordinates, degrees = 90){
+
     var newCoordinates = calculateRotation((gridSize - 1)/2, (gridSize - 1)/2, coordinates.x, coordinates.y, degrees);
     var x = Math.round(newCoordinates[0],0);
     var y = Math.round(newCoordinates[1],0);
@@ -508,7 +520,6 @@ document.addEventListener("DOMContentLoaded", function(){
 
       // Socket receive events
       socket.on('updateWorld', function (data) {
-        console.log("Receiving world update")
         updateWorld(data);
       });
 
@@ -546,6 +557,15 @@ document.addEventListener("DOMContentLoaded", function(){
         roomId = data;
       });
 
+      socket.on('listOfSaves', function(data){
+        saves = data;
+        $('#saves').empty();
+        $('#saves').append("<option value='0'>None</option>");
+        data.forEach(function(save){
+          $('#saves').append('<option value="' + save._id + '">' + save.name + '</option>');
+        })
+      });
+
       socket.on('updateChat', function(data) {
         var div = $("#chat");
         var time = new Date(data.time)
@@ -554,8 +574,6 @@ document.addEventListener("DOMContentLoaded", function(){
         div.append(message + "<br/>");
         div.scrollTop(div.prop("scrollHeight"));
       })
-
-
 
       // Socket send events
       function emitDeleteBlock(block){

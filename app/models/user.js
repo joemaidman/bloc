@@ -7,12 +7,14 @@ var userSchema = mongoose.Schema({
     local            : {
         displayName  : String,
         password     : String,
+        savesInUser: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Save'}]
     },
     facebook         : {
         id           : String,
         token        : String,
         email        : String,
-        displayName  : String
+        displayName  : String,
+        savesInUser: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Save'}]
     }
 });
 

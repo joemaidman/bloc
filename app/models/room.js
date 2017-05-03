@@ -10,6 +10,12 @@ function Room(name, gameController, limit){
 }
 
 Room.prototype = {
+  loadBlocks: function(blocks){
+    var that = this;
+    blocks.forEach(function (block){
+      that.gameController.createShape(block.xPos, block.yPos, block.zPos, block.r, block.g, block.b, block.type, block.texture)
+    });
+  },
   addPlayer: function(player){
     this.players.push(player);
   },

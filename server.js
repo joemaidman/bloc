@@ -8,12 +8,16 @@ GameView = require('./app/views/gameView.js'),
 Game = require('./app/models/game.js'),
 Room = require('./app/models/room.js'),
 Player = require('./app/models/player.js'),
+Save = require('./app/models/save.js'),
 GameController = require('./app/controllers/gameController.js'),
 mongoose = require('mongoose'),
 passport = require('passport'),
 passportSocketIo = require('passport.socketio')
 flash = require('connect-flash'),
 morgan = require('morgan'),
+
+mongo = require('mongodb'),
+
 cookieParser = require('cookie-parser'),
 bodyParser = require('body-parser'),
 session = require('express-session'),
@@ -24,6 +28,14 @@ var Message = require("./app/models/message.js");
 mongoose.connect(configDB.url);
 const MongoStore = require('connect-mongo')(session);
 var sessionStore = new MongoStore({ mongooseConnection: mongoose.connection });
+var ObjectId = require('mongodb').ObjectID;
+var db;
+const MongoClient = require('mongodb').MongoClient
+MongoClient.connect(configDB.url, (err, database) => {
+  if (err) return console.log(err)
+  db = database
+})
+
 var systemPlayer = new Player(0, "System");
 
 app.use(morgan('dev')); // log every request to the console
@@ -73,16 +85,23 @@ io.set('authorization', passportSocketIo.authorize({
 
 io.sockets.on('connection', function(socket) {
   clientCount++;
-  // console.log("User is :" + user)
+
   console.log("A new client connected: " + socket.id + " (" + clientCount + " clients)");
+  loadSaves()
   socket.emit("list_of_games", listOfRooms());
 
   socket.on('new_game', function(data){
     var roomName = data.name;
     var size = data.size;
     var playerLimit = data.roomLimit;
+    var saveId = data.saveId;
     var room = new Room(roomName, new GameController(new Game(size)), playerLimit);
     rooms.push(room);
+
+    if(data.saveId && data.saveId != 0){
+      loadSavedGame(data.saveId, room)
+    }
+
     var playerName;
     if(socket.request.user.facebook.displayName){
       playerName = socket.request.user.facebook.displayName;
@@ -91,6 +110,7 @@ io.sockets.on('connection', function(socket) {
       playerName = socket.request.user.local.displayName
     }
     room.addPlayer(new Player(socket.id, playerName));
+
     socket.join(room.getId());
     socket.emit('new_game_id', room.getId());
     console.log("Creating a new game with id: " + room.getId());
@@ -160,6 +180,45 @@ function sendMessage(roomId){
     console.log("A client disconnected: " + socket.id + " (" + clientCount + " clients)");
   });
 
+  socket.on('saveBlocks', function(data) {
+    var save = new Save({name: data.name, blocks: data.blocks, userForSave: socket.request.user.id});
+    save.save();
+  });
+
+
+  function loadSaves(){
+  var userId = socket.request.user.id;
+  db.collection('saves').find({userForSave: userId}).toArray((err, result) => {
+     if (err) return console.log(err)
+     printStuff(result, userId);
+   })
+  }
+
+  function printStuff(stuff, id){
+    var savesToSend = []
+    stuff.forEach(function(thing){
+      savesToSend.push(thing);
+    });
+    socket.emit("listOfSaves", savesToSend);
+  }
+
+  function loadSavedGame(id, room){
+    db.collection('saves').find({_id: ObjectId(id)}).toArray((err, result) => {
+       if (err) return console.log(err)
+       emitSaveToRoom(result, room);
+     })
+  }
+
+  function emitSaveToRoom(result, room){
+    var savesToSend = []
+    result.forEach(function(thing){
+      savesToSend.push(thing);
+    });
+
+    room.loadBlocks(savesToSend[0].blocks);
+    updateWorld(room.id);
+  }
+
   function updateWorld(roomId){
     var room = findRoom(roomId);
     io.sockets.in(roomId).emit("updateWorld", {blocks: room.gameController.getAllShapes()});
@@ -182,6 +241,7 @@ function sendMessage(roomId){
       rooms.splice(roomIndex, 1);
     }
     io.sockets.emit("list_of_games", listOfRooms());
+    loadSaves();
   }
 
   function findRoom(id){

@@ -22,11 +22,8 @@ document.addEventListener("DOMContentLoaded", function(){
     };
   })();
 
-
-
   function updateCenterPiece(){
     iso.canvas.clear();
-
     iso.add(Shape.Prism(new Point(0,0,0)).rotateZ(new Point(0.5,0.5,0), angle),new Color(0, 180, 180,0.3));
     iso.add(Shape.Cylinder(new Point(0.5,0.5), 0.5, 50, 1).rotateZ(new Point(0.5,0.5,0), angle),new Color(255,0,0,0.1));
     iso.add(Shape.Pyramid(new Point(0,0,0)).rotateZ(new Point(0.5,0.5,0), angle),new Color(255, 100, 0,0.3));
