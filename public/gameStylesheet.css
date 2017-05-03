@@ -9,6 +9,8 @@
 body{
   width: 100%;
   text-align: center;
+  background: url(colorBack2.png) bottom left no-repeat fixed, url(colorBack.png) top right no-repeat fixed;
+  background-size: 400px
 }
 
 #sessionDiv{
@@ -51,6 +53,7 @@ vertical-align: top;
 
 #navbarDiv
 {
+  font-size: 15px;
   padding-top: 20px;
   padding-right: 50px;
 }
