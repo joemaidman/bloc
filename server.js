@@ -25,13 +25,22 @@ connect = require('connect'),
 configDB = require('./config/database.js');
 require('./config/passport')(passport);
 var Message = require("./app/models/message.js");
-mongoose.connect(configDB.url);
+var dbUrl;
+if(process.env.PORT){
+  mongoose.connect(configDB.urlprod);
+  dbUrl = configDB.urlprod;
+}
+else{
+  mongoose.connect(configDB.urldev);
+  dbUrl = configDB.urldev;
+}
+
 const MongoStore = require('connect-mongo')(session);
 var sessionStore = new MongoStore({ mongooseConnection: mongoose.connection });
 var ObjectId = require('mongodb').ObjectID;
 var db;
 const MongoClient = require('mongodb').MongoClient
-MongoClient.connect(configDB.url, (err, database) => {
+MongoClient.connect(dbUrl, (err, database) => {
   if (err) return console.log(err)
   db = database
 })

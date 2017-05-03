@@ -1,5 +1,4 @@
 module.exports = {
-
-    'url' : 'mongodb://localhost/bloc_development' // looks like mongodb://<user>:<pass>@mongo.onmodulus.net:27017/Mikha4ot
-
+    'urldev' : 'mongodb://localhost/bloc_development',
+    'urlprod' : 'mongodb://ds137090.mlab.com:37090/heroku_3cs148ph'
 };
