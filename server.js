@@ -15,7 +15,7 @@ passport = require('passport'),
 passportSocketIo = require('passport.socketio')
 flash = require('connect-flash'),
 morgan = require('morgan'),
-
+require('dotenv').config();
 mongo = require('mongodb'),
 
 cookieParser = require('cookie-parser'),
@@ -25,15 +25,8 @@ connect = require('connect'),
 configDB = require('./config/database.js');
 require('./config/passport')(passport);
 var Message = require("./app/models/message.js");
-var dbUrl;
-if(process.env.PORT){
-  mongoose.connect(configDB.urlprod);
-  dbUrl = configDB.urlprod;
-}
-else{
-  mongoose.connect(configDB.urldev);
-  dbUrl = configDB.urldev;
-}
+var dbUrl = process.env.MONGODB_URI || configDB.url;
+mongoose.connect(dbUrl)
 
 const MongoStore = require('connect-mongo')(session);
 var sessionStore = new MongoStore({ mongooseConnection: mongoose.connection });

@@ -35,7 +35,7 @@ document.addEventListener("DOMContentLoaded", function(){
   var currentRotation = 0;
   var currentShapeType = 0;
   var saves;
-  var canvasBackgroundColor = "rgb(255, 255, 255)"
+  var canvasBackgroundColor = "rgb(255, 255, 255)";
 
 
   $("#gameDiv").hide();
@@ -434,13 +434,12 @@ document.addEventListener("DOMContentLoaded", function(){
     iso.add(Shape.Cylinder(new Point(block.xPos + 0.5, block.yPos + 0.5, block.zPos), 0.5, 10, 1),new Color(block.r,block.g,block.b), true, block.texture);
   }
 
-  function rotate(coordinates, degrees = 90){
-
-    var newCoordinates = calculateRotation((gridSize - 1)/2, (gridSize - 1)/2, coordinates.x, coordinates.y, degrees);
-    var x = Math.round(newCoordinates[0],0);
-    var y = Math.round(newCoordinates[1],0);
-    return {x: x, y: y};
-  }
+  // function rotate(coordinates, degrees = 90){
+  //   var newCoordinates = calculateRotation((gridSize - 1)/2, (gridSize - 1)/2, coordinates.x, coordinates.y, degrees);
+  //   var x = Math.round(newCoordinates[0],0);
+  //   var y = Math.round(newCoordinates[1],0);
+  //   return {x: x, y: y};
+  // }
 
   function sortBlocks(){
     blocks.sort(function(obj1, obj2){
@@ -448,14 +447,14 @@ document.addEventListener("DOMContentLoaded", function(){
     });
   }
 
-  function calculateRotation(cx, cy, x, y, angle) {
-    var radians = (Math.PI / 180) * angle,
-    cos = Math.cos(radians),
-    sin = Math.sin(radians),
-    nx = (cos * (x - cx)) + (sin * (y - cy)) + cx,
-    ny = (cos * (y - cy)) - (sin * (x - cx)) + cy;
-    return [nx, ny];
-  }
+  // function calculateRotation(cx, cy, x, y, angle) {
+  //   var radians = (Math.PI / 180) * angle,
+  //   cos = Math.cos(radians),
+  //   sin = Math.sin(radians),
+  //   nx = (cos * (x - cx)) + (sin * (y - cy)) + cx,
+  //   ny = (cos * (y - cy)) - (sin * (x - cx)) + cy;
+  //   return [nx, ny];
+  // }
 
   function isBelow(block){
     return block.zPos < z;
