@@ -125,10 +125,24 @@ io.sockets.on('connection', function(socket) {
       console.log("Unable to join a room that is full (player: " + socket.id +")");
     }
     else {
-      room.addPlayer(new Player(socket.id, socket.request.user.facebook.displayName));
+      var playerName;
+      if(socket.request.user.facebook.displayName){
+        playerName = socket.request.user.facebook.displayName;
+      }
+      else{
+        playerName = socket.request.user.local.displayName
+      }
+      room.addPlayer(new Player(socket.id, playerName));
       socket.join(room.getId());
+      var playerName;
+      if(socket.request.user.facebook.displayName){
+        playerName = socket.request.user.facebook.displayName;
+      }
+      else{
+        playerName = socket.request.user.local.displayName
+      }
       socket.emit('joined_game',{roomId:room.getId(), gameSize: room.gameController.game.getSize() + 1, blocks: room.gameController.getAllShapes()});
-      var message = new Message(systemPlayer, socket.request.user.facebook.displayName + " joined the room");
+      var message = new Message(systemPlayer, playerName + " joined the room");
       room.addMessage(message);
       sendMessage(roomId);
       console.log("Adding player " + room.getPlayers()[0].id + " to room " + room.getId());
@@ -231,7 +245,14 @@ function sendMessage(roomId){
     room.removePlayer(playerId);
     socket.leave(room.getId());
     console.log("Player " + socket.id + " left room: " + room.getId());
-    var message = new Message(systemPlayer, socket.request.user.facebook.displayName + " left the room");
+    var playerName;
+    if(socket.request.user.facebook.displayName){
+      playerName = socket.request.user.facebook.displayName;
+    }
+    else{
+      playerName = socket.request.user.local.displayName
+    }
+    var message = new Message(systemPlayer, playerName + " left the room");
     room.addMessage(message);
     sendMessage(roomId);
     if(room.getPlayerCount() === 0)

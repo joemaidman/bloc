@@ -544,7 +544,7 @@ document.addEventListener("DOMContentLoaded", function(){
         roomId = data.roomId;
         blocks = data.blocks;
         gridSize = data.gameSize;
-        gridSize === 11 ? gameScale = 34 : gameScale = 18;
+        gridSize === 11 ? gameScale = 30 : gameScale = 16;
         iso = new Isomer(canvas, { scale: gameScale, originY: canvas.height});
         $("#sessionDiv").hide();
         $("#gameDiv").show();
