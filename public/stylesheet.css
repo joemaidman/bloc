@@ -1,3 +1,7 @@
+html {
+   min-height: 100%;
+}
+
 h1 {
   font-family: 'merkurregular';
   font-size: 150px;
@@ -5,8 +9,7 @@ h1 {
 }
 body{
   background-image: url(background.jpg);
-  background-position: top;
-  background-size: 1300px 900px;
+  background-size: cover;
   background-repeat: no-repeat;
 
 }

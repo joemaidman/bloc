@@ -3,6 +3,8 @@
 <html>
 <head>
 
+  <link rel="stylesheet" type="text/css" href="fonts/fonts.css" />
+  <link rel="stylesheet" type="text/css" href="gameStylesheet.css" />
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css">
 
@@ -10,48 +12,26 @@
   <script src="client.js"></script>
   <script src="isomer.js"></script>
   <script src="jquery-3.2.1.min.js"></script>
+  <script src="spin.js"></script>
+
     <title>Bloc</title>
-    <style type="text/css">
-    body{
-    }
-    #display{
-      width: 10%;
-
-    }
-    .colourSelector{
-      padding-top: 10px;
-    }
-    .Row
-  {
-      display: table;
-      /*width: 38%; /*Optional*/*/
-      table-layout: fixed; /*Optional*/
-      border-spacing: 0px; /*Optional*/
-  }
-  .Column
-  {
-    vertical-align: top;
-      display: table-cell;
-      padding: 10px;
-  }
-
-  .Column-controls
-  {
-    vertical-align: top;
-      display: table-cell;
-      padding: 10px;
-      width: 10%;
-  }
-    </style>
 </head>
 <body>
  <nav class="navbar navbar-default">
-   <div class="navbar-header">
+   <div id="navbarCanvas" class="navbar-header navbar-left">
+     <canvas width="100px" height="120px" id="centerpiece"></canvas>
+   </div>
 
-   <p classs ="navbar-text"><% if (user.facebook.displayName){ %></p>
-  <strong>Welcome</strong>: <%= user.facebook.displayName %><br>  <a href="/logout" class="btn btn-default btn-sm navbar-btn ">Logout</a>
+   <div id="navbarTitle" class="navbar-header">
+     <p id="titleText" class = "navbar-text">Bloc </p>
+   </div>
+
+   <div id= "navbarDiv" class="navbar-header navbar-right">
+
+   <p class ="text-center navbar-text"><% if (user.facebook.displayName){ %></p>
+  <strong>Welcome</strong>: <%= user.facebook.displayName %><br>  <a href="/logout" class="btn btn-default btn-sm navbar-btn navbar-right">Logout</a>
   <% } else { %>
-    <strong>Welcome</strong>: <%= user.local.displayName %><br>  <a href="/logout" class="btn btn-default btn-sm navbar-btn">Logout</a>
+    <strong>Welcome</strong>: <%= user.local.displayName %><br>  <a href="/logout" class="btn btn-default btn-sm navbar-btn navbar-right">Logout</a>
     <% } %>
 </div>
 </nav>
