@@ -387,6 +387,25 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	  this.width = elem.width;
 	  this.height = elem.height;
+		this.woodImage = new Image();
+		this.woodImage.src = document.location.origin + "/wood" +".jpg";
+		this.waterImage = new Image();
+		this.waterImage.src = document.location.origin + "/water" +".jpg";
+		this.grassImage = new Image();
+		this.grassImage.src = document.location.origin + "/grass" +".jpg";
+		this.sandImage = new Image();
+		this.sandImage.src = document.location.origin + "/sand" +".jpg";
+		this.snowImage = new Image();
+		this.snowImage.src = document.location.origin + "/snow" +".jpg";
+		this.dirtImage = new Image();
+		this.dirtImage.src = document.location.origin + "/dirt" +".jpg";
+		this.stoneImage = new Image();
+		this.stoneImage.src = document.location.origin + "/stone" +".jpg";
+		this.iceImage = new Image();
+		this.iceImage.src = document.location.origin + "/ice" +".jpg";
+		this.oakImage = new Image();
+		this.oakImage.src = document.location.origin + "/oak" +".jpg";
+
 	}
 
 	Canvas.prototype.clear = function() {
@@ -407,9 +426,41 @@ return /******/ (function(modules) { // webpackBootstrap
 
 		this.ctx.globalAlpha = color.a;
 		if(isFace && isTexture){
-		 var img =new Image();
-		 img.src = document.location.origin + "/"+ isTexture +".jpg";
-		 var pattern = this.ctx.createPattern(img, "repeat");
+			var pattern
+			switch(isTexture){
+				case 'wood':
+					pattern = this.ctx.createPattern(this.woodImage, "repeat");
+				break;
+				case 'water':
+					pattern = this.ctx.createPattern(this.waterImage, "repeat");
+				break;
+				case 'grass':
+					pattern = this.ctx.createPattern(this.grassImage, "repeat");
+				break;
+				case 'sand':
+					pattern = this.ctx.createPattern(this.sandImage, "repeat");
+				break;
+				case 'snow':
+					pattern = this.ctx.createPattern(this.snowImage, "repeat");
+				break;
+				case 'dirt':
+					pattern = this.ctx.createPattern(this.dirtImage, "repeat");
+				break;
+				case 'stone':
+					pattern = this.ctx.createPattern(this.stoneImage, "repeat");
+				break;
+				case 'ice':
+					pattern = this.ctx.createPattern(this.iceImage, "repeat");
+				break;
+				case 'oak':
+					pattern = this.ctx.createPattern(this.oakImage, "repeat");
+				break;
+
+				default:
+					pattern = this.ctx.createPattern(this.woodImage, "repeat");
+
+			}
+
 		 this.ctx.fillStyle =  pattern;
      this.ctx.strokeStyle = color.toHex();
 	  }
