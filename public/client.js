@@ -592,6 +592,8 @@ document.addEventListener("DOMContentLoaded", function(){
       function leaveGame(){
         gameId = "";
         socket.emit('leaveRoom', roomId);
+        var div = $("#chat");
+        div.empty();
         blocks = [];
           $("#gameDiv").hide();
         $("#sessionDiv").fadeIn(1000);
