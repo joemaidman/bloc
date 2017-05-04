@@ -541,7 +541,6 @@ document.addEventListener("DOMContentLoaded", function(){
       });
 
       socket.on('joined_game', function (data){
-        blocks = [];
         roomId = data.roomId;
         blocks = data.blocks;
         gridSize = data.gameSize;
