@@ -29,7 +29,6 @@ document.addEventListener("DOMContentLoaded", function(){
     iso.add(Shape.Pyramid(new Point(0,0,0)).rotateZ(new Point(0.5,0.5,0), angle),new Color(255, 100, 0,0.3));
 
     angle += Math.PI / 90;
-    console.log(angle)
 
     requestAnimationFrame(updateCenterPiece);
   }

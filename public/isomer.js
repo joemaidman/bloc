@@ -408,7 +408,7 @@ return /******/ (function(modules) { // webpackBootstrap
 		this.ctx.globalAlpha = color.a;
 		if(isFace && isTexture){
 		 var img =new Image();
-		 img.src = "http://localhost:8080/"+ isTexture +".jpg";
+		 img.src = document.location.origin + "/"+ isTexture +".jpg";
 		 var pattern = this.ctx.createPattern(img, "repeat");
 		 this.ctx.fillStyle =  pattern;
      this.ctx.strokeStyle = color.toHex();

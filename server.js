@@ -309,7 +309,7 @@ function sendMessage(roomId){
     for(var i = 0; i < rooms.length; i++){
       var buttonStatus;
       rooms[i].isFull() ? buttonStatus = "disabled" : buttonStatus = "";
-      listString += "<li>" + rooms[i].getName() + " (" + rooms[i].getPlayerCount() + "/" + rooms[i].getLimit() + ")" + "<button " + " class ='joinButton' id='" + rooms[i].id  +  "' " + buttonStatus + ">Join</button>" +  "</li>";
+      listString += "<li>" + rooms[i].getName() + " (" + rooms[i].getPlayerCount() + "/" + rooms[i].getLimit() + ")" + "<button " + " class ='joinGame' id='" + rooms[i].id  +  "' " + buttonStatus + ">Join</button>" +  "</li>";
     }
     return listString;
   };

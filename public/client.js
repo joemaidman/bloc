@@ -87,7 +87,7 @@ document.addEventListener("DOMContentLoaded", function(){
     var saveId = $("#saves").val();
     socket.emit('new_game', {name: gameName, size: gridSize, roomLimit: roomLimit, saveId: saveId });
     $("#sessionDiv").hide();
-    $("#gameDiv").show();
+    $("#gameDiv").fadeIn(1000);
     iso = new Isomer(canvas, { scale: gameScale, originY: canvas.height });
     drawGridLines(gridSize,gridSize,0);
     drawOrigin();
@@ -534,7 +534,7 @@ document.addEventListener("DOMContentLoaded", function(){
 
       socket.on('list_of_games', function(data) {
         $("#listOfGames").html(data);
-        $(".joinButton").click(function(evt) {
+        $(".joinGame").click(function(evt) {
           var gameId = evt.target.id
           socket.emit('join_game', gameId);
         });
@@ -547,9 +547,10 @@ document.addEventListener("DOMContentLoaded", function(){
         gridSize === 11 ? gameScale = 30 : gameScale = 16;
         iso = new Isomer(canvas, { scale: gameScale, originY: canvas.height});
         $("#sessionDiv").hide();
-        $("#gameDiv").show();
+        $("#gameDiv").fadeIn(1000);
         drawGridLines(gridSize,gridSize,0);
         drawOrigin();
+        setupColorPicker();
         updateWorld(blocks);
       });
 
@@ -593,8 +594,9 @@ document.addEventListener("DOMContentLoaded", function(){
       function leaveGame(){
         gameId = "";
         socket.emit('leaveRoom', roomId);
-        $("#sessionDiv").show();
-        $("#gameDiv").hide();
+          $("#gameDiv").hide();
+        $("#sessionDiv").fadeIn(1000);
+
       }
 
     });
