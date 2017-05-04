@@ -541,6 +541,7 @@ document.addEventListener("DOMContentLoaded", function(){
       });
 
       socket.on('joined_game', function (data){
+        blocks = [];
         roomId = data.roomId;
         blocks = data.blocks;
         gridSize = data.gameSize;
@@ -593,6 +594,7 @@ document.addEventListener("DOMContentLoaded", function(){
 
       function leaveGame(){
         gameId = "";
+        blocks = [];
         socket.emit('leaveRoom', roomId);
           $("#gameDiv").hide();
         $("#sessionDiv").fadeIn(1000);
