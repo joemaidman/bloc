@@ -1,0 +1,300 @@
+#titleText{
+  font-family: 'merkurregular';
+  font-size: 85px;
+  margin: 0px;
+  color: black;
+  text-align: center;
+}
+
+body{
+  width: 100%;
+  text-align: center;
+  background: url(colorBack2.png) bottom left no-repeat fixed, url(colorBack.png) top right no-repeat fixed;
+  background-size: 400px
+}
+
+ul{
+  list-style-type: none;
+}
+
+#sessionDiv{
+  padding: 10px;
+  display: inline-block;
+
+}
+#newGameText{
+    font-family: 'merkurregular';
+    font-size: 45px;
+}
+
+#joinGameText{
+      font-family: 'merkurregular';
+      font-size: 45px;
+
+}
+
+#newGame{
+  background: rgb(51, 51, 51);
+  border-color: rgb(46,9,9);
+  color: rgb(250, 242, 242);
+  border-radius: 8px;
+  font-size: 30px
+}
+#newGame:hover{
+  background: rgb(51, 51, 51);
+  border-color: rgb(46,9,9);
+  color: rgb(0,255,0);
+  border-radius: 8px;
+  font-size: 30px
+}
+
+#inputGridSize{
+  background: rgb(51, 51, 51);
+  border-color: rgb(46,9,9);
+  color: rgb(250, 242, 242);
+  border-radius: 8px;
+}
+
+#saves{
+  background: rgb(51, 51, 51);
+  border-color: rgb(46,9,9);
+  color: rgb(250, 242, 242);
+  border-radius: 8px;
+}
+.joinGame{
+  background: rgb(51, 51, 51);
+  border-color: rgb(46,9,9);
+  color: rgb(250, 242, 242);
+  border-radius: 8px;
+}
+
+#gameDiv{
+  padding: 10px;
+}
+
+#display{
+  width: 70%;
+
+}
+#red{
+  margin-right: 5px;
+}
+#blue{
+  margin-left: 5px;
+}
+
+.colourSelector{
+  padding-top: 10px;
+  padding-left: 10px;
+  padding-right: 10px
+}
+.Row
+{
+  display: table;
+  /*width: 38%; /*Optional*/*/
+  table-layout: fixed; /*Optional*/
+  border-spacing: 0px; /*Optional*/
+}
+.Column
+{
+vertical-align: top;
+  display: table-cell;
+  padding: 10px;
+}
+
+.Column-controls
+{
+vertical-align: top;
+  display: table-cell;
+  padding: 10px;
+  width: 10%;
+}
+
+
+
+#shapeType{
+  background: rgb(51, 51, 51);
+  border-color: rgb(46,9,9);
+  color: rgb(250, 242, 242);
+  border-radius: 8px;
+}
+#shapeType:hover{
+  background: rgb(51, 51, 51);
+  border-color: rgb(46,9,9);
+color: rgb(255, 0, 0);
+}
+
+#texture{
+  background: rgb(51, 51, 51);
+  border-color: rgb(46,9,9);
+  color: rgb(250, 242, 242);
+  border-radius: 8px;
+}
+#texture:hover{
+  background: rgb(51, 51, 51);
+  border-color: rgb(46,9,9);
+color: rgb(255, 0, 0);
+}
+
+#clear{
+  background: rgb(51, 51, 51);
+  border-color: rgb(46,9,9);
+  color: rgb(250, 242, 242);
+  border-radius: 8px;
+}
+#clear:hover{
+  background: rgb(51, 51, 51);
+  border-color: rgb(46,9,9);
+color: rgb(255, 0, 0);
+}
+
+#toggleGridlines{
+  background: rgb(51, 51, 51);
+  border-color: rgb(46,9,9);
+  color: rgb(250, 242, 242);
+  border-radius: 8px;
+}
+#toggleGridlines:hover{
+  background: rgb(51, 51, 51);
+  color: rgb(0,255, 0);
+  border-color: rgb(46,9,9);
+}
+
+#toggleFloor{
+  background: rgb(51, 51, 51);
+  border-color: rgb(46,9,9);
+  color: rgb(250, 242, 242);
+  border-radius: 8px;
+}
+#toggleFloor:hover{
+  background: rgb(51, 51, 51);
+  border-color: rgb(46,9,9);
+  color: rgb(0,255, 0);
+}
+
+#toggleBuildGrid{
+  background: rgb(51, 51, 51);
+  border-color: rgb(46,9,9);
+  color: rgb(250, 242, 242);
+  border-radius: 8px;
+}
+#toggleBuildGrid:hover{
+  background: rgb(51, 51, 51);
+  border-color: rgb(46,9,9);
+  color: rgb(0,255, 0);
+}
+
+#changeGridlinecolour{
+  background: rgb(51, 51, 51);
+  border-color: rgb(46,9,9);
+  color: rgb(250, 242, 242);
+  border-radius: 8px;
+}
+#changeGridlinecolour:hover{
+  background: rgb(51, 51, 51);
+  border-color: rgb(46,9,9);
+  color: rgb(60, 204, 240);
+}
+
+#changeCanvasColour{
+  background: rgb(51, 51, 51);
+  border-color: rgb(46,9,9);
+  color: rgb(250, 242, 242);
+  border-radius: 8px;
+}
+#changeCanvasColour:hover{
+  background: rgb(51, 51, 51);
+  border-color: rgb(46,9,9);
+  color: rgb(60, 204, 240);
+}
+
+#changeFloorColour{
+  background: rgb(51, 51, 51);
+
+  border-color: rgb(46,9,9);
+  color: rgb(250, 242, 242);
+  border-radius: 8px;
+}
+#changeFloorColour:hover{
+  background: rgb(51, 51, 51);
+  color: rgb(60, 204, 240);
+}
+
+#changeBuildGridColour{
+  background: rgb(51, 51, 51);
+    border-color: rgb(46,9,9);
+  color: rgb(250, 242, 242);
+  border-radius: 8px;
+}
+#changeBuildGridColour:hover{
+  background: rgb(51, 51, 51);
+  border-color: rgb(46,9,9);
+  color: rgb(60, 204, 240);
+}
+
+#saveCanvas{
+  background-color: Transparent;
+  background-repeat: no-repeat;
+  border: none;
+  overflow: hidden;
+  outline: none;
+  text-decoration: none;
+  color: inherit;
+}
+#saveGame{
+  background-color: Transparent;
+  background-repeat: no-repeat;
+  border: none;
+  overflow: hidden;
+  outline: none;
+}
+
+#rotate{
+  background: rgb(51, 51, 51);
+    border-color: rgb(46,9,9);
+    color: rgb(250, 242, 242);
+    border-radius: 8px;
+
+}
+
+#rotate:hover{
+  background: rgb(51, 51, 51);
+  border-color: rgb(46,9,9);
+color: rgb(255, 0, 0);
+}
+
+#leaveGame{
+  background-color: Transparent;
+  background-repeat: no-repeat;
+  border: none;
+  overflow: hidden;
+  outline: none;
+}
+
+#build{
+  font-family:"merkurregular";
+  font-size: 40px;
+}
+
+#interface{
+  font-family:"merkurregular";
+  font-size: 40px;
+}
+
+#colours{
+  font-family:"merkurregular";
+  font-size: 40px;
+}
+
+#game{
+  font-family:"merkurregular";
+  font-size: 40px;
+}
+
+
+#navbarDiv
+{
+  font-size: 15px;
+  padding-top: 20px;
+  padding-right: 50px;
+}
