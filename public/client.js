@@ -593,7 +593,7 @@ document.addEventListener("DOMContentLoaded", function(){
 
       function leaveGame(){
         gameId = "";
-        blocks = [];
+      
         socket.emit('leaveRoom', roomId);
           $("#gameDiv").hide();
         $("#sessionDiv").fadeIn(1000);
