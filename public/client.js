@@ -54,7 +54,7 @@ document.addEventListener("DOMContentLoaded", function(){
     document.getElementById('red').value = RandomColour()
     document.getElementById('green').value = RandomColour()
     document.getElementById('blue').value = RandomColour()
-    setColour()
+    setColour();
   }
 
   function setColour() {
