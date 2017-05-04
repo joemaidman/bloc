@@ -231,7 +231,7 @@ document.addEventListener("DOMContentLoaded", function(){
       highlightGrid = gridPos;
       drawWorld();
       var message = "Grid: x : " + gridPos.x + ", y: " + gridPos.y+ ", z: " + z;
-      writeMessage(message, "positionDiv");
+      // writeMessage(message, "positionDiv");
     }
   });
 
@@ -542,7 +542,6 @@ document.addEventListener("DOMContentLoaded", function(){
 
       socket.on('joined_game', function (data){
         roomId = data.roomId;
-        blocks = data.blocks;
         gridSize = data.gameSize;
         gridSize === 11 ? gameScale = 30 : gameScale = 16;
         iso = new Isomer(canvas, { scale: gameScale, originY: canvas.height});
@@ -551,7 +550,6 @@ document.addEventListener("DOMContentLoaded", function(){
         drawGridLines(gridSize,gridSize,0);
         drawOrigin();
         setupColorPicker();
-        updateWorld(blocks);
       });
 
       socket.on('new_game_id', function (data){
@@ -593,7 +591,7 @@ document.addEventListener("DOMContentLoaded", function(){
 
       function leaveGame(){
         gameId = "";
-      
+
         socket.emit('leaveRoom', roomId);
           $("#gameDiv").hide();
         $("#sessionDiv").fadeIn(1000);

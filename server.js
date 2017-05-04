@@ -150,7 +150,9 @@ io.sockets.on('connection', function(socket) {
       else{
         playerName = socket.request.user.local.displayName
       }
-      socket.emit('joined_game',{roomId:room.getId(), gameSize: room.gameController.game.getSize() + 1, blocks: room.gameController.getAllShapes()});
+
+      socket.emit('joined_game',{roomId:room.getId(), gameSize: room.gameController.game.getSize() + 1});
+      updateWorld(room.getId());
       var message = new Message(systemPlayer, playerName + " joined the room");
       room.addMessage(message);
       sendMessage(roomId);
