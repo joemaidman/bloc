@@ -166,15 +166,19 @@ app.use(session({
 
     socket.on('newMessage', function(data) {
       var room = findRoom(data.roomId);
+      if(room){
       var player = room.getPlayerById(socket.id);
       var message = new Message(player, data.message);
       room.addMessage(message);
       sendMessage(data.roomId);
+    }
     })
 
     function sendMessage(roomId){
       var room = findRoom(roomId);
+      if(room){
       io.sockets.in(roomId).emit("updateChat", room.getMessages()[room.getMessages().length - 1]);
+    }
     }
 
 
@@ -196,8 +200,10 @@ app.use(session({
 
     socket.on('clearBlocks', function (data) {
       var room = findRoom(data);
+      if(room){
       room.gameController.resetWorld();
       updateWorld(room.getId());
+    }
     });
 
     socket.on('disconnect', function () {
@@ -250,7 +256,9 @@ app.use(session({
 
     function updateWorld(roomId){
       var room = findRoom(roomId);
-      io.sockets.in(roomId).emit("updateWorld", {blocks: room.gameController.getAllShapes()});
+      if(room){
+              io.sockets.in(roomId).emit("updateWorld", {blocks: room.gameController.getAllShapes()});
+            }
     }
 
     function leaveRoom(roomId, playerId){
