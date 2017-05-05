@@ -37,102 +37,102 @@
         </div>
       </nav>
       <div class ="container">
-      <div id="sessionDiv">
-        <h3 id="newGameText"> New game </h3>
-        Name<input type="text" id="newGameName"><br/><br/>
-        Grid size
-        <select id="inputGridSize">
-          <option value="small">Small</option>
-          <option value="large">Large</option>
-        </select>
-        Player limit
-        <input type="number" id="roomLimit" min="0" max="10" step="1" value="2">
-        Starting world
-        <select id="saves">
-          <option value="0">No saves</option>
-        </select><br/><br/>
+        <div id="sessionDiv">
+          <h3 id="newGameText"> New game </h3>
+          Name<input type="text" id="newGameName"><br/><br/>
+          Grid size
+          <select id="inputGridSize">
+            <option value="small">Small</option>
+            <option value="large">Large</option>
+          </select>
+          Player limit
+          <input type="number" id="roomLimit" min="0" max="10" step="1" value="2">
+          Starting world
+          <select id="saves">
+            <option value="0">No saves</option>
+          </select><br/><br/>
           <button id="newGame">Start</button>
-        <h3 id="joinGameText"> Join a game </h3>
-        <div><ul id="listOfGames"></ul></div>
-
-      </div>
-      <div class="Row" id="gameDiv">
-        <div class="col-sm-7" style="border: 2px black solid;border-radius:5px;background:white;">
-          <div>
-
-            <canvas id="canvas" width="600px" height="660px" ></canvas>
-          </div>
+          <h3 id="joinGameText"> Join a game </h3>
+          <div><ul id="listOfGames"></ul></div>
 
         </div>
-        <div class="col-sm-5">
+        <div class="Row" id="gameDiv">
+          <div class="col-sm-7" style="border: 2px black solid;border-radius:5px;background:white;">
+            <div>
 
-          <div id="controls" style="border: 2px black solid;border-radius:5px;background:#e6e6e6;">
-             <!-- <div id="blockDiv">Block Count</div> -->
+              <canvas id="canvas" width="600px" height="660px" ></canvas>
+            </div>
+
+          </div>
+          <div class="col-sm-5">
+
+            <div id="controls" style="border: 2px black solid;border-radius:5px;background:#e6e6e6;">
+              <!-- <div id="blockDiv">Block Count</div> -->
               <div id= "build">Build</div>
-               <b>| ↑ ↓ = move the build grid up and down | ← → = rotate the world | Left click = Place shape | Right click = Remove shape | </b>
-            <select id="shapeType" data-toggle="tooltip" data-placement="right" title= "Choose a block type ">
-              <option value="0">Cube</option>
-              <option value="1">Pyramid</option>
-              <option value="2">Cylinder</option>
-            </select>
-            <select id="texture"data-toggle="tooltip" data-placement="right" title= "Choose a colour or texture">
-              <option value="">Plain colour</option>
-              <option value="wood">Wood</option>
-              <option value="water">Water</option>
-              <option value="grass">Grass</option>
-              <option value="sand">Sand</option>
-              <option value="snow">Snow</option>
-              <option value="dirt">Dirt</option>
-              <option value="stone">Stone</option>
-              <option value="ice">Ice</option>
-              <option value="log_oak">Oak</option>
-            </select>
-            <button  id="rotate" class="fa fa-repeat fa-1x" data-toggle="tooltip" data-placement="right" title= "Rotate" ></button>
-            <button id="clear"  class= "fa fa-bomb fa-1x" data-toggle="tooltip" data-placement="right" title= "Clear blocks"> </button>
-                        <div class = "colourSelector">
-                          <label style="float:left;">R</label>
-                          <input type="range" min="0" max="255" step="1" id="red" style="width:120px;float:left;"></input>
+              <b>| ↑ ↓ = move the build grid up and down | ← → = rotate the world | Left click = Place shape | Right click = Remove shape | </b>
+              <select id="shapeType" data-toggle="tooltip" data-placement="right" title= "Choose a block type ">
+                <option value="0">Cube</option>
+                <option value="1">Pyramid</option>
+                <option value="2">Cylinder</option>
+              </select>
+              <select id="texture"data-toggle="tooltip" data-placement="right" title= "Choose a colour or texture">
+                <option value="">Plain colour</option>
+                <option value="dirt">Dirt</option>
+                <option value="grass">Grass</option>
+                <option value="ice">Ice</option>
+                <option value="oak">Oak</option>
+                <option value="sand">Sand</option>
+                <option value="snow">Snow</option>
+                <option value="water">Water</option>
+                <option value="stone">Stone</option>
+                <option value="wood">Wood</option>
+              </select>
+              <button  id="rotate" class="fa fa-repeat fa-1x" data-toggle="tooltip" data-placement="right" title= "Rotate" ></button>
+              <button id="clear"  class= "fa fa-bomb fa-1x" data-toggle="tooltip" data-placement="right" title= "Clear blocks"> </button>
+              <div class = "colourSelector">
+                <label style="float:left;">R</label>
+                <input type="range" min="0" max="255" step="1" id="red" style="width:120px;float:left;"></input>
 
-                          <label style="float:left;">G</label>
-                          <input type="range" min="0" max="255" step="1" id="green" style="width:120px;float:left;"></input>
-                          <label style="float:left;">B</label>
-                          <input type="range" min="0" max="255" step="1" id="blue" style="width:120px;float:left;"></input>
-                          <input id="display" type="block"  disabled>
-                        </div>
+                <label style="float:left;">G</label>
+                <input type="range" min="0" max="255" step="1" id="green" style="width:120px;float:left;"></input>
+                <label style="float:left;">B</label>
+                <input type="range" min="0" max="255" step="1" id="blue" style="width:120px;float:left;"></input>
+                <input id="display" type="block"  disabled>
+              </div>
               <div id= "interface">Interface</div>
-            <button id="toggleGridlines"   data-toggle="tooltip" data-placement="right" title= "Turn grid walls on and off" > Grid walls </button>
-            <button id="toggleFloor"   data-toggle="tooltip" data-placement="right" title= "Turn grid floor on and off"> Grid floor </button>
-            <button id="toggleBuildGrid"   data-toggle="tooltip" data-placement="right" title= "Turn grid build floor on and off"> Build grid</button>
+              <button id="toggleGridlines"   data-toggle="tooltip" data-placement="right" title= "Turn grid walls on and off" > Grid walls </button>
+              <button id="toggleFloor"   data-toggle="tooltip" data-placement="right" title= "Turn grid floor on and off"> Grid floor </button>
+              <button id="toggleBuildGrid"   data-toggle="tooltip" data-placement="right" title= "Turn grid build floor on and off"> Build grid</button>
               <div id= "colours">Colours</div>
-            <button id="changeGridlinecolour"  data-toggle="tooltip" data-placement="right" title="Change grid wall colour">Grid wall  </button>
-            <button id="changeCanvasColour" data-toggle="tooltip" data-placement="right" title="Change background colour">Background </button>
-            <button id="changeFloorColour"  data-toggle="tooltip" data-placement="right" title="Change grid floor colour"> Grid floor </button><br/><br/>
-            <button id="changeBuildGridColour"  data-toggle="tooltip" data-placement="right" title="Change grid build floor colour"> Grid build floor </button><br/>
-            <div id= "game">Game</div>
-            <button id="saveGame" class="fa fa-floppy-o fa-3x" aria-hidden="true" data-toggle="tooltip" data-placement="right" title="Save game"></button>
-            <a id="saveCanvas" class="fa fa-camera-retro fa-3x" aria-hidden="true" data-toggle="tooltip" data-placement="right" title="Save game as image" ></a>
+              <button id="changeGridlinecolour"  data-toggle="tooltip" data-placement="right" title="Change grid wall colour">Grid wall  </button>
+              <button id="changeCanvasColour" data-toggle="tooltip" data-placement="right" title="Change background colour">Background </button>
+              <button id="changeFloorColour"  data-toggle="tooltip" data-placement="right" title="Change grid floor colour"> Grid floor </button><br/><br/>
+              <button id="changeBuildGridColour"  data-toggle="tooltip" data-placement="right" title="Change grid build floor colour"> Grid build floor </button><br/>
+              <div id= "game">Game</div>
+              <button id="saveGame" class="fa fa-floppy-o fa-3x" aria-hidden="true" data-toggle="tooltip" data-placement="right" title="Save game"></button>
+              <a id="saveCanvas" class="fa fa-camera-retro fa-3x" aria-hidden="true" data-toggle="tooltip" data-placement="right" title="Save game as image" ></a>
 
 
-            <button id="leaveGame" class="fa fa-sign-out fa-3x" aria-hidden="true" data-toggle="tooltip" data-placement="right" title="Leave game"></button><br/><br/>
+              <button id="leaveGame" class="fa fa-sign-out fa-3x" aria-hidden="true" data-toggle="tooltip" data-placement="right" title="Leave game"></button><br/><br/>
 
-          </div>
-          <div style="padding-top:5px;padding-bottom:5px;text-align:left;">
-          <div id="chat" style="border: 2px black solid;border-radius:5px; overflow:auto; height: 100px;">
-          </div>
+            </div>
+            <div style="padding-top:5px;padding-bottom:5px;text-align:left;">
+              <div id="chat" style="border: 2px black solid;border-radius:5px; overflow:auto; height: 100px;">
+              </div>
 
-          <div class="row">
-              <div class="col-lg-12">
-                <div class="input-group">
-                  <input id="text" type="text" class="form-control" placeholder="Type a message...">
-                  <span class="input-group-btn">
-                    <button class="btn btn-default" id=sendMessage type="button">Send</button>
-                  </span>
+              <div class="row">
+                <div class="col-lg-12">
+                  <div class="input-group">
+                    <input id="text" type="text" class="form-control" placeholder="Type a message...">
+                    <span class="input-group-btn">
+                      <button class="btn btn-default" id=sendMessage type="button">Send</button>
+                    </span>
+                  </div>
                 </div>
               </div>
+            </div>
           </div>
-         </div>
+
+
         </div>
-
-
       </div>
-    </div>
