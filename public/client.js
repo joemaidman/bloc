@@ -490,7 +490,7 @@ document.addEventListener("DOMContentLoaded", function(){
           drawGridLines(gridSize,gridSize,z,bgridr,bgridg, bgridb);
           drawOrigin(bgridr,bgridg, bgridb,1, z);}
           drewBuildGrid = true;
-          writeMessage("Block Count: 0", "blockDiv");
+          // writeMessage("Block Count: 0", "blockDiv");
         }
         else{
 
@@ -503,7 +503,7 @@ document.addEventListener("DOMContentLoaded", function(){
             drawOrigin(bgridr,bgridg, bgridb,1, z);}
             drawSomeBlocks(overBlocks);
             drewBuildGrid = true;
-            writeMessage("Block Count: " + blocks.length, "blockDiv");
+            // writeMessage("Block Count: " + blocks.length, "blockDiv");
           }
         }
         if(drewBuildGrid === false && showBuildGrid){

@@ -524,6 +524,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  newColor.l = Math.min(newColor.l + percentage, 1);
 
 	  newColor.loadRGB();
+
 	  return newColor;
 	};
 

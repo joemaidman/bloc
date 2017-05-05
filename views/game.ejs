@@ -29,7 +29,6 @@
     </div>
 
     <div id= "navbarDiv" class="navbar-header navbar-right">
-
       <p class ="text-center navbar-text"><% if (user.facebook.displayName){ %></p>
         <strong>Welcome</strong>: <%= user.facebook.displayName %><br>  <a href="/logout" class="btn btn-default btn-sm navbar-btn navbar-right">Logout</a>
         <% } else { %>
@@ -40,7 +39,7 @@
       <div class ="container">
       <div id="sessionDiv">
         <h3 id="newGameText"> New game </h3>
-        Name<input type="text" id="newGameName">
+        Name<input type="text" id="newGameName"><br/><br/>
         Grid size
         <select id="inputGridSize">
           <option value="small">Small</option>
@@ -68,8 +67,9 @@
         <div class="col-sm-5">
 
           <div id="controls" style="border: 2px black solid;border-radius:5px;background:#e6e6e6;">
-             <div id="blockDiv">Block Count</div>
+             <!-- <div id="blockDiv">Block Count</div> -->
               <div id= "build">Build</div>
+               <b>| ↑ ↓ = move the build grid up and down | ← → = rotate the world | Left click = Place shape | Right click = Remove shape | </b>
             <select id="shapeType" data-toggle="tooltip" data-placement="right" title= "Choose a block type ">
               <option value="0">Cube</option>
               <option value="1">Pyramid</option>
@@ -117,7 +117,7 @@
 
           </div>
           <div style="padding-top:5px;padding-bottom:5px;text-align:left;">
-          <div id="chat" style="border: 2px black solid;border-radius:5px; overflow:auto; height: 120px;">
+          <div id="chat" style="border: 2px black solid;border-radius:5px; overflow:auto; height: 100px;">
           </div>
 
           <div class="row">
