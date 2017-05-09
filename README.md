@@ -59,6 +59,7 @@ I want to have a red, green and blue value
 **Frontend**
 - Bootstrap: a front-end web framework for designing websites
 - Socket.io: a JavaScript library that allows for realtime communication between web clients and servers
+- isomer.js : an isometric graphics library for HTML5 canvas
 
 **Database & authentication**
 - MongoDB: an open source database that uses a document-oriented data model
