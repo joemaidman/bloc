@@ -1,7 +1,6 @@
 # Bloc [![Build Status](https://travis-ci.org/joemaidman/bloc.svg?branch=master)](https://travis-ci.org/joemaidman/bloc) [![Code Climate GPA](https://codeclimate.com/github/joemaidman/bloc/badges/gpa.svg)](https://codeclimate.com/github/joemaidman/bloc) [![Code Climate Coverage](https://codeclimate.com/github/joemaidman/bloc/badges/coverage.svg)](https://codeclimate.com/github/joemaidman/bloc)
 
-[Logo](https://github.com/joemaidman/bloc/blob/master/screenshots/logo.png)
-
+![Logo](https://github.com/joemaidman/bloc/blob/master/screenshots/logo.png)
 Bloc is a full stack, isometric, multiplayer building game built with node.js and web sockets.
 
 # User stories
@@ -13,18 +12,18 @@ Bloc is a full stack, isometric, multiplayer building game built with node.js an
 ## Screenshots
 **Homepage**
 
-![home](https://github.com/joemaidman/chitter-challenge/blob/master/screenshots/peeps.png)
+![home]()
 
 **A small game**
 
-![A small game with two players](https://github.com/joemaidman/chitter-challenge/blob/master/screenshots/profile.png)
+![A small game with two players]()
 
 **A large game**
-![A large game with two players](https://github.com/joemaidman/chitter-challenge/blob/master/screenshots/peep.png)
+![A large game with two players]()
 
 **A complete build**
 
-![reply](https://github.com/joemaidman/chitter-challenge/blob/master/screenshots/replies.png)
+![reply]()
 
 ## Technologies & tools
 **Backend**
