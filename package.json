@@ -5,8 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "istanbul cover --report lcov --report json --report text --report html _mocha -- -r ./test/testConfig.js test/**/*-test.js",
-    "build": "webpack",
-    "karma": "karma start my.conf.js"
+    "build": "webpack"
   },
   "author": "Sophie McLean, Joe Maidman, Ryan Chu, Christos Paraskeva",
   "license": "ISC",
