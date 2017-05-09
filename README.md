@@ -3,7 +3,9 @@
 ![Logo](https://github.com/joemaidman/bloc/blob/master/screenshots/logo.png)
 Bloc is a full stack, isometric, multiplayer building game inspired by lego and Minecraft.
 
-It is a full stack javascript app built with Node.js and Socket-io. The game is live at https://bloc-game.herokuapp.com.
+It is a full stack javascript app built with Node.js and Socket-io.
+
+The game is live and can be played at https://bloc-game.herokuapp.com
 
 
 # User stories
