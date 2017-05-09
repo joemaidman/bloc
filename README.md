@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/joemaidman/bloc.svg?branch=master)](https://travis-ci.org/joemaidman/bloc) [![Code Climate GPA](https://codeclimate.com/github/joemaidman/bloc/badges/gpa.svg)](https://codeclimate.com/github/joemaidman/bloc) [![Code Climate Coverage](https://codeclimate.com/github/joemaidman/bloc/badges/coverage.svg)](https://codeclimate.com/github/joemaidman/bloc)
+[![Build Status](https://travis-ci.org/joemaidman/bloc.svg?branch=master)](https://travis-ci.org/joemaidman/bloc) [![Code Climate Coverage](https://codeclimate.com/github/joemaidman/bloc/badges/coverage.svg)](https://codeclimate.com/github/joemaidman/bloc)
 
 ![Logo](https://github.com/joemaidman/bloc/blob/master/screenshots/logo.png)
 Bloc is a full stack, isometric, multiplayer building game inspired by lego and Minecraft.
@@ -46,7 +46,7 @@ I want to have a red, green and blue value
 
 **A complete build**
 
-![A complete build](https://github.com/joemaidman/bloc/blob/master/screenshots/completehs.png)
+![A complete build](https://github.com/joemaidman/bloc/blob/master/screenshots/complete.png)
 
 ## Technologies & tools
 **Backend**
