@@ -46,9 +46,8 @@ I want to have a red, green and blue value
 **A large game**
 ![A large game with two players](https://github.com/joemaidman/bloc/blob/master/screenshots/large.png)
 
-**A complete build**
-
-![A complete build](https://github.com/joemaidman/bloc/blob/master/screenshots/complete.png)
+**Demo video**
+[![Bloc](https://github.com/joemaidman/bloc/blob/master/screenshots/demo.png)](https://www.youtube.com/watch?v=cgpoHxR8JlA&feature=youtu.be)
 
 ## Technologies & tools
 **Backend**
