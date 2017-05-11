@@ -45,5 +45,4 @@ describe("Shape", function(){
     expect(shape.getType()).to.eq(1);
   });
 
-
 });

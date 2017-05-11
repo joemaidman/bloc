@@ -29,6 +29,9 @@ GameDouble.prototype = {
   },
   clearShapes: function(){
     return true;
+  },
+  getSize: function(){
+    return true;
   }
 };
 
@@ -70,6 +73,12 @@ describe("GameController", function(){
     var resetSpy = sinon.spy(gameDouble, "clearShapes");
     gameController.resetWorld();
     expect(resetSpy).to.have.been.calledOnce;
+  });
+
+  it(".getGameSize calls getSize on game", function(){
+    var sizeDouble = sinon.spy(gameDouble, "getSize");
+    gameController.getGameSize();
+    expect(sizeDouble).to.have.been.calledOnce;
   });
 
 });

@@ -20,6 +20,9 @@ GameController.prototype = {
   },
   resetWorld: function(){
     this.game.clearShapes();
+  },
+  getGameSize: function(){
+    return this.game.getSize();
   }
 };
 

@@ -5,12 +5,9 @@ html {
 h1 {
   font-family: 'merkurregular';
   font-size: 150px;
-
 }
 body{
   background-image: url(background.jpg);
   background-size: cover;
   background-repeat: no-repeat;
-  
-
 }

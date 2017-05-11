@@ -8,7 +8,6 @@ function GameDouble() {
 
 GameDouble.prototype = {
   createShape: function(){
-
   }
 };
 
