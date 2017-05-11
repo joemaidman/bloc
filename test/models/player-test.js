@@ -21,5 +21,4 @@ describe("Player", function(){
     expect(player.getName()).to.eql("Timmy");
   });
 
-
 });

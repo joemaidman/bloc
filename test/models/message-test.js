@@ -44,7 +44,7 @@ describe("Message", function(){
   });
 
   afterEach(function(){
-     timekeeper.reset();
-   });
+    timekeeper.reset();
+  });
 
 });

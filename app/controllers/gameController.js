@@ -1,4 +1,5 @@
 "strict mode";
+
 var GameView = require('../views/gameView.js');
 var Game = require('../models/game.js');
 var Shape = require('../models/shape.js');
