@@ -4,7 +4,8 @@
   "description": "Multiplayer isometric building game",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon server.js",
+    "start": "node server.js",
+    "devstart": "nodemon server.js",
     "test": "istanbul cover --report lcov --report json --report text --report html _mocha -- -r ./test/testConfig.js test/**/*-test.js",
     "build": "webpack"
   },
