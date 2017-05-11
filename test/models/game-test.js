@@ -99,6 +99,7 @@ describe("Game", function(){
     game.addShape(shapeDoubleFour);
     expect(game.getShapes()).to.eql([shapeDoubleOne]);
   });
+
   it("can return the game size", function(){
     expect(game.getSize()).to.eql(10);
   });

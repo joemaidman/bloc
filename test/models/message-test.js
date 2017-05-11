@@ -16,7 +16,6 @@ PlayerDouble.prototype = {
   }
 };
 
-
 describe("Message", function(){
   var message;
   var player;

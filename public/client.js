@@ -37,14 +37,13 @@ document.addEventListener("DOMContentLoaded", function(){
   var saves;
   var canvasBackgroundColor = "rgb(255, 255, 255)"
 
-
-  $("#gameDiv").hide();
-
   //UI setup
+  $("#gameDiv").hide();
 
   $('#shapeType').change(function(){
     currentShapeType = parseInt($("#shapeType option:selected").val());
   })
+
   function setupColorPicker(){
     for(var i = 0; i < input.length; i++){
       input[i].addEventListener("input",function(){
@@ -70,7 +69,7 @@ document.addEventListener("DOMContentLoaded", function(){
   document.getElementById('red').value = RandomColour()
   document.getElementById('green').value = RandomColour()
   document.getElementById('blue').value = RandomColour()
-  //UI element event listeners
+
   function drawBackground(){
     var ctx = canvas.getContext("2d");
     ctx.fillStyle = canvasBackgroundColor;
@@ -474,7 +473,6 @@ document.addEventListener("DOMContentLoaded", function(){
     drawBackground();
     if(showGridlines){
       drawWalls(gridSize,gridSize,gridSize,gridr, gridg, gridb,1);
-
     }
 
     if(showFloor){
@@ -490,7 +488,6 @@ document.addEventListener("DOMContentLoaded", function(){
           drawGridLines(gridSize,gridSize,z,bgridr,bgridg, bgridb);
           drawOrigin(bgridr,bgridg, bgridb,1, z);}
           drewBuildGrid = true;
-          // writeMessage("Block Count: 0", "blockDiv");
         }
         else{
 
@@ -503,7 +500,6 @@ document.addEventListener("DOMContentLoaded", function(){
             drawOrigin(bgridr,bgridg, bgridb,1, z);}
             drawSomeBlocks(overBlocks);
             drewBuildGrid = true;
-            // writeMessage("Block Count: " + blocks.length, "blockDiv");
           }
         }
         if(drewBuildGrid === false && showBuildGrid){
@@ -513,91 +509,90 @@ document.addEventListener("DOMContentLoaded", function(){
         drawHighlight();
       }
 
-      function downloadCanvas(link) {
-        link.href = canvas.toDataURL();
-        link.download = 'bloc' + new Date() + '.png';
-      }
+  function downloadCanvas(link) {
+    link.href = canvas.toDataURL();
+    link.download = 'bloc' + new Date() + '.png';
+  }
 
-      // Socket receive events
-      socket.on('updateWorld', function (data) {
-        updateWorld(data);
-      });
+  // Socket receive events
+  socket.on('updateWorld', function (data) {
+    updateWorld(data);
+  });
 
-      function updateWorld(data){
-        blocks = data.blocks;
-        if(blocks){
-          rotateAllBlocks(currentRotation);
-          sortBlocks();
-        }
-        drawWorld();
-      }
+  function updateWorld(data){
+    blocks = data.blocks;
+    if(blocks){
+      rotateAllBlocks(currentRotation);
+      sortBlocks();
+    }
+    drawWorld();
+  }
 
-      socket.on('list_of_games', function(data) {
-        $("#listOfGames").html(data);
-        $(".joinGame").click(function(evt) {
-          var gameId = evt.target.id
-          socket.emit('join_game', gameId);
-        });
-      });
-
-      socket.on('joined_game', function (data){
-        roomId = data.roomId;
-        gridSize = data.gameSize;
-        gridSize === 11 ? gameScale = 30 : gameScale = 16;
-        iso = new Isomer(canvas, { scale: gameScale, originY: canvas.height});
-        $("#sessionDiv").hide();
-        $("#gameDiv").fadeIn(1000);
-        drawGridLines(gridSize,gridSize,0);
-        drawOrigin();
-        setupColorPicker();
-      });
-
-      socket.on('new_game_id', function (data){
-        roomId = data;
-      });
-
-      socket.on('listOfSaves', function(data){
-        saves = data;
-        $('#saves').empty();
-        $('#saves').append("<option value='0'>None</option>");
-        data.forEach(function(save){
-          $('#saves').append('<option value="' + save._id + '">' + save.name + '</option>');
-        })
-      });
-
-      socket.on('updateChat', function(data) {
-        var div = $("#chat");
-        var time = new Date(data.time)
-        var timeString = (time.getHours()<10?'0':'') + time.getHours() + ":" + (time.getMinutes()<10?'0':'') + time.getMinutes();
-        var message = data.player.name + " " + timeString + " - " + data.body
-        div.append(message + "<br/>");
-        div.scrollTop(div.prop("scrollHeight"));
-      })
-
-      // Socket send events
-      function emitDeleteBlock(block){
-        var newCoords = rotate( {x: block[0], y: block[1]}, -currentRotation);
-        block[0] = newCoords.x;
-        block[1] = newCoords.y;
-        socket.emit('delete_block', {block: block, roomId: roomId});
-      }
-
-      function emitNewBlock(block){
-        var newCoords = rotate( {x: block[0], y: block[1]}, -currentRotation);
-        block[0] = newCoords.x;
-        block[1] = newCoords.y;
-        socket.emit('add_block', {block: block, roomId: roomId});
-      }
-
-      function leaveGame(){
-        gameId = "";
-        socket.emit('leaveRoom', roomId);
-        var div = $("#chat");
-        div.empty();
-        blocks = [];
-          $("#gameDiv").hide();
-        $("#sessionDiv").fadeIn(1000);
-
-      }
-
+  socket.on('list_of_games', function(data) {
+    $("#listOfGames").html(data);
+    $(".joinGame").click(function(evt) {
+      var gameId = evt.target.id
+      socket.emit('join_game', gameId);
     });
+  });
+
+  socket.on('joined_game', function (data){
+    roomId = data.roomId;
+    gridSize = data.gameSize;
+    gridSize === 11 ? gameScale = 30 : gameScale = 16;
+    iso = new Isomer(canvas, { scale: gameScale, originY: canvas.height});
+    $("#sessionDiv").hide();
+    $("#gameDiv").fadeIn(1000);
+    drawGridLines(gridSize,gridSize,0);
+    drawOrigin();
+    setupColorPicker();
+  });
+
+  socket.on('new_game_id', function (data){
+    roomId = data;
+  });
+
+  socket.on('listOfSaves', function(data){
+    saves = data;
+    $('#saves').empty();
+    $('#saves').append("<option value='0'>None</option>");
+    data.forEach(function(save){
+      $('#saves').append('<option value="' + save._id + '">' + save.name + '</option>');
+    })
+  });
+
+  socket.on('updateChat', function(data) {
+    var div = $("#chat");
+    var time = new Date(data.time)
+    var timeString = (time.getHours()<10?'0':'') + time.getHours() + ":" + (time.getMinutes()<10?'0':'') + time.getMinutes();
+    var message = data.player.name + " " + timeString + " - " + data.body
+    div.append(message + "<br/>");
+    div.scrollTop(div.prop("scrollHeight"));
+  })
+
+  // Socket send events
+  function emitDeleteBlock(block){
+    var newCoords = rotate( {x: block[0], y: block[1]}, -currentRotation);
+    block[0] = newCoords.x;
+    block[1] = newCoords.y;
+    socket.emit('delete_block', {block: block, roomId: roomId});
+  }
+
+  function emitNewBlock(block){
+    var newCoords = rotate( {x: block[0], y: block[1]}, -currentRotation);
+    block[0] = newCoords.x;
+    block[1] = newCoords.y;
+    socket.emit('add_block', {block: block, roomId: roomId});
+  }
+
+  function leaveGame(){
+    gameId = "";
+    socket.emit('leaveRoom', roomId);
+    var div = $("#chat");
+    div.empty();
+    blocks = [];
+    $("#gameDiv").hide();
+    $("#sessionDiv").fadeIn(1000);
+  }
+
+});
