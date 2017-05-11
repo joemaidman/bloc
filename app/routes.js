@@ -55,7 +55,7 @@ module.exports = function(app, passport) {
 // Helpers
 function guestLogin(req, res, next){
   if(req.user) return next();
-  var user = new User({displayName: 'guest'+Math.random().toString() });
+  var user = new User({displayName: 'guest' + Math.random().toString() });
   user.save();
   req.logIn(user, next);
 }
