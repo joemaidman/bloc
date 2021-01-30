@@ -20,20 +20,13 @@ cookieParser = require('cookie-parser'),
 bodyParser = require('body-parser'),
 session = require('express-session'),
 connect = require('connect'),
-configDB = require('./config/database.js'),
 systemPlayer = new Player(0, "System"),
 require('./config/passport')(passport),
 Message = require("./app/models/message.js");
 var dbUrl;
 
-if(process.env.PORT){
-  mongoose.connect(configDB.urlprod);
-  dbUrl = configDB.urlprod;
-}
-else{
-  mongoose.connect(configDB.urldev);
-  dbUrl = configDB.urldev;
-}
+mongoose.connect(process.env.DB_URL);
+dbUrl = process.env.DB_URL;
 
 const MongoStore = require('connect-mongo')(session);
 var sessionStore = new MongoStore({ mongooseConnection: mongoose.connection });
