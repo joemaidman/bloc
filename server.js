@@ -23,10 +23,9 @@ connect = require('connect'),
 systemPlayer = new Player(0, "System"),
 require('./config/passport')(passport),
 Message = require("./app/models/message.js");
-var dbUrl;
+var dbUrl = process.env.DB_URL;
 
-mongoose.connect(process.env.DB_URL);
-dbUrl = process.env.DB_URL;
+mongoose.connect(dbUrl);
 
 const MongoStore = require('connect-mongo')(session);
 var sessionStore = new MongoStore({ mongooseConnection: mongoose.connection });
