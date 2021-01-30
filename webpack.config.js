@@ -1,10 +1,10 @@
-var path = require('path');
+var path = require("path");
 
 module.exports = {
-  entry: './src/package.js',
-  target: 'node',
+  entry: path.join(__dirname, "server.js"),
+  target: "node",
   output: {
-    path: path.join(__dirname, './public/build'),
-    filename: 'bundle.js'
-  }
+    path: path.join(__dirname, "./public/build"),
+    filename: "bundle.js",
+  },
 };

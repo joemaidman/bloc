@@ -2,7 +2,7 @@
   "name": "bloc",
   "version": "1.0.0",
   "description": "Multiplayer isometric building game",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
     "start": "node server.js",
     "devstart": "nodemon server.js",
